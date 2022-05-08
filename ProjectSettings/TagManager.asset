@@ -38,6 +38,18 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: World
+    uniqueID: 593254727
+    locked: 0
+  - name: Decals_Back
+    uniqueID: 760946551
+    locked: 0
+  - name: Entity
+    uniqueID: 160037619
+    locked: 0
+  - name: Decals_Fore
+    uniqueID: 248856479
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
