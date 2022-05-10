@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 94f3b3e59d6d2de4da03a647dd6cdee1
+guid: 700003cecc28f74478768fb9800e0542
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -47,7 +47,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 16
+  spritePixelsToUnits: 24
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -116,12 +116,12 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: player_idle_0
+      name: gridSelect_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
-        width: 48
+        y: 120
+        width: 24
         height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -130,19 +130,40 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c7821333bb7123c449427470d90b5c14
-      internalID: 1420248078
+      spriteID: e50e85d62826ade4a8acfe47c00b0432
+      internalID: 1770494954
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: player_idle_1
+      name: gridSelect_1
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 120
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ff8d30b9111973947a869b308e16db02
+      internalID: 2075624657
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gridSelect_2
       rect:
         serializedVersion: 2
         x: 48
-        y: 0
-        width: 48
+        y: 120
+        width: 24
         height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -151,19 +172,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7c7adece11cabe349959f80545e38083
-      internalID: -324532725
+      spriteID: 465a6e8182ca3154ba1826674964cf83
+      internalID: -1712244625
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: player_idle_2
+      name: gridSelect_3
       rect:
         serializedVersion: 2
-        x: 96
-        y: 0
-        width: 48
+        x: 0
+        y: 96
+        width: 24
         height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -172,19 +193,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: cc609af7f18173242b43d9f1ee048dca
-      internalID: -550050753
+      spriteID: e046d36c9cccdcf45a395f9acd07a558
+      internalID: -1010109566
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: player_idle_3
+      name: gridSelect_4
       rect:
         serializedVersion: 2
-        x: 144
-        y: 0
-        width: 48
+        x: 24
+        y: 96
+        width: 24
         height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -193,19 +214,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1765c694db8eac44482e5022d35bb7fd
-      internalID: 2101768713
+      spriteID: bcb1db2f8d8db304481437b5d314f2a5
+      internalID: -1451621154
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: player_idle_4
+      name: gridSelect_5
       rect:
         serializedVersion: 2
-        x: 192
-        y: 0
-        width: 48
+        x: 48
+        y: 96
+        width: 24
         height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -214,19 +235,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0657a8dd7a457f74a955d40f74d9633a
-      internalID: -1906830518
+      spriteID: 4e7eb74f486f72d45b3caf93e01f3983
+      internalID: 1769828527
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: player_idle_5
+      name: gridSelect_6
       rect:
         serializedVersion: 2
-        x: 240
-        y: 0
-        width: 48
+        x: 0
+        y: 72
+        width: 24
         height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -235,19 +256,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d2b11cf2b6d02bc41969e54e3c9f30e0
-      internalID: 396275436
+      spriteID: 64157109af561f64284ff1071acdc6dd
+      internalID: -471080561
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: player_idle_6
+      name: gridSelect_7
       rect:
         serializedVersion: 2
-        x: 288
-        y: 0
-        width: 48
+        x: 24
+        y: 72
+        width: 24
         height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -256,19 +277,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b421aaf246c3f9d4c874650d6ff6aeaf
-      internalID: 811571889
+      spriteID: 582cdcd5f37f6fd4bbdc0354f00bf356
+      internalID: -2089335370
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: player_idle_7
+      name: gridSelect_8
       rect:
         serializedVersion: 2
-        x: 336
-        y: 0
-        width: 48
+        x: 48
+        y: 72
+        width: 24
         height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -277,19 +298,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 45526b00b0dbf6d459d116a8b183e217
-      internalID: -1433312507
+      spriteID: 1cb4baa73ed97f441b671a0239164d94
+      internalID: -1337482200
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: player_idle_8
+      name: gridSelect_9
       rect:
         serializedVersion: 2
-        x: 384
-        y: 0
-        width: 48
+        x: 0
+        y: 48
+        width: 24
         height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -298,19 +319,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 904af9f9e46f04b4d8fc6f0ec61fed77
-      internalID: 594486950
+      spriteID: 88f77a1c9087b3040897a0518c1b8531
+      internalID: -2140212031
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: player_idle_9
+      name: gridSelect_10
       rect:
         serializedVersion: 2
-        x: 432
-        y: 0
-        width: 48
+        x: 24
+        y: 48
+        width: 24
         height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -319,8 +340,113 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c7519988b2543ba4991c8527e55aba78
-      internalID: 638290916
+      spriteID: a73f5c13217b4ff43bcefb79c06e4e8e
+      internalID: -1820833925
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gridSelect_11
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 48
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7edb48daed60e204bb840de8cec50f58
+      internalID: -456035778
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gridSelect_12
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 24
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e21e8c2ea89d58349925449839849cff
+      internalID: -726172638
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gridSelect_13
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 24
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b591c8b5134bde648a8b434ef2226ca0
+      internalID: -1175924535
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gridSelect_14
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 24
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bdfc87acd8506664b906d95a9523a6e3
+      internalID: 2115734372
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gridSelect_15
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 0
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 96975061462a275498ba45427fc5c7b7
+      internalID: 62418579
       vertices: []
       indices: 
       edges: []
@@ -336,16 +462,22 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      player_idle_2: -550050753
-      player_idle_8: 594486950
-      player_idle_6: 811571889
-      player_idle_1: -324532725
-      player_idle_9: 638290916
-      player_idle_7: -1433312507
-      player_idle_4: -1906830518
-      player_idle_5: 396275436
-      player_idle_3: 2101768713
-      player_idle_0: 1420248078
+      gridSelect_8: -1337482200
+      gridSelect_1: 2075624657
+      gridSelect_10: -1820833925
+      gridSelect_0: 1770494954
+      gridSelect_12: -726172638
+      gridSelect_11: -456035778
+      gridSelect_4: -1451621154
+      gridSelect_2: -1712244625
+      gridSelect_9: -2140212031
+      gridSelect_5: 1769828527
+      gridSelect_15: 62418579
+      gridSelect_6: -471080561
+      gridSelect_3: -1010109566
+      gridSelect_13: -1175924535
+      gridSelect_7: -2089335370
+      gridSelect_14: 2115734372
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
