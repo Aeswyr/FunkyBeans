@@ -24,7 +24,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 200}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 632
+  controlID: 786
 --- !u!114 &2
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -45,10 +45,10 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 294.4
+    x: 350.4
     y: 73.6
-    width: 898
-    height: 411.8
+    width: 1083.6
+    height: 609.4
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
     m_LastAppliedPresetName: Default
@@ -59,7 +59,7 @@ MonoBehaviour:
   m_ShowGizmos: 0
   m_TargetDisplay: 0
   m_ClearColor: {r: 0, g: 0, b: 0, a: 0}
-  m_TargetSize: {x: 695, y: 390.8}
+  m_TargetSize: {x: 1046, y: 588.4}
   m_TextureFilterMode: 0
   m_TextureHideFlags: 61
   m_RenderIMGUI: 1
@@ -74,10 +74,10 @@ MonoBehaviour:
     m_VRangeLocked: 0
     hZoomLockedByDefault: 0
     vZoomLockedByDefault: 0
-    m_HBaseRangeMin: -278
-    m_HBaseRangeMax: 278
-    m_VBaseRangeMin: -156.31999
-    m_VBaseRangeMax: 156.31999
+    m_HBaseRangeMin: -418.4
+    m_HBaseRangeMax: 418.4
+    m_VBaseRangeMin: -235.36002
+    m_VBaseRangeMax: 235.36002
     m_HAllowExceedBaseRangeMin: 1
     m_HAllowExceedBaseRangeMax: 1
     m_VAllowExceedBaseRangeMin: 1
@@ -95,23 +95,23 @@ MonoBehaviour:
       serializedVersion: 2
       x: 0
       y: 21
-      width: 898
-      height: 390.8
-    m_Scale: {x: 5.367089, y: 5.367089}
-    m_Translation: {x: 450.72388, y: 194.8914}
+      width: 1083.6
+      height: 588.4
+    m_Scale: {x: 6.25, y: 6.25}
+    m_Translation: {x: 627.8787, y: 317.88025}
     m_MarginLeft: 0
     m_MarginRight: 0
     m_MarginTop: 0
     m_MarginBottom: 0
     m_LastShownAreaInsideMargins:
       serializedVersion: 2
-      x: -83.97921
-      y: -36.312313
-      width: 167.31602
-      height: 72.81415
+      x: -100.460594
+      y: -50.86084
+      width: 173.37599
+      height: 94.144005
     m_MinimalGUI: 1
   m_defaultScale: 1
-  m_LastWindowPixelSize: {x: 1122.5, y: 514.75}
+  m_LastWindowPixelSize: {x: 1354.5, y: 761.75}
   m_ClearInEditMode: 1
   m_NoCameraWarning: 1
   m_LowResolutionForAspectRatios: 01000000000000000000
@@ -136,12 +136,12 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1194.4
+    width: 1150.4
     height: 730.8
   m_MinSize: {x: 200, y: 200}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 633
+  controlID: 787
 --- !u!114 &4
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -161,12 +161,12 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1194.4
-    height: 432.8
+    width: 1150.4
+    height: 396
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 634
+  controlID: 788
 --- !u!114 &5
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -184,10 +184,10 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 294.4
-    height: 432.8
-  m_MinSize: {x: 200, y: 200}
-  m_MaxSize: {x: 4000, y: 4000}
+    width: 284.8
+    height: 396
+  m_MinSize: {x: 201, y: 221}
+  m_MaxSize: {x: 4001, y: 4021}
   m_ActualView: {fileID: 6}
   m_Panes:
   - {fileID: 6}
@@ -215,8 +215,8 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 73.6
-    width: 293.4
-    height: 411.8
+    width: 283.8
+    height: 375
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
     m_LastAppliedPresetName: Default
@@ -226,7 +226,7 @@ MonoBehaviour:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: 2afbffff
+      m_ExpandedIDs: 12fbffff16fbffff2afbffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -265,10 +265,10 @@ MonoBehaviour:
   m_Children: []
   m_Position:
     serializedVersion: 2
-    x: 294.4
+    x: 284.8
     y: 0
-    width: 900
-    height: 432.8
+    width: 865.60004
+    height: 396
   m_MinSize: {x: 202, y: 221}
   m_MaxSize: {x: 4002, y: 4021}
   m_ActualView: {fileID: 2}
@@ -278,7 +278,7 @@ MonoBehaviour:
   - {fileID: 9}
   - {fileID: 10}
   m_Selected: 1
-  m_LastSelected: 3
+  m_LastSelected: 0
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -299,10 +299,10 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 294.4
+    x: 284.80002
     y: 73.6
-    width: 898
-    height: 411.8
+    width: 863.60004
+    height: 375
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
     m_LastAppliedPresetName: Default
@@ -355,7 +355,7 @@ MonoBehaviour:
       containerId: overlay-toolbar__top
       floating: 0
       collapsed: 0
-      displayed: 0
+      displayed: 1
       snapOffset: {x: 0, y: 24.8}
       snapOffsetDelta: {x: 0, y: 0}
       snapCorner: 0
@@ -526,9 +526,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 3.5197945, y: -0.909857, z: 0.027670652}
+    m_Target: {x: 0.7195828, y: -0.5264449, z: 0.08417158}
     speed: 2
-    m_Value: {x: 3.5197945, y: -0.909857, z: 0.027670652}
+    m_Value: {x: 0.7195828, y: -0.5264449, z: 0.08417158}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -579,9 +579,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 7.232894
+    m_Target: 1.5827906
     speed: 2
-    m_Value: 7.232894
+    m_Value: 1.5827906
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -626,10 +626,10 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 294.4
+    x: 284
     y: 73.6
-    width: 898
-    height: 411.8
+    width: 863.6
+    height: 375
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
     m_LastAppliedPresetName: Default
@@ -638,14 +638,14 @@ MonoBehaviour:
     m_KeySerializationHelper:
     - {fileID: 3358573759148827295, guid: 6e52543f9c067934fa9dab714f2d48dd, type: 2}
     m_ValueSerializationHelper:
-    - e00: 1
+    - e00: 0.6003072
       e01: 0
       e02: 0
-      e03: 0
+      e03: 36.031143
       e10: 0
-      e11: 1
+      e11: 0.6003072
       e12: 0
-      e13: 0
+      e13: 117.79958
       e20: 0
       e21: 0
       e22: 1
@@ -690,10 +690,10 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 294.4
+    x: 284.80002
     y: 73.6
-    width: 898
-    height: 411.8
+    width: 863.60004
+    height: 375
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
     m_LastAppliedPresetName: Default
@@ -817,13 +817,14 @@ MonoBehaviour:
     2\n            },\n            \"m_InputSlot\": {\n                \"m_Node\":
     {\n                    \"m_Id\": \"d7533712651d49cdaa9f7a962abc4a11\"\n               
     },\n                \"m_SlotId\": 2\n            }\n        }\n    ],\n    \"m_VertexContext\":
-    {\n        \"m_Position\": {\n            \"x\": 0.0,\n            \"y\": 0.0\n       
-    },\n        \"m_Blocks\": [\n            {\n                \"m_Id\": \"e7dbf637739f4041a93a4ed5e1a0c8e0\"\n           
+    {\n        \"m_Position\": {\n            \"x\": 0.0000443353783339262,\n           
+    \"y\": -175.99998474121095\n        },\n        \"m_Blocks\": [\n           
+    {\n                \"m_Id\": \"e7dbf637739f4041a93a4ed5e1a0c8e0\"\n           
     },\n            {\n                \"m_Id\": \"efc7452fc7654905a0ba55ed06c11f92\"\n           
     },\n            {\n                \"m_Id\": \"b370641a1d9143f9ba14847692060425\"\n           
     }\n        ]\n    },\n    \"m_FragmentContext\": {\n        \"m_Position\": {\n           
-    \"x\": 0.0,\n            \"y\": 200.0\n        },\n        \"m_Blocks\": [\n           
-    {\n                \"m_Id\": \"ea9e7e2b004d4932a82d1e5b9fade897\"\n           
+    \"x\": 19.99999237060547,\n            \"y\": 435.2000427246094\n        },\n       
+    \"m_Blocks\": [\n            {\n                \"m_Id\": \"ea9e7e2b004d4932a82d1e5b9fade897\"\n           
     },\n            {\n                \"m_Id\": \"f86fafe179db4d9db6cc69b35d647bf9\"\n           
     }\n        ]\n    },\n    \"m_PreviewData\": {\n        \"serializedMesh\": {\n           
     \"m_SerializedMesh\": \"{\\\"mesh\\\":{\\\"instanceID\\\":0}}\",\n           
@@ -844,8 +845,8 @@ MonoBehaviour:
     \"m_ObjectId\": \"0bb3d219fa3349d295ee666aaad14def\",\n    \"m_Group\": {\n       
     \"m_Id\": \"\"\n    },\n    \"m_Name\": \"Property\",\n    \"m_DrawState\": {\n       
     \"m_Expanded\": true,\n        \"m_Position\": {\n            \"serializedVersion\":
-    \"2\",\n            \"x\": -1478.39990234375,\n            \"y\": 335.1999816894531,\n           
-    \"width\": 123.1998291015625,\n            \"height\": 33.600006103515628\n       
+    \"2\",\n            \"x\": -1504.0001220703125,\n            \"y\": 401.6000061035156,\n           
+    \"width\": 123.199951171875,\n            \"height\": 33.60003662109375\n       
     }\n    },\n    \"m_Slots\": [\n        {\n            \"m_Id\": \"1e4f8cff344b4317a9d3d09e32d9ac17\"\n       
     }\n    ],\n    \"synonyms\": [],\n    \"m_Precision\": 1,\n    \"m_PreviewExpanded\":
     true,\n    \"m_PreviewMode\": 0,\n    \"m_CustomColors\": {\n        \"m_SerializableColors\":
@@ -914,9 +915,9 @@ MonoBehaviour:
     \"m_ObjectId\": \"1a2fd1a71a7448af8aa4bdd8b78c5122\",\n    \"m_Group\": {\n       
     \"m_Id\": \"\"\n    },\n    \"m_Name\": \"Sample Texture 2D\",\n    \"m_DrawState\":
     {\n        \"m_Expanded\": true,\n        \"m_Position\": {\n            \"serializedVersion\":
-    \"2\",\n            \"x\": -246.3999786376953,\n            \"y\": 171.19998168945313,\n           
-    \"width\": 207.99996948242188,\n            \"height\": 431.9999694824219\n       
-    }\n    },\n    \"m_Slots\": [\n        {\n            \"m_Id\": \"bf0f93b892034cd3b3b793ca5b553827\"\n       
+    \"2\",\n            \"x\": -256.0,\n            \"y\": 36.80000305175781,\n           
+    \"width\": 208.0,\n            \"height\": 432.0\n        }\n    },\n    \"m_Slots\":
+    [\n        {\n            \"m_Id\": \"bf0f93b892034cd3b3b793ca5b553827\"\n       
     },\n        {\n            \"m_Id\": \"4455ef0c46504addbb8d8145e855f655\"\n       
     },\n        {\n            \"m_Id\": \"515bec5b5a534efa9c188709076a5cf1\"\n       
     },\n        {\n            \"m_Id\": \"6bf071386c274806906dca5b2fcdde86\"\n       
@@ -969,9 +970,9 @@ MonoBehaviour:
     \"UnityEditor.ShaderGraph.Vector2Node\",\n    \"m_ObjectId\": \"3194c60c8e83482b8597e24f9d912cde\",\n   
     \"m_Group\": {\n        \"m_Id\": \"\"\n    },\n    \"m_Name\": \"Vector 2\",\n   
     \"m_DrawState\": {\n        \"m_Expanded\": true,\n        \"m_Position\": {\n           
-    \"serializedVersion\": \"2\",\n            \"x\": -874.3999633789063,\n           
-    \"y\": -191.19998168945313,\n            \"width\": 127.199951171875,\n           
-    \"height\": 100.79998779296875\n        }\n    },\n    \"m_Slots\": [\n       
+    \"serializedVersion\": \"2\",\n            \"x\": -944.0,\n            \"y\":
+    -175.99996948242188,\n            \"width\": 127.20001220703125,\n           
+    \"height\": 100.80001068115235\n        }\n    },\n    \"m_Slots\": [\n       
     {\n            \"m_Id\": \"10373cb191874365bf53f934a9323960\"\n        },\n       
     {\n            \"m_Id\": \"3acd55819b324c13be8c4651051c70fc\"\n        },\n       
     {\n            \"m_Id\": \"5c66ac247ae948ffad0a7a409a1cfbcf\"\n        }\n   
@@ -990,8 +991,8 @@ MonoBehaviour:
     \"341b63411f774afaba6d7637a3681880\",\n    \"m_Group\": {\n        \"m_Id\":
     \"\"\n    },\n    \"m_Name\": \"Property\",\n    \"m_DrawState\": {\n       
     \"m_Expanded\": true,\n        \"m_Position\": {\n            \"serializedVersion\":
-    \"2\",\n            \"x\": -380.00006103515627,\n            \"y\": 199.99998474121095,\n           
-    \"width\": 105.59994506835938,\n            \"height\": 33.600006103515628\n       
+    \"2\",\n            \"x\": -368.79998779296877,\n            \"y\": 69.60000610351563,\n           
+    \"width\": 105.59991455078125,\n            \"height\": 33.60002136230469\n       
     }\n    },\n    \"m_Slots\": [\n        {\n            \"m_Id\": \"075f9d32a6764fa2b709d9421850959d\"\n       
     }\n    ],\n    \"synonyms\": [],\n    \"m_Precision\": 0,\n    \"m_PreviewExpanded\":
     true,\n    \"m_PreviewMode\": 0,\n    \"m_CustomColors\": {\n        \"m_SerializableColors\":
@@ -1000,8 +1001,8 @@ MonoBehaviour:
     \"m_ObjectId\": \"34a91a5911fd4206beacc56abcd9ad12\",\n    \"m_Group\": {\n       
     \"m_Id\": \"\"\n    },\n    \"m_Name\": \"Vector 2\",\n    \"m_DrawState\": {\n       
     \"m_Expanded\": true,\n        \"m_Position\": {\n            \"serializedVersion\":
-    \"2\",\n            \"x\": -454.4000549316406,\n            \"y\": 392.0,\n           
-    \"width\": 127.20001220703125,\n            \"height\": 100.80001831054688\n       
+    \"2\",\n            \"x\": -443.19989013671877,\n            \"y\": 284.79998779296877,\n           
+    \"width\": 127.19992065429688,\n            \"height\": 100.79995727539063\n       
     }\n    },\n    \"m_Slots\": [\n        {\n            \"m_Id\": \"a3879a85e6e74ad48788090c6ccee0bf\"\n       
     },\n        {\n            \"m_Id\": \"005dc827048d49388d1418988b9a40e4\"\n       
     },\n        {\n            \"m_Id\": \"f5626798ed5d4b16bfac47f781bd7466\"\n       
@@ -1149,9 +1150,9 @@ MonoBehaviour:
     \"m_ObjectId\": \"811c4b1746794d3ca789d467f7fb145d\",\n    \"m_Group\": {\n       
     \"m_Id\": \"\"\n    },\n    \"m_Name\": \"Sample Texture 2D\",\n    \"m_DrawState\":
     {\n        \"m_Expanded\": true,\n        \"m_Position\": {\n            \"serializedVersion\":
-    \"2\",\n            \"x\": -1355.2000732421875,\n            \"y\": 295.20001220703127,\n           
-    \"width\": 208.0,\n            \"height\": 432.0\n        }\n    },\n    \"m_Slots\":
-    [\n        {\n            \"m_Id\": \"c0a21356806f40a88a14d3bf2e449904\"\n       
+    \"2\",\n            \"x\": -1355.2001953125,\n            \"y\": 385.6000061035156,\n           
+    \"width\": 208.0,\n            \"height\": 431.9999694824219\n        }\n   
+    },\n    \"m_Slots\": [\n        {\n            \"m_Id\": \"c0a21356806f40a88a14d3bf2e449904\"\n       
     },\n        {\n            \"m_Id\": \"1bf25a76ba0440c89a9439e2d4474c7f\"\n       
     },\n        {\n            \"m_Id\": \"3113f314b9c94f598d768bb5459d17cb\"\n       
     },\n        {\n            \"m_Id\": \"82bfcf62edb5461abff337b1cc619d81\"\n       
@@ -1302,8 +1303,8 @@ MonoBehaviour:
     \"d7533712651d49cdaa9f7a962abc4a11\",\n    \"m_Group\": {\n        \"m_Id\":
     \"\"\n    },\n    \"m_Name\": \"Vector 2\",\n    \"m_DrawState\": {\n       
     \"m_Expanded\": true,\n        \"m_Position\": {\n            \"serializedVersion\":
-    \"2\",\n            \"x\": -916.0000610351563,\n            \"y\": 944.0,\n           
-    \"width\": 127.2000732421875,\n            \"height\": 100.800048828125\n       
+    \"2\",\n            \"x\": -944.0,\n            \"y\": 939.2000732421875,\n           
+    \"width\": 127.20001220703125,\n            \"height\": 100.800048828125\n       
     }\n    },\n    \"m_Slots\": [\n        {\n            \"m_Id\": \"79dc0abac7644732907854c6d456135e\"\n       
     },\n        {\n            \"m_Id\": \"fb96e6099d48451b855989e904f510f3\"\n       
     },\n        {\n            \"m_Id\": \"2cea68a5c3914e2dafc89074ee0c50d4\"\n       
@@ -1470,7 +1471,7 @@ MonoBehaviour:
     \"minus\",\n        \"take away\"\n    ],\n    \"m_Precision\": 0,\n    \"m_PreviewExpanded\":
     true,\n    \"m_PreviewMode\": 0,\n    \"m_CustomColors\": {\n        \"m_SerializableColors\":
     []\n    }\n}\n\n"
-  m_AssetMaybeChangedOnDisk: 1
+  m_AssetMaybeChangedOnDisk: 0
   m_AssetMaybeDeleted: 0
 --- !u!114 &11
 MonoBehaviour:
@@ -1488,9 +1489,9 @@ MonoBehaviour:
   m_Position:
     serializedVersion: 2
     x: 0
-    y: 432.8
-    width: 1194.4
-    height: 298
+    y: 396
+    width: 1150.4
+    height: 334.8
   m_MinSize: {x: 230, y: 250}
   m_MaxSize: {x: 10000, y: 10000}
   m_ActualView: {fileID: 12}
@@ -1520,9 +1521,9 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 506.4
-    width: 1193.4
-    height: 277
+    y: 469.6
+    width: 1149.4
+    height: 313.8
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
     m_LastAppliedPresetName: Default
@@ -1540,21 +1541,21 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Resources
+    - Assets/Resources/Sprites
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Resources
+  - Assets/Resources/Sprites
   m_LastFoldersGridSize: -1
   m_LastProjectPath: D:\Game Dev\FunkyBeans
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 60}
-    m_SelectedIDs: be700000
-    m_LastClickedID: 28862
+    scrollPos: {x: 0, y: 84.60004}
+    m_SelectedIDs: ba700000
+    m_LastClickedID: 28858
     m_ExpandedIDs: 00000000b6700000b8700000ba700000bc700000be70000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -1608,9 +1609,9 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 
-    m_LastClickedInstanceID: 0
-    m_HadKeyboardFocusLastEvent: 0
+    m_SelectedInstanceIDs: e6faffff
+    m_LastClickedInstanceID: -1306
+    m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c62300006a970000aa9e0000deaa00005a6d0000626d0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -1682,12 +1683,12 @@ MonoBehaviour:
   m_Children: []
   m_Position:
     serializedVersion: 2
-    x: 1194.4
+    x: 1150.4
     y: 0
-    width: 341.59998
+    width: 385.59998
     height: 730.8
-  m_MinSize: {x: 275, y: 50}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 276, y: 71}
+  m_MaxSize: {x: 4001, y: 4021}
   m_ActualView: {fileID: 15}
   m_Panes:
   - {fileID: 15}
@@ -1713,9 +1714,9 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 1194.4
+    x: 1150.4
     y: 73.6
-    width: 340.59998
+    width: 384.59998
     height: 709.8
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
@@ -1727,7 +1728,7 @@ MonoBehaviour:
     m_CachedPref: 160
     m_ControlHash: -371814159
     m_PrefName: Preview_InspectorPreview
-  m_LastInspectedObjectInstanceID: -1
+  m_LastInspectedObjectInstanceID: -1306
   m_LastVerticalScrollValue: 0
   m_GlobalObjectId: 
   m_InspectorMode: 0
