@@ -33,7 +33,6 @@ public class PlayerController : MonoBehaviour
         foreach (var hit in results) {
             GameHandler.Instance.SnapToLevelGrid(hit.collider.transform.parent.gameObject);
         }
-        GameHandler.Instance.SnapToLevelGrid(gameObject);
 
         freeMove = false;
         rbody.velocity = Vector2.zero;
