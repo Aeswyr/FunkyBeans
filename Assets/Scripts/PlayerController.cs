@@ -36,5 +36,6 @@ public class PlayerController : MonoBehaviour
 
         freeMove = false;
         rbody.velocity = Vector2.zero;
+        GameHandler.Instance.DrawSelect(gameObject, 4);
     }
 }

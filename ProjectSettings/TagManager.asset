@@ -44,6 +44,9 @@ TagManager:
   - name: Decals_Back
     uniqueID: 760946551
     locked: 0
+  - name: CombatOverlay
+    uniqueID: 1119386057
+    locked: 0
   - name: Entity
     uniqueID: 160037619
     locked: 0

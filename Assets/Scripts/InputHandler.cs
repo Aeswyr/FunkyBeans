@@ -10,6 +10,11 @@ public class InputHandler : MonoBehaviour
         private set;
     }
 
+    public Vector2 mousePos {
+        get;
+        private set;
+    }
+
     // Update is called once per frame
     void FixedUpdate()
     {
@@ -18,6 +23,10 @@ public class InputHandler : MonoBehaviour
 
     public void Move(InputAction.CallbackContext ctx) {
         dir = ctx.ReadValue<Vector2>();
+    }
+
+    public void MouseMove(InputAction.CallbackContext ctx) {
+        mousePos = ctx.ReadValue<Vector2>();
     }
 }
 
