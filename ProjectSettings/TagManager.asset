@@ -53,6 +53,9 @@ TagManager:
   - name: Decals_Fore
     uniqueID: 248856479
     locked: 0
+  - name: WorldUI
+    uniqueID: 3893692847
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
