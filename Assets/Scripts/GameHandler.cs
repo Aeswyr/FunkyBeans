@@ -7,11 +7,27 @@ public class GameHandler : Singleton<GameHandler>
 {
     [Header("Gameplay grids")]
     [SerializeField] private Grid currentLevel;
-    private Tilemap floorGrid;
-    private Tilemap wallGrid;
+    public Tilemap floorGrid {
+        get;
+        private set;
+    }
+    public Tilemap wallGrid {
+        get;
+        private set;
+    }
+    public Grid CurrentLevel {
+        get {return currentLevel;}
+    }
     [SerializeField] private Grid combatOverlay;
-    private Tilemap selectGrid;
-    private Tilemap moveGrid;
+    public Tilemap selectGrid {
+        get;
+        private set;
+    }
+    
+    public Tilemap moveGrid {
+        get;
+        private set;
+    }
 
     [Header("Tiles for battle map overlay")]
     [SerializeField] private RuleTile selectTile;
@@ -31,6 +47,7 @@ public class GameHandler : Singleton<GameHandler>
 
     public void DrawSelect(GameObject src, int dist) {
         Vector3Int gridPos = currentLevel.WorldToCell(src.transform.position);
+        dist++;
         DrawSelectRecursive(gridPos, dist);
     }
 
@@ -39,9 +56,7 @@ public class GameHandler : Singleton<GameHandler>
     }
 
     private void DrawSelectRecursive(Vector3Int pos, int dist) {
-        if (dist <= 0  
-        || floorGrid.GetTile(pos) == null 
-        || wallGrid.GetTile(pos) != null)
+        if (dist <= 0 || Utils.GridUtil.IsCellFilled(pos))
             return;
         dist--;
 
@@ -53,9 +68,21 @@ public class GameHandler : Singleton<GameHandler>
         DrawSelectRecursive(pos + Vector3Int.down, dist);
     }
 
-    private bool IsPointInRange(GameObject src, Vector3 point, int dist) {
-        Vector2Int gridSrc = (Vector2Int)currentLevel.WorldToCell(src.transform.position);
-        Vector2Int gridPoint = (Vector2Int)currentLevel.WorldToCell(point);
-        return Utils.ManhattanDistance(gridPoint, gridSrc) <= dist;
+    public void DrawMove(GameObject src, Vector3Int dst) {
+        Vector3Int srcPos = currentLevel.WorldToCell(src.transform.position);
+
+        List<Vector3Int> positions = Utils.Pathfinding.GetPathInSelectRange(srcPos, dst);
+        foreach (var pos in positions)
+            moveGrid.SetTile(pos, pointerTile);
+        if (positions.Count > 0)
+            moveGrid.SetTile(srcPos, pointerTile);
     }
+
+
+
+    public void ClearMove() {
+        moveGrid.ClearAllTiles();
+    }
+
+
 }
