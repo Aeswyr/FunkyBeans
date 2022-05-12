@@ -128,5 +128,12 @@ public class Utils
             }
             return output;
         }
+
+        public static void PrintPathCosts() {
+            GameHandler.Instance.ClearText();
+            foreach (var cost in costs) {
+                GameHandler.Instance.DrawText(GameHandler.Instance.CurrentLevel.CellToWorld(cost.Key) + new Vector3(0.5f, 0.5f, 0), cost.Value.ToString());
+            }
+        }
     }
 }

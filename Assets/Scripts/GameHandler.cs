@@ -37,6 +37,7 @@ public class GameHandler : Singleton<GameHandler>
     [Header("UI Components")]
     [SerializeField] private GameObject moveCost;
     private TextMeshPro moveText;
+    [SerializeField] private GameObject textPrefab;
 
 
     void Start() {
@@ -78,8 +79,8 @@ public class GameHandler : Singleton<GameHandler>
     }
 
     public void DrawMove(GameObject src, Vector3Int dst) {
+        //ClearText();
         Vector3Int srcPos = currentLevel.WorldToCell(src.transform.position);
-        
 
         List<Vector3Int> positions = Utils.Pathfinding.GetPath(srcPos, dst, true);
 
@@ -92,6 +93,8 @@ public class GameHandler : Singleton<GameHandler>
             
         if (positions.Count > 0)
             moveGrid.SetTile(srcPos, pointerTile);
+
+        //Utils.Pathfinding.PrintPathCosts();
     }
 
 
@@ -101,5 +104,17 @@ public class GameHandler : Singleton<GameHandler>
         moveGrid.ClearAllTiles();
     }
 
+    List<GameObject> textList = new List<GameObject>();
+    public void DrawText(Vector3 pos, string text) {
+        GameObject txt = Instantiate(textPrefab, pos, Quaternion.identity);
+        txt.GetComponent<TextMeshPro>().text = text;
+        textList.Add(txt);
+    }
+
+    public void ClearText() {
+        foreach (var txt in textList)
+            Destroy(txt);
+        textList.Clear();
+    }
 
 }

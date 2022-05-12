@@ -24,6 +24,12 @@ public class PlayerController : MonoBehaviour
         if (freeMove)
             rbody.velocity = speed * input.dir;
 
+        if (input.action.pressed)
+            if (freeMove)
+                StartBattle();
+            else
+                EndBattle();
+
         DrawCombatMovement();
     }
 
@@ -56,5 +62,11 @@ public class PlayerController : MonoBehaviour
         freeMove = false;
         rbody.velocity = Vector2.zero;
         GameHandler.Instance.DrawSelect(gameObject, maxMove);
+    }
+
+    public void EndBattle() {
+        freeMove = true;
+        GameHandler.Instance.ClearMove();
+        GameHandler.Instance.ClearSelect();
     }
 }

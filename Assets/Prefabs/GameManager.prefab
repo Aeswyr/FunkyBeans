@@ -49,6 +49,8 @@ MonoBehaviour:
   combatOverlay: {fileID: 3457665192618206612}
   selectTile: {fileID: 11400000, guid: c504c5338e804914ea26ad2a705b1702, type: 2}
   pointerTile: {fileID: 11400000, guid: dbebd63645defb34689e2729f82b4e5b, type: 2}
+  moveCost: {fileID: 0}
+  textPrefab: {fileID: 2314319401878372548, guid: 2e0c2ad938f0a354eb7e7bdfc5dfd7d7, type: 3}
 --- !u!1001 &1639196193603407288
 PrefabInstance:
   m_ObjectHideFlags: 0

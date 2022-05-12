@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System;
+using UnityEngine;
 
 public class PriorityQueue<T> {
     private List<KeyValuePair<int, T>> elements = new List<KeyValuePair<int, T>>();
@@ -12,16 +13,15 @@ public class PriorityQueue<T> {
 
         // binary search for insertion index
         int left = 0, right = elements.Count;
-        int index = 0;
+        int index =(left + right) / 2;
         while (left < right) {
-            index = (left + right) / 2;
             if (priority < elements[index].Key)
                 right = index;
             else if (priority > elements[index].Key)
                 left  = index + 1;
             else
                 break;
-            
+            index = (left + right) / 2;
         }
 
         elements.Insert(index, new KeyValuePair<int, T>(priority, element));       
@@ -39,5 +39,12 @@ public class PriorityQueue<T> {
 
     public bool Empty() {
         return elements.Count == 0;
+    }
+
+    public void PrintCosts() {
+        string output = "";
+        for (int i = 0; i < elements.Count; i++)
+            output += $"{elements[i].Key} ";
+        Debug.Log(output);
     }
 }
