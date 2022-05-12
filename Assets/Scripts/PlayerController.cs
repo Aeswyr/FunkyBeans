@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Rigidbody2D rbody;
     [SerializeField] private InputHandler input;
     [SerializeField] private float speed;
-    private int maxMove = 3;
+    private int maxMove = 4;
     private ContactFilter2D filter = new ContactFilter2D();
     private bool freeMove  = true;
 

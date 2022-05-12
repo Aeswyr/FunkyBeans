@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using TMPro;
 
 public class GameHandler : Singleton<GameHandler>
 {
@@ -33,12 +34,20 @@ public class GameHandler : Singleton<GameHandler>
     [SerializeField] private RuleTile selectTile;
     [SerializeField] private RuleTile pointerTile;
 
+    [Header("UI Components")]
+    [SerializeField] private GameObject moveCost;
+    private TextMeshPro moveText;
+
+
     void Start() {
         floorGrid = currentLevel.transform.Find("Collision").GetComponent<Tilemap>();
         wallGrid = currentLevel.transform.Find("Walls").GetComponent<Tilemap>();
 
         selectGrid = combatOverlay.transform.Find("SelectGrid").GetComponent<Tilemap>();
         moveGrid = combatOverlay.transform.Find("MoveGrid").GetComponent<Tilemap>();
+
+        moveCost.SetActive(false);
+        moveText = moveCost.transform.Find("Text").GetComponent<TextMeshPro>();
     }
 
     public void SnapToLevelGrid(GameObject entity) {
@@ -70,10 +79,17 @@ public class GameHandler : Singleton<GameHandler>
 
     public void DrawMove(GameObject src, Vector3Int dst) {
         Vector3Int srcPos = currentLevel.WorldToCell(src.transform.position);
+        
 
         List<Vector3Int> positions = Utils.Pathfinding.GetPath(srcPos, dst, true);
+
+        moveCost.SetActive(true);
+        moveText.text = positions.Count.ToString();
+        moveCost.transform.position = new Vector3(0.5f, 0.5f, 0) + currentLevel.CellToWorld(dst) + (0.25f * Vector3.up);
+
         foreach (var pos in positions)
             moveGrid.SetTile(pos, pointerTile);
+            
         if (positions.Count > 0)
             moveGrid.SetTile(srcPos, pointerTile);
     }
@@ -81,6 +97,7 @@ public class GameHandler : Singleton<GameHandler>
 
 
     public void ClearMove() {
+        moveCost.SetActive(false);
         moveGrid.ClearAllTiles();
     }
 
