@@ -83,8 +83,10 @@ public class Utils
         * returns the list of positions that must be traversed
         * to get from the source to the destination.
         * this includes the destination, but not the source
+        *
+        * if inSelect is true, will only consider paths in the select range;
         */
-        public static List<Vector3Int> GetPath(Vector3Int src, Vector3Int dst) {
+        public static List<Vector3Int> GetPath(Vector3Int src, Vector3Int dst, bool inSelect = false) {
             // setup
             open.Clear();
             previous.Clear();
@@ -100,48 +102,19 @@ public class Utils
                 if (current == dst)
                     break;
 
-                foreach (var next in GridUtil.GetValidAdjacent(current)) {
-                    int cost = costs[current] + 1;
-                    if (!costs.ContainsKey(next) || cost < costs[next]) {
-                        costs[next] = cost;
-                        previous[next] = current;
-                        open.Put(next, GridUtil.ManhattanDistance(dst, next));
-                    }
+                List<Vector3Int> adj = null;
+                if (inSelect) {
+                    adj = GridUtil.GetValidSelectedAdjacent(current);
+                } else {
+                    adj = GridUtil.GetValidAdjacent(current);
                 }
-            }
 
-            // collect and return final path
-            var trace = dst;
-            var output = new List<Vector3Int>();
-            while (trace != src) {
-                output.Add(trace);
-                trace = previous[trace];
-            }
-            return output;
-        }
-
-        public static List<Vector3Int> GetPathInSelectRange(Vector3Int src, Vector3Int dst) {
-            // setup
-            open.Clear();
-            previous.Clear();
-            costs.Clear();
-            
-            open.Put(src, 0);
-            previous[src] = default(Vector3Int);
-            costs[src] = 0;
-
-            while (!open.Empty()) {
-                var current = open.Pop();
-
-                if (current == dst)
-                    break;
-
-                foreach (var next in GridUtil.GetValidSelectedAdjacent(current)) {
+                foreach (var next in adj) {
                     int cost = costs[current] + 1;
                     if (!costs.ContainsKey(next) || cost < costs[next]) {
                         costs[next] = cost;
                         previous[next] = current;
-                        open.Put(next, GridUtil.ManhattanDistance(dst, next));
+                        open.Put(next, cost + GridUtil.ManhattanDistance(dst, next));
                     }
                 }
             }

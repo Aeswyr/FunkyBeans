@@ -11,19 +11,18 @@ public class PriorityQueue<T> {
         }
 
         // binary search for insertion index
-        //int index = elements.Count / 2;
-        //while (index != elements.Count
-        //  && !(priority <= elements[index].Key && (index == 0 || priority >= elements[index - 1].Key))) {
-        //    if (priority < elements[index].Key)
-        //        index /= 2;
-        //    else if (priority > elements[index].Key)
-        //        index += (elements.Count - index) / 2 + 1;
-        //}
-
-        int index;
-        for (index = 0; index < elements.Count; index++)
-            if (priority <= elements[index].Key && (index == 0 || priority >= elements[index - 1].Key))
+        int left = 0, right = elements.Count;
+        int index = 0;
+        while (left < right) {
+            index = (left + right) / 2;
+            if (priority < elements[index].Key)
+                right = index;
+            else if (priority > elements[index].Key)
+                left  = index + 1;
+            else
                 break;
+            
+        }
 
         elements.Insert(index, new KeyValuePair<int, T>(priority, element));       
     }

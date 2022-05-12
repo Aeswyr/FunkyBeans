@@ -71,7 +71,7 @@ public class GameHandler : Singleton<GameHandler>
     public void DrawMove(GameObject src, Vector3Int dst) {
         Vector3Int srcPos = currentLevel.WorldToCell(src.transform.position);
 
-        List<Vector3Int> positions = Utils.Pathfinding.GetPathInSelectRange(srcPos, dst);
+        List<Vector3Int> positions = Utils.Pathfinding.GetPath(srcPos, dst, true);
         foreach (var pos in positions)
             moveGrid.SetTile(pos, pointerTile);
         if (positions.Count > 0)
