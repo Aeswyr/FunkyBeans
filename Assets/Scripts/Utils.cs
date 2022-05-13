@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class Utils
 {
+    public static Quaternion Rotate(Vector2 dir) {
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        return Quaternion.Euler(new Vector3(0, 0, angle));
+    }
+
     public class GridUtil {
         public static int ManhattanDistance(Vector2Int a, Vector2Int b) {
             return Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y);

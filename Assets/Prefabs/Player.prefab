@@ -356,6 +356,7 @@ MonoBehaviour:
   rbody: {fileID: 4859748966654108466}
   input: {fileID: 3199200688220628827}
   speed: 5
+  attackPrefab: {fileID: 4637698849271149972, guid: b387c12bf18ba0f40837514ca61d7fd8, type: 3}
 --- !u!1 &6163126135945220688
 GameObject:
   m_ObjectHideFlags: 0

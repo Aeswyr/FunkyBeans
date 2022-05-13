@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Rigidbody2D rbody;
     [SerializeField] private InputHandler input;
     [SerializeField] private float speed;
+    [SerializeField] private GameObject attackPrefab;
     private int maxMove = 4;
     private ContactFilter2D filter = new ContactFilter2D();
     private bool freeMove  = true;
@@ -25,8 +26,11 @@ public class PlayerController : MonoBehaviour
             rbody.velocity = speed * input.dir;
 
         if (input.action.pressed)
-            if (freeMove)
-                StartBattle();
+            if (freeMove) {
+                GameObject attack = Instantiate(attackPrefab, transform);
+                attack.GetComponent<AttackController>().SetSource(this);
+                attack.transform.rotation = Utils.Rotate(Camera.main.ScreenToWorldPoint(input.mousePos) - transform.position);
+            }
             else
                 EndBattle();
 
