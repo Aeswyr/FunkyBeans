@@ -33,9 +33,11 @@ public class PlayerController : MonoBehaviour
                 attack.transform.rotation = Utils.Rotate(Camera.main.ScreenToWorldPoint(input.mousePos) - transform.position);
             }
             else
+            {
                 EndBattle();
+            }
 
-        DrawCombatMovement();
+        //DrawCombatMovement();
     }
 
     private Vector3Int lastMouseCell;
@@ -65,8 +67,14 @@ public class PlayerController : MonoBehaviour
 
         currentCombat = GameHandler.Instance.CreateCombatManager();
 
+        //Make list of all entities that will be in combat
+        List<CombatEntity> entities = new List<CombatEntity>();
+
         foreach (var hit in results) {
-            Utils.GridUtil.SnapToLevelGrid(hit.collider.transform.parent.gameObject);
+            GameObject hitEntity = hit.collider.transform.parent.gameObject;
+
+            Utils.GridUtil.SnapToLevelGrid(hitEntity);
+            entities.Add(hitEntity.GetComponent<CombatEntity>());
         }
 
         freeMove = false;
@@ -78,5 +86,7 @@ public class PlayerController : MonoBehaviour
         freeMove = true;
         currentCombat.ClearMove();
         currentCombat.ClearSelect();
+
+        Destroy(currentCombat.gameObject);
     }
 }

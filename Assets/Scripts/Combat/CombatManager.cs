@@ -27,6 +27,9 @@ public class CombatManager : MonoBehaviour
     [SerializeField] private GameObject moveCost;
     private TextMeshPro moveText;
 
+    private List<CombatEntity> combatEntities;
+    private CombatEntity currEntity;
+
     void Awake()
     {
         selectGrid = combatOverlay.transform.Find("SelectGrid").GetComponent<Tilemap>();
@@ -58,6 +61,48 @@ public class CombatManager : MonoBehaviour
         DrawSelectRecursive(pos + Vector3Int.up, dist);
         DrawSelectRecursive(pos + Vector3Int.down, dist);
     }
+
+    public void SetCombatEntities(List<CombatEntity> newEntities)
+    {
+        combatEntities = newEntities;
+    }
+
+    public void GenerateTurnOrder()
+    {
+        float highestSpeed = -1000;
+        CombatEntity fastestEntity = null;
+
+        //Find the fastest entity, make them go first
+        foreach(CombatEntity entity in combatEntities)
+        {
+            if(entity.Speed > highestSpeed)
+            {
+                highestSpeed = entity.Speed;
+                fastestEntity = entity;
+            }
+        }
+        currEntity = fastestEntity;
+    }
+
+    private void DrawCombatMovement()
+    {
+        /*
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(input.mousePos);
+        Vector3Int mouseCell = GameHandler.Instance.currentLevel.WorldToCell(mousePos);
+
+        if (mouseCell != lastMouseCell)
+        {
+            currentCombat.ClearMove();
+
+            if (Utils.GridUtil.IsPointInSelectRange(mouseCell, currentCombat) && !Utils.GridUtil.IsCellFilled(mouseCell))
+            {
+                currentCombat.DrawMove(gameObject, mouseCell);
+            }
+        }
+
+        lastMouseCell = mouseCell;*/
+    }
+
 
     public void DrawMove(GameObject src, Vector3Int dst) {
         //ClearText();
