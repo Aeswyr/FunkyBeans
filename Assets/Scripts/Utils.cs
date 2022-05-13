@@ -18,6 +18,10 @@ public class Utils
             return Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y);
         }
 
+        public static void SnapToLevelGrid(GameObject entity) {
+            entity.transform.position = new Vector3(0.5f, 0.5f, 0) + GameHandler.Instance.currentLevel.CellToWorld(GameHandler.Instance.currentLevel.WorldToCell(entity.transform.position));
+        }
+
         /**
         * returns true if a given cell on the level map has an obstacle or is invalid terrain
         */
@@ -25,28 +29,28 @@ public class Utils
             return GameHandler.Instance.floorGrid.GetTile(pos) == null || GameHandler.Instance.wallGrid.GetTile(pos) != null;
         }
         public static bool IsCellFilled(Vector3 point) {
-            var pos = GameHandler.Instance.CurrentLevel.WorldToCell(point);
+            var pos = GameHandler.Instance.currentLevel.WorldToCell(point);
             return GameHandler.Instance.floorGrid.GetTile(pos) == null || GameHandler.Instance.wallGrid.GetTile(pos) != null;
         }
 
         public static bool IsPointInRange(GameObject src, Vector3 point, int dist) {
-            Vector3Int gridSrc = GameHandler.Instance.CurrentLevel.WorldToCell(src.transform.position);
-            Vector3Int gridPoint = GameHandler.Instance.CurrentLevel.WorldToCell(point);
+            Vector3Int gridSrc = GameHandler.Instance.currentLevel.WorldToCell(src.transform.position);
+            Vector3Int gridPoint = GameHandler.Instance.currentLevel.WorldToCell(point);
             return ManhattanDistance(gridPoint, gridSrc) <= dist;
         }
 
         public static bool IsPointInRange(GameObject src, Vector3Int point, int dist) {
-            Vector3Int gridSrc = GameHandler.Instance.CurrentLevel.WorldToCell(src.transform.position);
+            Vector3Int gridSrc = GameHandler.Instance.currentLevel.WorldToCell(src.transform.position);
             return ManhattanDistance(point, gridSrc) <= dist;
         }
 
-        public static bool IsPointInSelectRange(Vector3 point) {
-            var pos = GameHandler.Instance.CurrentLevel.WorldToCell(point);
-            return GameHandler.Instance.selectGrid.GetTile(pos) != null;
+        public static bool IsPointInSelectRange(Vector3 point, CombatManager manager) {
+            var pos = GameHandler.Instance.currentLevel.WorldToCell(point);
+            return manager.selectGrid.GetTile(pos) != null;
         }
 
-        public static bool IsPointInSelectRange(Vector3Int point) {
-            return GameHandler.Instance.selectGrid.GetTile(point) != null;
+        public static bool IsPointInSelectRange(Vector3Int point, CombatManager manager) {
+            return manager.selectGrid.GetTile(point) != null;
         }
 
         public static List<Vector3Int> GetValidAdjacent(Vector3Int cell) {
@@ -63,16 +67,16 @@ public class Utils
             return results;
         }
 
-        public static List<Vector3Int> GetValidSelectedAdjacent(Vector3Int cell) {
+        public static List<Vector3Int> GetValidSelectedAdjacent(Vector3Int cell, CombatManager manager) {
             var results = new List<Vector3Int>();
 
-            if (GameHandler.Instance.selectGrid.GetTile(cell + Vector3Int.right) != null)
+            if (manager.selectGrid.GetTile(cell + Vector3Int.right) != null)
                 results.Add(cell + Vector3Int.right);
-            if (GameHandler.Instance.selectGrid.GetTile(cell + Vector3Int.left) != null)
+            if (manager.selectGrid.GetTile(cell + Vector3Int.left) != null)
                 results.Add(cell + Vector3Int.left);
-            if (GameHandler.Instance.selectGrid.GetTile(cell + Vector3Int.up) != null)
+            if (manager.selectGrid.GetTile(cell + Vector3Int.up) != null)
                 results.Add(cell + Vector3Int.up);
-            if (GameHandler.Instance.selectGrid.GetTile(cell + Vector3Int.down) != null)
+            if (manager.selectGrid.GetTile(cell + Vector3Int.down) != null)
                 results.Add(cell + Vector3Int.down);
             return results;
         }
@@ -91,7 +95,7 @@ public class Utils
         *
         * if inSelect is true, will only consider paths in the select range;
         */
-        public static List<Vector3Int> GetPath(Vector3Int src, Vector3Int dst, bool inSelect = false) {
+        public static List<Vector3Int> GetPath(Vector3Int src, Vector3Int dst, CombatManager manager = null) {
             // setup
             open.Clear();
             previous.Clear();
@@ -108,8 +112,8 @@ public class Utils
                     break;
 
                 List<Vector3Int> adj = null;
-                if (inSelect) {
-                    adj = GridUtil.GetValidSelectedAdjacent(current);
+                if (manager != null) {
+                    adj = GridUtil.GetValidSelectedAdjacent(current, manager);
                 } else {
                     adj = GridUtil.GetValidAdjacent(current);
                 }
@@ -137,7 +141,7 @@ public class Utils
         public static void PrintPathCosts() {
             GameHandler.Instance.ClearText();
             foreach (var cost in costs) {
-                GameHandler.Instance.DrawText(GameHandler.Instance.CurrentLevel.CellToWorld(cost.Key) + new Vector3(0.5f, 0.5f, 0), cost.Value.ToString());
+                GameHandler.Instance.DrawText(GameHandler.Instance.currentLevel.CellToWorld(cost.Key) + new Vector3(0.5f, 0.5f, 0), cost.Value.ToString());
             }
         }
     }

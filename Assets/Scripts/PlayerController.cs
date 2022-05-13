@@ -10,7 +10,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject attackPrefab;
     private int maxMove = 4;
     private ContactFilter2D filter = new ContactFilter2D();
-    private bool freeMove  = true;
+    private bool freeMove = true;
+    private CombatManager currentCombat = null;
 
 
     // Start is called before the first frame update
@@ -38,15 +39,18 @@ public class PlayerController : MonoBehaviour
     }
 
     private Vector3Int lastMouseCell;
+    
     private void DrawCombatMovement() {
+        if (currentCombat == null)
+            return;
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(input.mousePos);
-        Vector3Int mouseCell = GameHandler.Instance.CurrentLevel.WorldToCell(mousePos);
+        Vector3Int mouseCell = GameHandler.Instance.currentLevel.WorldToCell(mousePos);
 
         if (mouseCell != lastMouseCell) {
-            GameHandler.Instance.ClearMove();
+            currentCombat.ClearMove();
             
-            if (Utils.GridUtil.IsPointInSelectRange(mouseCell) && !Utils.GridUtil.IsCellFilled(mouseCell)) {
-                GameHandler.Instance.DrawMove(gameObject, mouseCell);
+            if (Utils.GridUtil.IsPointInSelectRange(mouseCell, currentCombat) && !Utils.GridUtil.IsCellFilled(mouseCell)) {
+                currentCombat.DrawMove(gameObject, mouseCell);
             }
         }
 
@@ -59,18 +63,20 @@ public class PlayerController : MonoBehaviour
         var results = new List<RaycastHit2D>();
         Physics2D.CircleCast(transform.position, maxMove, Vector2.right, filter, results, 0);
 
+        currentCombat = GameHandler.Instance.CreateCombatManager();
+
         foreach (var hit in results) {
-            GameHandler.Instance.SnapToLevelGrid(hit.collider.transform.parent.gameObject);
+            Utils.GridUtil.SnapToLevelGrid(hit.collider.transform.parent.gameObject);
         }
 
         freeMove = false;
         rbody.velocity = Vector2.zero;
-        GameHandler.Instance.DrawSelect(gameObject, maxMove);
+        currentCombat.DrawSelect(gameObject, maxMove);
     }
 
     public void EndBattle() {
         freeMove = true;
-        GameHandler.Instance.ClearMove();
-        GameHandler.Instance.ClearSelect();
+        currentCombat.ClearMove();
+        currentCombat.ClearSelect();
     }
 }
