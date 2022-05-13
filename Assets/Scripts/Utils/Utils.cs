@@ -21,11 +21,11 @@ public class Utils
 
         private static Queue<Vector3Int> bfs = new Queue<Vector3Int>();
         private static Dictionary<Vector3Int, bool> bfsVisited = new Dictionary<Vector3Int, bool>();
-        public static void SnapToLevelGrid(GameObject entity) {
+        public static void SnapToLevelGrid(GameObject entity, CombatManager manager) {
 
             Vector3Int tilePos = GameHandler.Instance.currentLevel.WorldToCell(entity.transform.position);
 
-            if (IsCellFilled(tilePos)) {
+            if (IsCellFilled(tilePos) || manager.CellHasEntity(tilePos)) {
                 bfs.Clear();
                 bfsVisited.Clear();
 
@@ -35,7 +35,7 @@ public class Utils
                 while (bfs.Count > 0) {
                     var current = bfs.Dequeue();
                     
-                    if (!IsCellFilled(current)) {
+                    if (!IsCellFilled(current) && !manager.CellHasEntity(current)) {
                         tilePos = current;
                         break;
                     }
@@ -58,7 +58,7 @@ public class Utils
                     }
                 }
             }
-            
+
             entity.transform.position = new Vector3(0.5f, 0.5f, 0) + GameHandler.Instance.currentLevel.CellToWorld(tilePos);
         }
 

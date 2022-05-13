@@ -77,7 +77,8 @@ public class PlayerController : MonoBehaviour
         foreach (var hit in results) {
             GameObject hitEntity = hit.collider.transform.parent.gameObject;
 
-            Utils.GridUtil.SnapToLevelGrid(hitEntity);
+            Utils.GridUtil.SnapToLevelGrid(hitEntity, currentCombat);
+            currentCombat.EntityEnterTile(hitEntity);
             entities.Add(hitEntity.GetComponent<CombatEntity>());
         }
 
