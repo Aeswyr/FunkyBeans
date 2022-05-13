@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class Utils
 {
@@ -18,19 +19,74 @@ public class Utils
             return Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y);
         }
 
+        private static Queue<Vector3Int> bfs = new Queue<Vector3Int>();
+        private static Dictionary<Vector3Int, bool> bfsVisited = new Dictionary<Vector3Int, bool>();
         public static void SnapToLevelGrid(GameObject entity) {
-            entity.transform.position = new Vector3(0.5f, 0.5f, 0) + GameHandler.Instance.currentLevel.CellToWorld(GameHandler.Instance.currentLevel.WorldToCell(entity.transform.position));
+
+            Vector3Int tilePos = GameHandler.Instance.currentLevel.WorldToCell(entity.transform.position);
+
+            if (IsCellFilled(tilePos)) {
+                bfs.Clear();
+                bfsVisited.Clear();
+
+                bfs.Enqueue(tilePos);
+                bfsVisited[tilePos] = true;
+
+                while (bfs.Count > 0) {
+                    var current = bfs.Dequeue();
+                    
+                    if (!IsCellFilled(current)) {
+                        tilePos = current;
+                        break;
+                    }
+
+                    if (!bfsVisited.ContainsKey(current + Vector3Int.up)) {
+                        bfs.Enqueue(current + Vector3Int.up);
+                        bfsVisited[current + Vector3Int.up] = true;
+                    }
+                    if (!bfsVisited.ContainsKey(current + Vector3Int.down)) {
+                        bfs.Enqueue(current + Vector3Int.down);
+                        bfsVisited[current + Vector3Int.down] = true;
+                    }
+                    if (!bfsVisited.ContainsKey(current + Vector3Int.right)) {
+                        bfs.Enqueue(current + Vector3Int.right);
+                        bfsVisited[current + Vector3Int.right] = true;
+                    }
+                    if (!bfsVisited.ContainsKey(current + Vector3Int.left)) {
+                        bfs.Enqueue(current + Vector3Int.left);
+                        bfsVisited[current + Vector3Int.left] = true;
+                    }
+                }
+            }
+            
+            entity.transform.position = new Vector3(0.5f, 0.5f, 0) + GameHandler.Instance.currentLevel.CellToWorld(tilePos);
         }
 
         /**
         * returns true if a given cell on the level map has an obstacle or is invalid terrain
         */
         public static bool IsCellFilled(Vector3Int pos) {
-            return GameHandler.Instance.floorGrid.GetTile(pos) == null || GameHandler.Instance.wallGrid.GetTile(pos) != null;
+            return GameHandler.Instance.floorGrid.GetTile(pos) == null || isTileDiagonal(pos) ||  GameHandler.Instance.wallGrid.GetTile(pos) != null;
         }
         public static bool IsCellFilled(Vector3 point) {
             var pos = GameHandler.Instance.currentLevel.WorldToCell(point);
-            return GameHandler.Instance.floorGrid.GetTile(pos) == null || GameHandler.Instance.wallGrid.GetTile(pos) != null;
+            return GameHandler.Instance.floorGrid.GetTile(pos) == null || isTileDiagonal(pos) || GameHandler.Instance.wallGrid.GetTile(pos) != null;
+        }
+
+        private static Matrix4x4 transform;
+        private static bool isTileDiagonal(Vector3Int pos) {
+            var north = GameHandler.Instance.floorGrid.GetTile(pos + Vector3Int.up) == null;
+            var east = GameHandler.Instance.floorGrid.GetTile(pos + Vector3Int.right) == null;
+            var south = GameHandler.Instance.floorGrid.GetTile(pos + Vector3Int.down) == null;
+            var west = GameHandler.Instance.floorGrid.GetTile(pos + Vector3Int.left) == null;
+            return checkDiag(north, east, south, west) 
+                || checkDiag(east, south, west, north) 
+                || checkDiag(south, west, north, east) 
+                || checkDiag(west, north, east, south);
+        }
+
+        private static bool checkDiag(bool a, bool b, bool c, bool d) { 
+            return a && b && !c && !d;
         }
 
         public static bool IsPointInRange(GameObject src, Vector3 point, int dist) {

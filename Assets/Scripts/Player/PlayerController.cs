@@ -67,6 +67,10 @@ public class PlayerController : MonoBehaviour
 
         currentCombat = GameHandler.Instance.CreateCombatManager();
 
+        freeMove = false;
+        rbody.velocity = Vector2.zero;
+
+
         //Make list of all entities that will be in combat
         List<CombatEntity> entities = new List<CombatEntity>();
 
@@ -77,8 +81,6 @@ public class PlayerController : MonoBehaviour
             entities.Add(hitEntity.GetComponent<CombatEntity>());
         }
 
-        freeMove = false;
-        rbody.velocity = Vector2.zero;
         currentCombat.DrawSelect(gameObject, maxMove);
     }
 
