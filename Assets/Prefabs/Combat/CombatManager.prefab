@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   combatOverlay: {fileID: 5071642083883760748}
-  selectTile: {fileID: 11400000, guid: c504c5338e804914ea26ad2a705b1702, type: 2}
+  selectTile: {fileID: 11400000, guid: ac0783522c05c6447851fc096368a371, type: 2}
   pointerTile: {fileID: 11400000, guid: dbebd63645defb34689e2729f82b4e5b, type: 2}
   entityTile: {fileID: 11400000, guid: 0339acc570e7fdd49aa4a52bedd43f23, type: 2}
   moveCost: {fileID: 5119163333748181731}
