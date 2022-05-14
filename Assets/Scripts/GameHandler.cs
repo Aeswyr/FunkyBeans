@@ -6,6 +6,8 @@ using TMPro;
 
 public class GameHandler : Singleton<GameHandler>
 {
+    [SerializeField] private List<GameObject> thingsToEnableForCombat;
+
     [Header("Gameplay grids")]
     [SerializeField] private Grid m_currentLevel;
     public Tilemap floorGrid {
@@ -47,4 +49,10 @@ public class GameHandler : Singleton<GameHandler>
         return Instantiate(combatManagerPrefab, Vector3.zero, Quaternion.identity).GetComponent<CombatManager>();
     }
 
+
+    public void EnableCombatObjects()
+    {
+        foreach (GameObject obj in thingsToEnableForCombat)
+            obj.SetActive(true);
+    }
 }

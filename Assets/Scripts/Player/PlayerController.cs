@@ -60,6 +60,7 @@ public class PlayerController : MonoBehaviour
 
 
     public void StartBattle() {
+        GameHandler.Instance.EnableCombatObjects();
 
         var results = new List<RaycastHit2D>();
         Physics2D.CircleCast(transform.position, maxMove, Vector2.right, filter, results, 0);
