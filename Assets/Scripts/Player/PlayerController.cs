@@ -5,7 +5,6 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private Rigidbody2D rbody;
-    [SerializeField] private InputHandler input;
     [SerializeField] private float speed;
     [SerializeField] private GameObject attackPrefab;
     private int maxMove = 4;
@@ -24,17 +23,17 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         if (freeMove)
-            rbody.velocity = speed * input.dir;
+            rbody.velocity = speed * InputHandler.Instance.dir;
 
-        if (input.action.pressed)
+        if (InputHandler.Instance.action.pressed)
             if (freeMove) {
                 GameObject attack = Instantiate(attackPrefab, transform);
                 attack.GetComponent<AttackController>().SetSource(this);
-                attack.transform.rotation = Utils.Rotate(Camera.main.ScreenToWorldPoint(input.mousePos) - transform.position);
+                attack.transform.rotation = Utils.Rotate(Camera.main.ScreenToWorldPoint(InputHandler.Instance.mousePos) - transform.position);
             }
             else
             {
-                EndBattle();
+                //EndBattle();
             }
 
         //DrawCombatMovement();
@@ -45,7 +44,7 @@ public class PlayerController : MonoBehaviour
     private void DrawCombatMovement() {
         if (currentCombat == null)
             return;
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(input.mousePos);
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(InputHandler.Instance.mousePos);
         Vector3Int mouseCell = GameHandler.Instance.currentLevel.WorldToCell(mousePos);
 
         if (mouseCell != lastMouseCell) {
@@ -81,6 +80,8 @@ public class PlayerController : MonoBehaviour
             currentCombat.EntityEnterTile(hitEntity);
             entities.Add(hitEntity.GetComponent<CombatEntity>());
         }
+
+        currentCombat.SetCombatEntities(entities);
 
         currentCombat.DrawSelect(gameObject, maxMove);
     }

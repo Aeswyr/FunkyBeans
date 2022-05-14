@@ -51,6 +51,9 @@ MonoBehaviour:
   pointerTile: {fileID: 11400000, guid: dbebd63645defb34689e2729f82b4e5b, type: 2}
   entityTile: {fileID: 11400000, guid: 0339acc570e7fdd49aa4a52bedd43f23, type: 2}
   moveCost: {fileID: 5119163333748181731}
+  entityTurnIndicatorPrefab: {fileID: 350310851504152826, guid: 11c80f3b1ce278541ab2285d4e0f8163, type: 3}
+  timeToShowOnBar: 4
+  speedMultiplier: 50
 --- !u!1001 &5661763653960225224
 PrefabInstance:
   m_ObjectHideFlags: 0

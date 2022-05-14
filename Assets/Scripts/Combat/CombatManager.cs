@@ -33,8 +33,16 @@ public class CombatManager : MonoBehaviour
     [SerializeField] private GameObject moveCost;
     private TextMeshPro moveText;
 
+    [Header("Turn Indicator Stuff")]
+    [SerializeField] private GameObject entityTurnIndicatorPrefab;
+    [SerializeField] private float timeToShowOnBar;
+
     private List<CombatEntity> combatEntities;
+    private PriorityQueue<CombatEntity> turnOrder;
     private CombatEntity currEntity;
+    private List<EntityTurnIndicator> turnIndicators = new List<EntityTurnIndicator>();
+
+    [SerializeField] private float speedMultiplier;
 
     void Awake()
     {
@@ -44,6 +52,14 @@ public class CombatManager : MonoBehaviour
 
         moveCost.SetActive(false);
         moveText = moveCost.transform.Find("Text").GetComponent<TextMeshPro>();
+    }
+
+    private void FixedUpdate()
+    {
+        if(InputHandler.Instance.action.pressed)
+        {
+            StartNextTurn();
+        }
     }
 
     public void DrawSelect(GameObject src, int dist) {
@@ -73,11 +89,6 @@ public class CombatManager : MonoBehaviour
         return entityGrid.GetTile(cell) != null;
     }
 
-    public void SetCombatEntities(List<CombatEntity> newEntities)
-    {
-        combatEntities = newEntities;
-    }
-
     public void EntityEnterTile(GameObject entity) {
         var pos = entityGrid.WorldToCell(entity.transform.position);
         entityGrid.SetTile(pos, entityTile);
@@ -92,21 +103,94 @@ public class CombatManager : MonoBehaviour
 
     }
 
+    public void SetCombatEntities(List<CombatEntity> newEntities)
+    {
+        combatEntities = newEntities;
+        GenerateTurnOrder();
+    }
+
     public void GenerateTurnOrder()
     {
-        float highestSpeed = -1000;
-        CombatEntity fastestEntity = null;
+        turnOrder = new PriorityQueue<CombatEntity>();
 
-        //Find the fastest entity, make them go first
-        foreach(CombatEntity entity in combatEntities)
-        {
-            if(entity.Speed > highestSpeed)
+        foreach (CombatEntity entity in combatEntities)
+        { 
+            float posOnBar = speedMultiplier/entity.Speed;
+
+            while (posOnBar <= timeToShowOnBar)
             {
-                highestSpeed = entity.Speed;
-                fastestEntity = entity;
+                turnOrder.Put(entity, posOnBar);
+                posOnBar += speedMultiplier/entity.Speed;
             }
         }
-        currEntity = fastestEntity;
+
+        StartNextTurn();
+    }
+
+    private void StartNextTurn()
+    {
+        if(currEntity != null)
+        {
+            Debug.Log("Skipping current Turn!");
+
+            //Debug.LogError("Tried to start next turn mid-turn for entity: " + currEntity.name);
+            //return;
+        }
+
+        //Debug.Log("before turn change:");
+        turnOrder.PrintCosts();
+
+        //find how much to shift the current "time" and set new currEneity
+        float timeChange = turnOrder.GetLowestPriority();
+        //Debug.Log("timechange: " + timeChange);
+        currEntity = turnOrder.Pop();
+
+        //keeps track of how many copies of each entity show up on the turn bar indicator
+        int numCopies = turnOrder.GetNumCopies(currEntity) + 1;
+
+        //Get all entities in the current turn order, and make a new priority queue
+        List<KeyValuePair<float, CombatEntity>> currElements = turnOrder.GetElements();
+        PriorityQueue<CombatEntity> newTurnOrder = new PriorityQueue<CombatEntity>();
+
+        //Add each entity to the new priority queue, but with the updated time till their turn
+        foreach (KeyValuePair<float, CombatEntity> element in currElements)
+        {
+            newTurnOrder.Put(element.Value, element.Key - timeChange);
+        }
+        //Finally, add the current entity back into the new priority queue
+        newTurnOrder.Put(currEntity, (speedMultiplier/currEntity.Speed) * numCopies);
+
+        turnOrder = newTurnOrder;
+
+        UpdateTurnIndicatorUI();
+
+        //Debug.Log("after turn change:");
+        turnOrder.PrintCosts();
+    }
+
+    public void UpdateTurnIndicatorUI()
+    {
+        List<KeyValuePair<float, CombatEntity>> currElements = turnOrder.GetElements();
+
+        TurnOrderCanvas.Instance.SetCurrEntitySprite(currEntity.UISprite);
+
+        //delete all current turn indicators
+        while(turnIndicators.Count > 0)
+        {
+            Destroy(turnIndicators[0].gameObject);
+            turnIndicators.RemoveAt(0);
+        }
+
+        //create and set position for every entity in turnOrder
+        foreach (KeyValuePair<float, CombatEntity> element in currElements)
+        {
+            EntityTurnIndicator newIndicator = Instantiate(entityTurnIndicatorPrefab, TurnOrderCanvas.Instance.transform).GetComponent<EntityTurnIndicator>();
+            turnIndicators.Add(newIndicator);
+
+            newIndicator.SetSprite(element.Value.UISprite);
+
+            TurnOrderCanvas.Instance.PlaceTurnEntity(newIndicator.transform, element.Key / timeToShowOnBar);
+        }
     }
 
     private void DrawCombatMovement()
