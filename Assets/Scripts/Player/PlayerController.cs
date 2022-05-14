@@ -36,7 +36,7 @@ public class PlayerController : MonoBehaviour
                 //EndBattle();
             }
 
-        //DrawCombatMovement();
+        DrawCombatMovement();
     }
 
     private Vector3Int lastMouseCell;

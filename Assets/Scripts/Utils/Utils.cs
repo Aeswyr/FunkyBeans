@@ -108,31 +108,24 @@ public class Utils
         public static bool IsPointInSelectRange(Vector3Int point, CombatManager manager) {
             return manager.selectGrid.GetTile(point) != null;
         }
-
-        public static List<Vector3Int> GetValidAdjacent(Vector3Int cell) {
+        public static List<Vector3Int> GetValidAdjacent(Vector3Int cell, CombatManager manager = null, bool respectEntities = false, bool respectSelection = false, bool respectExclusion = false, Vector3Int exclude = default(Vector3Int)) {
             var results = new List<Vector3Int>();
 
-            if (!IsCellFilled(cell + Vector3Int.right))
+            if (!IsCellFilled(cell + Vector3Int.right)
+                && (!respectEntities || (!manager.CellHasEntity(cell + Vector3Int.right) || (respectExclusion && cell + Vector3Int.right == exclude)))
+                && (!respectSelection || manager.selectGrid.GetTile(cell + Vector3Int.right) != null))
                 results.Add(cell + Vector3Int.right);
-            if (!IsCellFilled(cell + Vector3Int.left))
+            if (!IsCellFilled(cell + Vector3Int.left)
+                && (!respectEntities || (!manager.CellHasEntity(cell + Vector3Int.left) || (respectExclusion && cell + Vector3Int.left == exclude)))
+                && (!respectSelection || manager.selectGrid.GetTile(cell + Vector3Int.left) != null))
                 results.Add(cell + Vector3Int.left);
-            if (!IsCellFilled(cell + Vector3Int.up))
+            if (!IsCellFilled(cell + Vector3Int.up)
+                && (!respectEntities || (!manager.CellHasEntity(cell + Vector3Int.up) || (respectExclusion && cell + Vector3Int.up == exclude)))
+                && (!respectSelection || manager.selectGrid.GetTile(cell + Vector3Int.up) != null))
                 results.Add(cell + Vector3Int.up);
-            if (!IsCellFilled(cell + Vector3Int.down))
-                results.Add(cell + Vector3Int.down);
-            return results;
-        }
-
-        public static List<Vector3Int> GetValidSelectedAdjacent(Vector3Int cell, CombatManager manager) {
-            var results = new List<Vector3Int>();
-
-            if (manager.selectGrid.GetTile(cell + Vector3Int.right) != null)
-                results.Add(cell + Vector3Int.right);
-            if (manager.selectGrid.GetTile(cell + Vector3Int.left) != null)
-                results.Add(cell + Vector3Int.left);
-            if (manager.selectGrid.GetTile(cell + Vector3Int.up) != null)
-                results.Add(cell + Vector3Int.up);
-            if (manager.selectGrid.GetTile(cell + Vector3Int.down) != null)
+            if (!IsCellFilled(cell + Vector3Int.down)
+                && (!respectEntities || (!manager.CellHasEntity(cell + Vector3Int.down) || (respectExclusion && cell + Vector3Int.down == exclude)))
+                && (!respectSelection || manager.selectGrid.GetTile(cell + Vector3Int.down) != null))
                 results.Add(cell + Vector3Int.down);
             return results;
         }
@@ -151,7 +144,7 @@ public class Utils
         *
         * if inSelect is true, will only consider paths in the select range;
         */
-        public static List<Vector3Int> GetPath(Vector3Int src, Vector3Int dst, CombatManager manager = null) {
+        public static List<Vector3Int> GetPath(Vector3Int src, Vector3Int dst, CombatManager manager = null, bool respectEntities = false, bool respectSelection = false) {
             // setup
             open.Clear();
             previous.Clear();
@@ -167,12 +160,7 @@ public class Utils
                 if (current == dst)
                     break;
 
-                List<Vector3Int> adj = null;
-                if (manager != null) {
-                    adj = GridUtil.GetValidSelectedAdjacent(current, manager);
-                } else {
-                    adj = GridUtil.GetValidAdjacent(current);
-                }
+                List<Vector3Int> adj = GridUtil.GetValidAdjacent(current, manager, respectEntities, respectSelection, true, dst);
 
                 foreach (var next in adj) {
                     int cost = costs[current] + 1;
