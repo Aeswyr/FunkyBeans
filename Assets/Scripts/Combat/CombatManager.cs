@@ -46,27 +46,41 @@ public class CombatManager : MonoBehaviour
         moveText = moveCost.transform.Find("Text").GetComponent<TextMeshPro>();
     }
 
+    private Dictionary<Vector3Int, int> bfsDist = new Dictionary<Vector3Int, int>();
+    private Queue<Vector3Int> bfs = new Queue<Vector3Int>();
     public void DrawSelect(GameObject src, int dist) {
-        Vector3Int gridPos = GameHandler.Instance.currentLevel.WorldToCell(src.transform.position);
-        dist++;
-        DrawSelectRecursive(gridPos, gridPos, dist);
+        bfs.Clear();
+        bfsDist.Clear();
+
+        Vector3Int start = GameHandler.Instance.currentLevel.WorldToCell(src.transform.position);
+
+        bfs.Enqueue(start);
+        bfsDist[start] = 0;
+
+        while (bfs.Count > 0) {
+            var current = bfs.Dequeue();
+            
+            selectGrid.SetTile(current, selectTile);
+            var cost = bfsDist[current] + 1;
+            if (cost > dist)
+                continue;
+            foreach (var next in Utils.GridUtil.GetValidAdjacent(current, this, true)) {
+                if (bfsDist.ContainsKey(next))
+                    continue;
+                
+                bfs.Enqueue(next);
+                bfsDist[next] = cost;
+            }
+
+            foreach (var next in Utils.GridUtil.GetValidAdjacent(current, this)) {
+                if (CellHasEntity(next) && selectGrid.GetTile(next) == null)
+                    selectGrid.SetTile(next, selectTile);
+            }
+        }
     }
 
     public void ClearSelect() {
         selectGrid.ClearAllTiles();
-    }
-
-    private void DrawSelectRecursive(Vector3Int pos, Vector3Int src, int dist) {
-        if (dist <= 0 || Utils.GridUtil.IsCellFilled(pos))
-            return;
-        dist--;
-
-        selectGrid.SetTile(pos, selectTile);
-
-        DrawSelectRecursive(pos + Vector3Int.right, src, dist);
-        DrawSelectRecursive(pos + Vector3Int.left, src, dist);
-        DrawSelectRecursive(pos + Vector3Int.up, src, dist);
-        DrawSelectRecursive(pos + Vector3Int.down, src, dist);
     }
 
     public bool CellHasEntity(Vector3Int cell) {
@@ -133,11 +147,21 @@ public class CombatManager : MonoBehaviour
         //ClearText();
         Vector3Int srcPos = GameHandler.Instance.currentLevel.WorldToCell(src.transform.position);
 
-        List<Vector3Int> positions = Utils.Pathfinding.GetPath(srcPos, dst, this);
+        List<Vector3Int> positions = Utils.Pathfinding.GetPath(srcPos, dst, this, true, true);
 
-        moveCost.SetActive(true);
+        
         moveText.text = positions.Count.ToString();
-        moveCost.transform.position = new Vector3(0.5f, 0.5f, 0) + GameHandler.Instance.currentLevel.CellToWorld(dst) + (0.25f * Vector3.up);
+
+        bool dstHasEntity = CellHasEntity(dst);
+        if (dstHasEntity) {
+            moveText.text = (positions.Count - 1).ToString();
+            positions.Remove(dst);
+        }
+
+        if (positions.Count > 0) {
+            moveCost.transform.position = new Vector3(0.5f, 0.5f, 0) + GameHandler.Instance.currentLevel.CellToWorld(positions[0]) + (0.25f * Vector3.up);
+            moveCost.SetActive(true);
+        }
 
         foreach (var pos in positions)
             moveGrid.SetTile(pos, pointerTile);
