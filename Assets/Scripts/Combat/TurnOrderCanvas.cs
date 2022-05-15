@@ -11,7 +11,7 @@ public class TurnOrderCanvas : Singleton<TurnOrderCanvas>
 
     public void PlaceTurnEntity(Transform obj, float percentOnBar)
     {
-        Vector3 offSet = ((rightBar.position - leftBar.position)+new Vector3(0,0,-50)) * percentOnBar;
+        Vector3 offSet = ((rightBar.position - leftBar.position)+new Vector3(0, 0,-50)) * percentOnBar + new Vector3(0, -0.07f, 0);
 
         obj.transform.position = leftBar.position + offSet;
     }
