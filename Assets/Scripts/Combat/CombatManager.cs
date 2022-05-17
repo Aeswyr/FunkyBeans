@@ -153,8 +153,6 @@ public class CombatManager : MonoBehaviour
 
         foreach (CombatEntity entity in combatEntities)
         {
-            entity.SetCombatManager(this);
-
             float posOnBar = speedMultiplier/entity.Speed;
 
             while (posOnBar <= timeToShowOnBar)
