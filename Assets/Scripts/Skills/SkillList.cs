@@ -7,11 +7,21 @@ using UnityEngine.Events;
 public class SkillList : ScriptableObject {
     [SerializeField] private List<Skill> skills;
 
+    /**
+    *   returns a usable copy of the skill
+    */
     public Skill Get(SkillID id, SkillActions entityActions) {
         var skill = skills[(int)id];
         skill.behavior = new UnityEvent();
         LinkSkill(id, skill, entityActions);
         return skill;
+    }
+
+    /**
+    *   returns an unusable copy of the skill, but with accurate skill data
+    */
+    public Skill Get(SkillID id) {
+        return skills[(int)id];
     }
 
     private void LinkSkill(SkillID id, Skill skill, SkillActions actions) {
