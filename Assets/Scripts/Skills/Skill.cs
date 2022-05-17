@@ -28,20 +28,4 @@ public struct Skill
     public int actionCost;
 
     public UnityEvent behavior;
-
-    public Skill Clone() {
-        Skill skill = new Skill {
-            name = this.name,
-            types = this.types,
-            category = this.category,
-            target = this.target,
-            range = this.range,
-            size = this.size,
-            speedCost = this.speedCost,
-            manaCost = this.manaCost,
-            actionCost = this.actionCost,
-            behavior = new UnityEvent()
-        };
-        return skill;
-    }
 }

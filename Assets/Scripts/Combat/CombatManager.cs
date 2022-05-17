@@ -158,15 +158,15 @@ public class CombatManager : MonoBehaviour
 
         foreach (CombatEntity entity in combatEntities)
         {
-            float posOnBar = speedMultiplier/entity.Speed;
+            float posOnBar = speedMultiplier/entity.Stats.speed;
 
             turnOrder.Put(entity, posOnBar);
-            posOnBar += speedMultiplier / entity.Speed;
+            posOnBar += speedMultiplier / entity.Stats.speed;
 
             while (posOnBar <= timeToShowOnBar)
             {
                 turnOrder.Put(entity, posOnBar);
-                posOnBar += speedMultiplier/entity.Speed;
+                posOnBar += speedMultiplier/entity.Stats.speed;
             }
         }
 
@@ -207,7 +207,7 @@ public class CombatManager : MonoBehaviour
             newTurnOrder.Put(element.Value, element.Key - timeChange);
         }
         //Finally, add the current entity back into the new priority queue
-        newTurnOrder.Put(currEntity, (speedMultiplier/currEntity.Speed) * numCopies);
+        newTurnOrder.Put(currEntity, (speedMultiplier/currEntity.Stats.speed) * numCopies);
 
         turnOrder = newTurnOrder;
 
@@ -227,7 +227,7 @@ public class CombatManager : MonoBehaviour
             case CombatEntity.EntityType.player:
                 {
                     //Set number of actions
-                    numMaxActions = currEntity.NumMaxActions;
+                    numMaxActions = currEntity.Stats.actions;
                     numActionsLeft = numMaxActions;
 
                     ActionUIController.Instance.SetActionUI(numActionsLeft, numMaxActions);

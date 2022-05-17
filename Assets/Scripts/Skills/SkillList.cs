@@ -8,7 +8,8 @@ public class SkillList : ScriptableObject {
     [SerializeField] private List<Skill> skills;
 
     public Skill Get(SkillID id, SkillActions entityActions) {
-        var skill = skills[(int)id].Clone();
+        var skill = skills[(int)id];
+        skill.behavior = new UnityEvent();
         LinkSkill(id, skill, entityActions);
         return skill;
     }
