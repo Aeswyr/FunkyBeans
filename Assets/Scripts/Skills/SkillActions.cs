@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class SkillActions : MonoBehaviour
 {
+
+    [SerializeField] private CombatEntity stats;
     public void Strike() {
-        
+        Debug.Log($"OUCH: {stats.Speed}");
     }
 }

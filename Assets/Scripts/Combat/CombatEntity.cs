@@ -14,6 +14,10 @@ public class CombatEntity : MonoBehaviour
     [SerializeField] private EntityType entityType;
     public EntityType EntitiyType => entityType;
 
+    [Header("Universal data")]
+    [SerializeField] private SkillList skillsMaster;
+    [SerializeField] private SkillActions skillActions;
+    [Header("Per-entity data")]
     [SerializeField] private float speed;
     public float Speed => speed;
 
@@ -22,4 +26,7 @@ public class CombatEntity : MonoBehaviour
 
     [SerializeField] private Sprite uiSprite;
     public Sprite UISprite => uiSprite;
+    public void UseSkill(SkillID id) {
+        skillsMaster.Get(id, skillActions).behavior.Invoke();
+    }
 }
