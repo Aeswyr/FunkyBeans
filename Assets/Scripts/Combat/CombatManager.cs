@@ -61,7 +61,12 @@ public class CombatManager : MonoBehaviour
     {
         if (currEntity != null)
         {
-            switch(currEntity.EntitiyType)
+            if (InputHandler.Instance.interact.pressed)
+            {
+                currEntity.UseSkill(SkillID.STRIKE);
+            }
+
+            switch (currEntity.EntitiyType)
                 {
                 case CombatEntity.EntityType.player:
                     {
@@ -155,6 +160,9 @@ public class CombatManager : MonoBehaviour
         {
             float posOnBar = speedMultiplier/entity.Speed;
 
+            turnOrder.Put(entity, posOnBar);
+            posOnBar += speedMultiplier / entity.Speed;
+
             while (posOnBar <= timeToShowOnBar)
             {
                 turnOrder.Put(entity, posOnBar);
@@ -178,7 +186,7 @@ public class CombatManager : MonoBehaviour
         }
 
         //Debug.Log("before turn change:");
-        turnOrder.PrintCosts();
+        //turnOrder.PrintCosts();
 
         //find how much to shift the current "time" and set new currEneity
         float timeChange = turnOrder.GetLowestPriority();
@@ -206,7 +214,7 @@ public class CombatManager : MonoBehaviour
         UpdateTurnIndicatorUI();
 
         //Debug.Log("after turn change:");
-        turnOrder.PrintCosts();
+        //turnOrder.PrintCosts();
 
         TurnStarted();
     }
