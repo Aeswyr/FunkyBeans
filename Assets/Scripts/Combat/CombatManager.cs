@@ -132,9 +132,20 @@ public class CombatManager : MonoBehaviour
         return entityGrid.GetTile(cell) != null;
     }
 
+    public EntityReference GetEntityInCell(Vector3Int cell) {
+        GameObject obj = entityGrid.GetInstantiatedObject(cell);
+        if (obj != null) {
+            return obj.GetComponent<EntityReference>();
+        }
+        return null;
+    }
+
     public void EntityEnterTile(GameObject entity) {
         var pos = entityGrid.WorldToCell(entity.transform.position);
         entityGrid.SetTile(pos, entityTile);
+        EntityReference reference = entityGrid.GetInstantiatedObject(pos).GetComponent<EntityReference>();
+        reference.entity = entity.GetComponentInChildren<CombatEntity>();
+        reference.entityObj = entity;
     }
 
     public void EntityExitTile(GameObject entity) {

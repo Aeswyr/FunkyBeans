@@ -182,6 +182,33 @@ public class Utils
             return output;
         }
 
+        private static Dictionary<Vector3Int, int> bfsDist = new Dictionary<Vector3Int, int>();
+        private static Queue<Vector3Int> bfs = new Queue<Vector3Int>();
+        public static List<Vector3Int> GetBFS(Vector3Int src, int dist, CombatManager manager, bool respectEntities, bool respectSelection) {
+            bfs.Clear();
+            bfsDist.Clear();
+            List<Vector3Int> output = new List<Vector3Int>();
+
+            bfs.Enqueue(src);
+            bfsDist[src] = 0;
+
+            while (bfs.Count > 0) {
+                var current = bfs.Dequeue();
+                
+                output.Add(current);
+                var cost = bfsDist[current] + 1;
+                if (cost > dist)
+                    continue;
+                foreach (var next in Utils.GridUtil.GetValidAdjacent(current, manager, respectEntities, respectSelection)) {
+                    if (bfsDist.ContainsKey(next))
+                        continue;
+                    
+                    bfs.Enqueue(next);
+                    bfsDist[next] = cost;
+                }
+            }
+            return output;
+        }
         public static void PrintPathCosts() {
             GameHandler.Instance.ClearText();
             foreach (var cost in costs) {
