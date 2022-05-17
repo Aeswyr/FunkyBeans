@@ -53,7 +53,7 @@ public class CombatManager : MonoBehaviour
     private int numActionsLeft;
     private int numMaxActions;
     private CombatMode mode = CombatMode.MOVE;
-    private Skill activeSkill;
+    private SkillID activeSkill;
 
     void Awake()
     {
@@ -64,8 +64,6 @@ public class CombatManager : MonoBehaviour
 
         moveCost.SetActive(false);
         moveText = moveCost.transform.Find("Text").GetComponent<TextMeshPro>();
-
-        activeSkill = skillList.Get(SkillID.BOX);
     }
 
     private void FixedUpdate()
@@ -73,9 +71,9 @@ public class CombatManager : MonoBehaviour
         if(InputHandler.Instance.interact.pressed)
         {
             if (mode == CombatMode.MOVE)
-                mode = CombatMode.SELECT;
+                SetTargetMode(SkillID.BOX);
             else
-                mode = CombatMode.MOVE;
+                SetMoveMode();
         }
 
 
@@ -174,7 +172,15 @@ public class CombatManager : MonoBehaviour
     public void EntityEnterTile(GameObject entity) {
         var pos = entityGrid.WorldToCell(entity.transform.position);
         entityGrid.SetTile(pos, entityTile);
-        EntityReference reference = entityGrid.GetInstantiatedObject(pos).GetComponent<EntityReference>();
+        StartCoroutine(DelaySetEntityAtTile(entity, pos));
+    }
+
+    private IEnumerator DelaySetEntityAtTile(GameObject entity, Vector3Int pos) {
+        yield return new WaitForSeconds(Time.fixedDeltaTime * 2);
+        GameObject tileObj = entityGrid.GetInstantiatedObject(pos);
+        if (tileObj == null)
+            yield break;
+        EntityReference reference = tileObj.GetComponent<EntityReference>();
         reference.entity = entity.GetComponentInChildren<CombatEntity>();
         reference.entityObj = entity;
     }
@@ -217,7 +223,7 @@ public class CombatManager : MonoBehaviour
         StartNextTurn();
     }
 
-    public void SetTargetMode(Skill activeSkill) {
+    public void SetTargetMode(SkillID activeSkill) {
         ClearSelect();
         this.activeSkill = activeSkill;
         this.mode = CombatMode.SELECT;
@@ -326,7 +332,8 @@ public class CombatManager : MonoBehaviour
         if (mouseCell != lastMouseCell)
         {
             ClearHighlight();
-            List<Vector3Int> positions = Utils.CombatUtil.GetTilesInAttack(entityPos, mousePos, this, activeSkill.target, activeSkill.range, activeSkill.size); 
+            Skill skill = skillList.Get(activeSkill);
+            List<Vector3Int> positions = Utils.CombatUtil.GetTilesInAttack(entityPos, mousePos, this, skill.target, skill.range, skill.size); 
             DrawHighlight(positions);
             
         }
