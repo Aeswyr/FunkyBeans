@@ -44,6 +44,9 @@ public class CombatManager : MonoBehaviour
 
     [SerializeField] private float speedMultiplier;
 
+    private int numActionsLeft;
+    private int numMaxActions;
+
     void Awake()
     {
         selectGrid = combatOverlay.transform.Find("SelectGrid").GetComponent<Tilemap>();
@@ -56,9 +59,29 @@ public class CombatManager : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if(InputHandler.Instance.action.pressed)
+        if (currEntity != null)
         {
-            StartNextTurn();
+            switch(currEntity.EntitiyType)
+                {
+                case CombatEntity.EntityType.player:
+                    {
+                        DrawCombatMovement();
+
+                        if (InputHandler.Instance.action.pressed)
+                        {
+                            TryMovePlayer();
+                        }
+                        break;
+                    }
+                case CombatEntity.EntityType.enemy:
+                    {
+                        if (InputHandler.Instance.action.pressed)
+                        {
+                            StartNextTurn();
+                        }
+                        break;
+                    }
+            }
         }
     }
 
@@ -129,7 +152,9 @@ public class CombatManager : MonoBehaviour
         turnOrder = new PriorityQueue<CombatEntity>();
 
         foreach (CombatEntity entity in combatEntities)
-        { 
+        {
+            entity.SetCombatManager(this);
+
             float posOnBar = speedMultiplier/entity.Speed;
 
             while (posOnBar <= timeToShowOnBar)
@@ -146,7 +171,9 @@ public class CombatManager : MonoBehaviour
     {
         if(currEntity != null)
         {
-            Debug.Log("Skipping current Turn!");
+            //Debug.Log("Skipping current Turn!");
+
+            TurnEnded();
 
             //Debug.LogError("Tried to start next turn mid-turn for entity: " + currEntity.name);
             //return;
@@ -157,7 +184,8 @@ public class CombatManager : MonoBehaviour
 
         //find how much to shift the current "time" and set new currEneity
         float timeChange = turnOrder.GetLowestPriority();
-        //Debug.Log("timechange: " + timeChange);
+
+        //Set current Entity
         currEntity = turnOrder.Pop();
 
         //keeps track of how many copies of each entity show up on the turn bar indicator
@@ -181,6 +209,114 @@ public class CombatManager : MonoBehaviour
 
         //Debug.Log("after turn change:");
         turnOrder.PrintCosts();
+
+        TurnStarted();
+    }
+
+    private void TurnStarted()
+    {
+        CombatEntity.EntityType type = currEntity.EntitiyType;
+        switch (type)
+        {
+            case CombatEntity.EntityType.player:
+                {
+                    //Set number of actions
+                    numMaxActions = currEntity.NumMaxActions;
+                    numActionsLeft = numMaxActions;
+
+                    ActionUIController.Instance.SetActionUI(numActionsLeft, numMaxActions);
+
+                    //Show movement grid for player's entities
+                    DrawSelect(currEntity.gameObject, numActionsLeft);
+
+                    break;
+                }
+            case CombatEntity.EntityType.enemy:
+                {
+                    break;
+                }
+        }
+    }
+
+    private Vector3Int lastMouseCell;
+    private void DrawCombatMovement()
+    {
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(InputHandler.Instance.mousePos);
+        Vector3Int mouseCell = GameHandler.Instance.currentLevel.WorldToCell(mousePos);
+
+        if (mouseCell != lastMouseCell)
+        {
+            ClearMove();
+
+            if (Utils.GridUtil.IsPointInSelectRange(mouseCell, this) && !Utils.GridUtil.IsCellFilled(mouseCell))
+            {
+                DrawMove(currEntity.transform.parent.gameObject, mouseCell);
+            }
+        }
+
+        lastMouseCell = mouseCell;
+    }
+
+    private void TryMovePlayer()
+    {
+        if (lastMouseCell == null)
+            return;
+
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(InputHandler.Instance.mousePos);
+        Vector3Int mouseCell = GameHandler.Instance.currentLevel.WorldToCell(mousePos);
+
+        if (Utils.GridUtil.IsPointInSelectRange(mouseCell, this) && !Utils.GridUtil.IsCellFilled(mouseCell) && !CellHasEntity(mouseCell))
+        {
+            Vector3Int srcPos = GameHandler.Instance.currentLevel.WorldToCell(currEntity.transform.parent.position);
+
+            List<Vector3Int> positions = Utils.Pathfinding.GetPath(srcPos, mouseCell, this, true, true);
+            if(positions.Count > 0)
+            {
+                GameObject parentOfEntity = currEntity.transform.parent.gameObject;
+
+                //path is valid, move to destination
+                EntityExitTile(parentOfEntity);
+
+                parentOfEntity.transform.position = selectGrid.CellToWorld(positions[0]);
+                Utils.GridUtil.SnapToLevelGrid(parentOfEntity, this);
+
+                EntityEnterTile(parentOfEntity);
+
+                UseActions(positions.Count);
+            }
+        }
+    }
+
+    private void UseActions(int actionsToUse)
+    {
+        numActionsLeft -= actionsToUse;
+        ActionUIController.Instance.SetActionUI(numActionsLeft, numMaxActions);
+
+        ClearMove();
+        ClearSelect();
+        DrawSelect(currEntity.gameObject, numActionsLeft);
+
+        if (numActionsLeft <= 0)
+            StartNextTurn();
+    }
+
+    private void TurnEnded()
+    {
+        CombatEntity.EntityType type = currEntity.EntitiyType;
+        switch (type)
+        {
+            case CombatEntity.EntityType.player:
+                {
+                    //Get rid of UI movement stuff
+                    ClearMove();
+                    ClearSelect();
+                    break;
+                }
+            case CombatEntity.EntityType.enemy:
+                {
+                    break;
+                }
+        }
     }
 
     public void UpdateTurnIndicatorUI()
@@ -207,26 +343,6 @@ public class CombatManager : MonoBehaviour
             TurnOrderCanvas.Instance.PlaceTurnEntity(newIndicator.transform, element.Key / timeToShowOnBar);
         }
     }
-
-    private void DrawCombatMovement()
-    {
-        /*
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(input.mousePos);
-        Vector3Int mouseCell = GameHandler.Instance.currentLevel.WorldToCell(mousePos);
-
-        if (mouseCell != lastMouseCell)
-        {
-            currentCombat.ClearMove();
-
-            if (Utils.GridUtil.IsPointInSelectRange(mouseCell, currentCombat) && !Utils.GridUtil.IsCellFilled(mouseCell))
-            {
-                currentCombat.DrawMove(gameObject, mouseCell);
-            }
-        }
-
-        lastMouseCell = mouseCell;*/
-    }
-
 
     public void DrawMove(GameObject src, Vector3Int dst) {
         //ClearText();

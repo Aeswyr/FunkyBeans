@@ -153,12 +153,16 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4266659130729025017, guid: 0bc75f806f8806641bae013bdd180fd6, type: 3}
       propertyPath: speed
-      value: 17
+      value: 29
       objectReference: {fileID: 0}
     - target: {fileID: 4266659130729025017, guid: 0bc75f806f8806641bae013bdd180fd6, type: 3}
       propertyPath: uiSprite
       value: 
       objectReference: {fileID: 21300000, guid: 2067088142e27434f972e23edd680e9f, type: 3}
+    - target: {fileID: 4266659130729025017, guid: 0bc75f806f8806641bae013bdd180fd6, type: 3}
+      propertyPath: entityType
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4938962799226207605, guid: 0bc75f806f8806641bae013bdd180fd6, type: 3}
       propertyPath: m_RootOrder
       value: 1

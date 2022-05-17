@@ -35,29 +35,7 @@ public class PlayerController : MonoBehaviour
             {
                 //EndBattle();
             }
-
-        DrawCombatMovement();
     }
-
-    private Vector3Int lastMouseCell;
-    
-    private void DrawCombatMovement() {
-        if (currentCombat == null)
-            return;
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(InputHandler.Instance.mousePos);
-        Vector3Int mouseCell = GameHandler.Instance.currentLevel.WorldToCell(mousePos);
-
-        if (mouseCell != lastMouseCell) {
-            currentCombat.ClearMove();
-            
-            if (Utils.GridUtil.IsPointInSelectRange(mouseCell, currentCombat) && !Utils.GridUtil.IsCellFilled(mouseCell)) {
-                currentCombat.DrawMove(gameObject, mouseCell);
-            }
-        }
-
-        lastMouseCell = mouseCell;
-    }
-
 
     public void StartBattle() {
         GameHandler.Instance.EnableCombatObjects();
@@ -69,7 +47,6 @@ public class PlayerController : MonoBehaviour
 
         freeMove = false;
         rbody.velocity = Vector2.zero;
-
 
         //Make list of all entities that will be in combat
         List<CombatEntity> entities = new List<CombatEntity>();
@@ -87,7 +64,7 @@ public class PlayerController : MonoBehaviour
 
         currentCombat.SetCombatEntities(entities);
 
-        currentCombat.DrawSelect(gameObject, maxMove);
+        //currentCombat.DrawSelect(gameObject, maxMove);
     }
 
     public void EndBattle() {

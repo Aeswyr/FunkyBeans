@@ -57,5 +57,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8f3b51b277574e41be7f752b9b5faec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  entityType: 0
   speed: 0
+  numMaxActions: 0
   uiSprite: {fileID: 0}

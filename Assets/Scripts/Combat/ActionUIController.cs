@@ -4,8 +4,6 @@ using UnityEngine.UI;
 
 public class ActionUIController : Singleton<ActionUIController>
 {
-
-
     [Header("Text fields")]
     [SerializeField] private TextMeshProUGUI textRemaining;
     [SerializeField] private TextMeshProUGUI textMax;
