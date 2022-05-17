@@ -1,11 +1,12 @@
 using System;
+using UnityEngine.Events;
 
 
 [Serializable]
 public struct Skill
 {
     public enum Type {
-        COLD, FLAME, FLURRY, LIGHTNING, MIGHT, NATURE, PRECISION,
+        COLD, FLAME, FLURRY, LIGHTNING, PSYCHIC, MIGHT, NATURE, TACTICAL,
         FUNDEMENTALS, STARNOMAD, SPELLSWORD
     }
     public enum Category {
@@ -22,5 +23,9 @@ public struct Skill
     public Target target;
     public int range;
     public int size;
-    public int cost;
+    public int speedCost;
+    public int manaCost;
+    public int actionCost;
+
+    public UnityEvent behavior;
 }

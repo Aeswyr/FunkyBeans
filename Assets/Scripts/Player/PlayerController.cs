@@ -79,8 +79,11 @@ public class PlayerController : MonoBehaviour
 
             Utils.GridUtil.SnapToLevelGrid(hitEntity, currentCombat);
             currentCombat.EntityEnterTile(hitEntity);
-            entities.Add(hitEntity.GetComponent<CombatEntity>());
+            
+            entities.Add(hitEntity.GetComponentInChildren<CombatEntity>());
         }
+        foreach(var obj in entities)
+            Debug.Log(entities.ToString());
 
         currentCombat.SetCombatEntities(entities);
 
