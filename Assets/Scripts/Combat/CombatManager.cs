@@ -23,11 +23,16 @@ public class CombatManager : MonoBehaviour
         get;
         private set;
     }
+    public Tilemap highlightGrid {
+        get;
+        private set;
+    }
 
     [Header("Tiles for battle map overlay")]
     [SerializeField] private RuleTile selectTile;
     [SerializeField] private RuleTile pointerTile;
     [SerializeField] private RuleTile entityTile;
+    [SerializeField] private RuleTile highlightTile;
 
     [Header("UI Components")]
     [SerializeField] private GameObject moveCost;
@@ -46,12 +51,15 @@ public class CombatManager : MonoBehaviour
 
     private int numActionsLeft;
     private int numMaxActions;
+    private CombatMode mode = CombatMode.MOVE;
+    private Skill activeSkill;
 
     void Awake()
     {
         selectGrid = combatOverlay.transform.Find("SelectGrid").GetComponent<Tilemap>();
         moveGrid = combatOverlay.transform.Find("MoveGrid").GetComponent<Tilemap>();
         entityGrid = combatOverlay.transform.Find("EntityGrid").GetComponent<Tilemap>();
+        highlightGrid = combatOverlay.transform.Find("HighlightGrid").GetComponent<Tilemap>();
 
         moveCost.SetActive(false);
         moveText = moveCost.transform.Find("Text").GetComponent<TextMeshPro>();
@@ -70,11 +78,15 @@ public class CombatManager : MonoBehaviour
                 {
                 case CombatEntity.EntityType.player:
                     {
-                        DrawCombatMovement();
+                        if (mode == CombatMode.MOVE) {
+                            DrawCombatMovement();
 
-                        if (InputHandler.Instance.action.pressed)
-                        {
-                            TryMovePlayer();
+                            if (InputHandler.Instance.action.pressed)
+                            {
+                                TryMovePlayer();
+                            }
+                        } else if (mode == CombatMode.SELECT) {
+
                         }
                         break;
                     }
@@ -126,6 +138,15 @@ public class CombatManager : MonoBehaviour
 
     public void ClearSelect() {
         selectGrid.ClearAllTiles();
+    }
+
+    public void DrawHighlight(List<Vector3Int> positions) {
+        foreach (var pos in positions)
+            highlightGrid.SetTile(pos, highlightTile);
+    }
+
+    public void ClearHighlight() {
+        highlightGrid.ClearAllTiles();
     }
 
     public bool CellHasEntity(Vector3Int cell) {
@@ -182,6 +203,17 @@ public class CombatManager : MonoBehaviour
         }
 
         StartNextTurn();
+    }
+
+    public void SetTargetMode(Skill activeSkill) {
+        ClearSelect();
+        this.activeSkill = activeSkill;
+        this.mode = CombatMode.SELECT;
+        lastMouseCell = int.MaxValue * Vector3Int.one;
+    }
+
+    public void SetMoveMode() {
+        this.mode = CombatMode.MOVE;
     }
 
     private void StartNextTurn()
@@ -269,6 +301,20 @@ public class CombatManager : MonoBehaviour
             {
                 DrawMove(currEntity.transform.parent.gameObject, mouseCell);
             }
+        }
+
+        lastMouseCell = mouseCell;
+    }
+    private void DrawCombatHighlight() {
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(InputHandler.Instance.mousePos);
+        Vector3Int mouseCell = GameHandler.Instance.currentLevel.WorldToCell(mousePos);
+
+        if (mouseCell != lastMouseCell)
+        {
+            ClearHighlight();
+            List<Vector3Int> positions = null; //TODO targeting utils
+            DrawHighlight(positions);
+            
         }
 
         lastMouseCell = mouseCell;
@@ -396,4 +442,10 @@ public class CombatManager : MonoBehaviour
         moveCost.SetActive(false);
         moveGrid.ClearAllTiles();
     }
+
+    private enum CombatMode {
+    NONE, MOVE, SELECT
+    }
 }
+
+
