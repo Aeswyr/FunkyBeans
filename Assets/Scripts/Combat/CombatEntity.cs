@@ -24,6 +24,13 @@ public class CombatEntity : MonoBehaviour
     public void UseSkill(SkillID id) {
         skillsMaster.Get(id, skillActions).behavior.Invoke();
     }
+
+    private CombatManager combatManager;
+    public void SetCombatManager(CombatManager manager)
+    {
+        combatManager = manager;
+    }
+    public CombatManager CombatManager => combatManager;
 }
 
 [Serializable]

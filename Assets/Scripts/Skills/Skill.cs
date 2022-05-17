@@ -26,6 +26,7 @@ public struct Skill
     public int speedCost;
     public int manaCost;
     public int actionCost;
+    public bool requiresValidTarget;
 
     public UnityEvent behavior;
 }

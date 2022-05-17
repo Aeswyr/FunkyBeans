@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65861dd444d3e194a95ad71d19b1b759, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  skillList: {fileID: 11400000, guid: 767c3e5c23ffcbd4dad117bb01187a80, type: 2}
   combatOverlay: {fileID: 5071642083883760748}
   selectTile: {fileID: 11400000, guid: ac0783522c05c6447851fc096368a371, type: 2}
   pointerTile: {fileID: 11400000, guid: dbebd63645defb34689e2729f82b4e5b, type: 2}

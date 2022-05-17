@@ -22,6 +22,20 @@ MonoBehaviour:
     speedCost: 0
     manaCost: 0
     actionCost: 2
+    requiresValidTarget: 0
+    behavior:
+      m_PersistentCalls:
+        m_Calls: []
+  - name: The Box.
+    types: 08000000
+    category: 0
+    target: 0
+    range: 2
+    size: 4
+    speedCost: 0
+    manaCost: 0
+    actionCost: 2
+    requiresValidTarget: 0
     behavior:
       m_PersistentCalls:
         m_Calls: []

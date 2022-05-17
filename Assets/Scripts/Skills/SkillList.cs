@@ -29,11 +29,17 @@ public class SkillList : ScriptableObject {
             case SkillID.STRIKE:
                 skill.behavior.AddListener(actions.Strike);
                 break;
+            case SkillID.BOX:
+                {
+                    skill.behavior.AddListener(actions.Box);
+                    break;
+                }
         }
         
     }
 }
 
 public enum SkillID {
-    STRIKE, 
+    STRIKE,
+    BOX
 }

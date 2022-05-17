@@ -216,4 +216,125 @@ public class Utils
             }
         }
     }
+
+    public class CombatUtil
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sourcePos"></param>
+        /// <param name="destPos"></param>
+        /// <param name="combatManager"></param>
+        /// <param name="targetType"></param>
+        /// <param name="range"></param>
+        /// <param name="size"></param>
+        /// <returns>Null in case on invalid destination</returns>
+        public static List<Vector3Int> GetTilesInAttack(Vector3Int sourcePos, Vector3 destPos, CombatManager combatManager, Skill.Target targetType, int range, int size)
+        {
+            List<Vector3Int> validTiles = new List<Vector3Int>();
+            switch(targetType)
+            {
+                case Skill.Target.SQUARE:
+                    {
+                        //Square
+
+                        Vector3Int topLeftTile;
+
+                        if (size % 2 == 0)
+                        {
+                            //Even size, targeting is a bit messier
+                            List<Vector3Int> centerTiles = new List<Vector3Int>();
+                            centerTiles.Add(combatManager.entityGrid.WorldToCell(destPos + new Vector3(0.5f, 0.5f, 0)));
+                            centerTiles.Add(combatManager.entityGrid.WorldToCell(destPos + new Vector3(-0.5f, 0.5f, 0)));
+                            centerTiles.Add(combatManager.entityGrid.WorldToCell(destPos + new Vector3(-0.5f, -0.5f, 0)));
+                            centerTiles.Add(combatManager.entityGrid.WorldToCell(destPos + new Vector3(0.5f, -0.5f, 0)));
+
+                            #region GetTopLeftCenterTile
+                            Vector3Int topLeftCenterTile = centerTiles[0];
+                            Vector2Int topLeftPos = new Vector2Int(centerTiles[0].x, centerTiles[0].y);
+
+                            for(int i = 1; i< centerTiles.Count; i++)
+                            {
+                                Vector2Int currCellPos = new Vector2Int(centerTiles[i].x, centerTiles[i].y);
+
+                                if((currCellPos.x < topLeftPos.x) ||(currCellPos.y < topLeftPos.y))
+                                {
+                                    topLeftCenterTile = centerTiles[i];
+                                    topLeftPos = currCellPos;
+                                }
+                            }
+                            #endregion
+
+                            topLeftTile = topLeftCenterTile - new Vector3Int(size/2 - 1, size / 2 - 1, 0);
+                        }
+                        else
+                        {
+                            //odd size, brain is happy :)
+                            int radius = (size - 1) / 2;
+                            topLeftTile = combatManager.entityGrid.WorldToCell(destPos - new Vector3(radius, radius, 0));
+                        }
+
+                        //from top left tile, get tiles that will be hit by move
+                        for (int i = 0; i < size; i++)
+                        {
+                            for (int j = 0; j < size; j++)
+                            {
+                                validTiles.Add(topLeftTile + new Vector3Int(i, j, 0));
+                            }
+                        }
+
+                        break;
+                    }
+                case Skill.Target.RADIUS:
+                    {
+                        //Diamond
+
+                        validTiles = Pathfinding.GetBFS(combatManager.entityGrid.WorldToCell(destPos), size, combatManager, false, false);
+
+                        break;
+                    }
+                case Skill.Target.LINE:
+                    {
+                        //Straight line
+
+                        break;
+                    }
+                case Skill.Target.ARC:
+                    {
+                        //Goes around the end of a diamond
+
+                        break;
+                    }
+            }
+
+            bool inRange = false;
+            foreach (Vector3Int tile in validTiles)
+            {
+                if (GridUtil.ManhattanDistance(tile, sourcePos) <= range)
+                {
+                    inRange = true;
+                    break;
+                }
+            }
+
+            if (inRange == false)
+                return null;
+
+            return validTiles;
+        }
+
+        public static List<CombatEntity> GetEntitiesInAttack(Vector3Int sourcePos, Vector3 destPos, CombatManager combatManager, Skill.Target targetType, int range, int size)
+        {
+            List<Vector3Int> attackTiles = GetTilesInAttack(sourcePos, destPos, combatManager, targetType, range, size);
+
+            List<CombatEntity> entities = new List<CombatEntity>();
+
+            foreach (Vector3Int tile in attackTiles)
+            {
+                entities.Add(combatManager.GetEntityInCell(tile).entity);
+            }
+
+            return entities;
+        }
+    }
 }

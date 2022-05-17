@@ -6,6 +6,7 @@ using TMPro;
 
 public class CombatManager : MonoBehaviour
 {
+    [SerializeField] private SkillList skillList;
 
     [Header("Combat grid")]
     [SerializeField] private Grid combatOverlay;
@@ -63,30 +64,39 @@ public class CombatManager : MonoBehaviour
 
         moveCost.SetActive(false);
         moveText = moveCost.transform.Find("Text").GetComponent<TextMeshPro>();
+
+        activeSkill = skillList.Get(SkillID.BOX);
     }
 
     private void FixedUpdate()
     {
+        if(InputHandler.Instance.interact.pressed)
+        {
+            if (mode == CombatMode.MOVE)
+                mode = CombatMode.SELECT;
+            else
+                mode = CombatMode.MOVE;
+        }
+
+
         if (currEntity != null)
         {
-            if (InputHandler.Instance.interact.pressed)
-            {
-                currEntity.UseSkill(SkillID.STRIKE);
-            }
-
             switch (currEntity.EntitiyType)
-                {
+            {
                 case CombatEntity.EntityType.player:
                     {
-                        if (mode == CombatMode.MOVE) {
+                        if (mode == CombatMode.MOVE)
+                        {
                             DrawCombatMovement();
 
                             if (InputHandler.Instance.action.pressed)
                             {
                                 TryMovePlayer();
                             }
-                        } else if (mode == CombatMode.SELECT) {
-
+                        }
+                        else if (mode == CombatMode.SELECT)
+                        {
+                            DrawCombatHighlight();
                         }
                         break;
                     }
@@ -190,6 +200,8 @@ public class CombatManager : MonoBehaviour
 
         foreach (CombatEntity entity in combatEntities)
         {
+            entity.SetCombatManager(this);
+
             float posOnBar = speedMultiplier/entity.Stats.speed;
 
             turnOrder.Put(entity, posOnBar);
@@ -309,10 +321,12 @@ public class CombatManager : MonoBehaviour
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(InputHandler.Instance.mousePos);
         Vector3Int mouseCell = GameHandler.Instance.currentLevel.WorldToCell(mousePos);
 
+        Vector3Int entityPos = GameHandler.Instance.currentLevel.WorldToCell(currEntity.transform.parent.position);
+
         if (mouseCell != lastMouseCell)
         {
             ClearHighlight();
-            List<Vector3Int> positions = null; //TODO targeting utils
+            List<Vector3Int> positions = Utils.CombatUtil.GetTilesInAttack(entityPos, mousePos, this, activeSkill.target, activeSkill.range, activeSkill.size); 
             DrawHighlight(positions);
             
         }
