@@ -18,6 +18,8 @@ public class CombatEntity : MonoBehaviour
     [Header("Per-entity data")]
     [SerializeField] private Stats stats;
     public Stats Stats => stats;
+    [SerializeField] private CombatReward reward;
+    public CombatReward Reward => reward;
     [SerializeField] private List<SkillID> knownSkills;
     public List<SkillID> KnownSkills => knownSkills;
     [SerializeField] private Sprite uiSprite;
@@ -39,7 +41,9 @@ public class CombatEntity : MonoBehaviour
     {
         dmg = Mathf.Min(dmg, hp);
         hp -= dmg;
-        Instantiate(damageNumberPrefab, transform.position, Quaternion.identity).GetComponent<TextMeshPro>().text = dmg.ToString();
+        var tm = Instantiate(damageNumberPrefab, transform.position, Quaternion.identity).GetComponent<TextMeshPro>();
+        tm.text = dmg.ToString();
+        tm.color = Color.red;
         GameObject parent = transform.parent.gameObject;
         Debug.Log("Entity " + parent.name + " took " + dmg + " points of damage, new hp: " + hp + "/" + stats.maxHp);
         if (hp <= 0 && entityType == EntityType.enemy) {
@@ -63,4 +67,10 @@ public struct Stats {
     public int damage;
     public int speed;
     public int actions;
+}
+
+[Serializable]
+public struct CombatReward
+{
+    public int exp;
 }

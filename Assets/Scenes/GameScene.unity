@@ -456,6 +456,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2467019966403178182, guid: e935dbd2ec8d55a43b797c4a0f404d32, type: 3}
+      propertyPath: reward.exp
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2467019966403178182, guid: e935dbd2ec8d55a43b797c4a0f404d32, type: 3}
       propertyPath: stats.maxHp
       value: 5
       objectReference: {fileID: 0}
@@ -1756,6 +1760,10 @@ PrefabInstance:
     - target: {fileID: 2467019966403178182, guid: e935dbd2ec8d55a43b797c4a0f404d32, type: 3}
       propertyPath: speed
       value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 2467019966403178182, guid: e935dbd2ec8d55a43b797c4a0f404d32, type: 3}
+      propertyPath: reward.exp
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2467019966403178182, guid: e935dbd2ec8d55a43b797c4a0f404d32, type: 3}
       propertyPath: stats.maxHp

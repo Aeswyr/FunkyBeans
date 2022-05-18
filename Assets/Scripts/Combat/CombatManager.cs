@@ -54,6 +54,7 @@ public class CombatManager : MonoBehaviour
     private int numMaxActions;
     private CombatMode mode = CombatMode.MOVE;
     private SkillID activeSkill;
+    private CombatReward reward;
 
     void Awake()
     {
@@ -502,6 +503,13 @@ public class CombatManager : MonoBehaviour
 
     public void RemoveEntity(CombatEntity entity) 
     {
+        combatEntities.Remove(entity);
+
+        // Accumilate rewards for defeated enemies
+        if (entity.team == CombatEntity.EntityType.enemy) {
+            reward.exp += entity.Reward.exp;
+        }
+
         //Get all entities in the current turn order, and make a new priority queue
         List<KeyValuePair<float, CombatEntity>> currElements = turnOrder.GetElements();
         PriorityQueue<CombatEntity> newTurnOrder = new PriorityQueue<CombatEntity>();
@@ -527,6 +535,18 @@ public class CombatManager : MonoBehaviour
         {
             //killed entity's turn, so move to next turn
             StartNextTurn();
+        }
+
+        var team = combatEntities[0].team;
+        foreach (var centity in combatEntities) {
+            if (team != centity.team)
+                return;
+        }
+        if (team == CombatEntity.EntityType.player) {
+            foreach (var centity in combatEntities) {
+                if (centity.transform.parent.TryGetComponent(out PlayerController player))
+                    player.EndBattle(reward);
+            }
         }
     }
 

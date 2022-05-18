@@ -1,4 +1,4 @@
-using System.Collections;
+using TMPro;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Rigidbody2D rbody;
     [SerializeField] private float speed;
     [SerializeField] private GameObject attackPrefab;
+    [SerializeField] private GameObject combatTextPrefab;
     private int maxMove = 4;
     private ContactFilter2D filter = new ContactFilter2D();
     private bool freeMove = true;
@@ -67,7 +68,11 @@ public class PlayerController : MonoBehaviour
         //currentCombat.DrawSelect(gameObject, maxMove);
     }
 
-    public void EndBattle() {
+    public void EndBattle(CombatReward reward) {
+        var tm = Instantiate(combatTextPrefab, transform.position, Quaternion.identity).GetComponent<TextMeshPro>();
+        tm.text = $"+{reward.exp} EXP";
+        tm.color = Color.yellow;
+
         freeMove = true;
         currentCombat.ClearMove();
         currentCombat.ClearSelect();
