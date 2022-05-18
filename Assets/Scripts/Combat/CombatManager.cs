@@ -500,6 +500,10 @@ public class CombatManager : MonoBehaviour
         moveGrid.ClearAllTiles();
     }
 
+    public void RemoveEntity(CombatEntity entity) {
+
+    }
+
     private enum CombatMode {
     NONE, MOVE, SELECT
     }

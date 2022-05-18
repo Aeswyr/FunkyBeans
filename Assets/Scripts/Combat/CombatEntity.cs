@@ -42,8 +42,9 @@ public class CombatEntity : MonoBehaviour
         Instantiate(damageNumberPrefab, transform.position, Quaternion.identity).GetComponent<TextMeshPro>().text = dmg.ToString();
         GameObject parent = transform.parent.gameObject;
         Debug.Log("Entity " + parent.name + " took " + dmg + " points of damage, new hp: " + hp + "/" + stats.maxHp);
-        if (hp <= 0) {
+        if (hp <= 0 && entityType == EntityType.enemy) {
             combatManager.EntityExitTile(parent);
+            combatManager.RemoveEntity(this);
             Destroy(parent);
         }
     }
