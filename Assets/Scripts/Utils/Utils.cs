@@ -366,7 +366,7 @@ public class Utils
             // perform action on targets
             foreach(CombatEntity target in targets)
             {
-                target.TakeDamage(target.Stats.damage);
+                target.TakeDamage(entity.Stats.damage);
             }
 
             //use actions
