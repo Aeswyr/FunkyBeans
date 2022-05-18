@@ -55,4 +55,10 @@ public class GameHandler : Singleton<GameHandler>
         foreach (GameObject obj in thingsToEnableForCombat)
             obj.SetActive(true);
     }
+
+    public void DisableCombatObjects()
+    {
+        foreach (GameObject obj in thingsToEnableForCombat)
+            obj.SetActive(false);
+    }
 }

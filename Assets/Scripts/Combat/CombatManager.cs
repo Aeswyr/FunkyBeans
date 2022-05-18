@@ -95,6 +95,11 @@ public class CombatManager : MonoBehaviour
                                 TryUseSkill(activeSkill);
                             }
                         }
+                        else if (mode == CombatMode.GUARD) {
+                            currEntity.UseDefense();
+                            if (numActionsLeft > 0)
+                                SetMoveMode();
+                        }
                         break;
                     }
                 case CombatEntity.EntityType.enemy:
@@ -237,6 +242,13 @@ public class CombatManager : MonoBehaviour
         this.mode = CombatMode.MOVE;
         ClearHighlight();
         DrawSelect(currEntity.gameObject, numActionsLeft);
+    }
+
+    public void SetDefendMode() {
+        this.mode = CombatMode.GUARD;
+        ClearSelect();
+        ClearMove();
+        ClearHighlight();
     }
 
     private void StartNextTurn()
@@ -543,15 +555,20 @@ public class CombatManager : MonoBehaviour
                 return;
         }
         if (team == CombatEntity.EntityType.player) {
-            foreach (var centity in combatEntities) {
-                if (centity.transform.parent.TryGetComponent(out PlayerController player))
-                    player.EndBattle(reward);
-            }
+            EndCombat();
+        }
+    }
+
+    public void EndCombat() {
+        GameHandler.Instance.DisableCombatObjects();
+        foreach (var centity in combatEntities) {
+            if (centity.transform.parent.TryGetComponent(out PlayerController player))
+                player.EndBattle(reward);
         }
     }
 
     private enum CombatMode {
-    NONE, MOVE, SELECT
+    NONE, MOVE, SELECT, GUARD,
     }
 }
 

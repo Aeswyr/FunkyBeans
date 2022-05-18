@@ -344,5 +344,33 @@ public class Utils
 
             return entities;
         }
+
+        public static void UseSimpleDamageSkill(CombatEntity entity, Skill skill) {
+            List<CombatEntity> targets = null;
+
+            // collect targets
+            if(entity.team == CombatEntity.EntityType.player)
+            {
+                Vector3 mousePos = Camera.main.ScreenToWorldPoint(InputHandler.Instance.mousePos);
+                Vector3Int entityPos = GameHandler.Instance.currentLevel.WorldToCell(entity.transform.parent.position);
+                targets = Utils.CombatUtil.GetEntitiesInAttack(entityPos, mousePos, entity.CombatManager, skill.target, skill.range, skill.size);
+
+                if ((targets.Count == 0) && (skill.requiresValidTarget))
+                    return;
+            }
+            else
+            {
+                //Uhhhhhhhhhhhhhhhhhhhhh yeah
+            }
+
+            // perform action on targets
+            foreach(CombatEntity target in targets)
+            {
+                target.TakeDamage(target.Stats.damage);
+            }
+
+            //use actions
+            entity.CombatManager.UseActions(skill.actionCost);
+        }
     }
 }

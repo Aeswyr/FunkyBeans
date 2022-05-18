@@ -314,20 +314,40 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: 1967d95ad34d8874d85dc1ed885d4e05, type: 3}
     - target: {fileID: 4266659130729025017, guid: 0bc75f806f8806641bae013bdd180fd6, type: 3}
+      propertyPath: stats.maxHp
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4266659130729025017, guid: 0bc75f806f8806641bae013bdd180fd6, type: 3}
       propertyPath: stats.speed
       value: 23
+      objectReference: {fileID: 0}
+    - target: {fileID: 4266659130729025017, guid: 0bc75f806f8806641bae013bdd180fd6, type: 3}
+      propertyPath: stats.damage
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4266659130729025017, guid: 0bc75f806f8806641bae013bdd180fd6, type: 3}
       propertyPath: stats.actions
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4266659130729025017, guid: 0bc75f806f8806641bae013bdd180fd6, type: 3}
+      propertyPath: stats.defense
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4266659130729025017, guid: 0bc75f806f8806641bae013bdd180fd6, type: 3}
       propertyPath: knownSkills.Array.size
-      value: 2
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4266659130729025017, guid: 0bc75f806f8806641bae013bdd180fd6, type: 3}
       propertyPath: knownSkills.Array.data[1]
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4266659130729025017, guid: 0bc75f806f8806641bae013bdd180fd6, type: 3}
+      propertyPath: knownSkills.Array.data[2]
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4266659130729025017, guid: 0bc75f806f8806641bae013bdd180fd6, type: 3}
+      propertyPath: knownSkills.Array.data[3]
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4938962799226207605, guid: 0bc75f806f8806641bae013bdd180fd6, type: 3}
       propertyPath: m_RootOrder

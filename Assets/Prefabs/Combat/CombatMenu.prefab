@@ -197,7 +197,7 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 1
+  m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 112, y: 30}
@@ -373,6 +373,7 @@ MonoBehaviour:
   holder: {fileID: 4748853222595131833}
   options: {fileID: 1551212064937326035}
   buttonPrefab: {fileID: 2529036899214600481, guid: 35196f996b3a40043b7ac27f41b39b65, type: 3}
+  menuState: 0
 --- !u!1 &8818404090752339176
 GameObject:
   m_ObjectHideFlags: 0
@@ -456,6 +457,34 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4692447677873909393}
     m_Modifications:
+    - target: {fileID: 2072867733099020429, guid: 6ed1de06e2bde014780ae11d8aa6277e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2072867733099020429, guid: 6ed1de06e2bde014780ae11d8aa6277e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2072867733099020429, guid: 6ed1de06e2bde014780ae11d8aa6277e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 148496699640979181}
+    - target: {fileID: 2072867733099020429, guid: 6ed1de06e2bde014780ae11d8aa6277e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2072867733099020429, guid: 6ed1de06e2bde014780ae11d8aa6277e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: FleePressed
+      objectReference: {fileID: 0}
+    - target: {fileID: 2072867733099020429, guid: 6ed1de06e2bde014780ae11d8aa6277e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: CombatUIController, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2072867733099020429, guid: 6ed1de06e2bde014780ae11d8aa6277e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 2529036899214600481, guid: 6ed1de06e2bde014780ae11d8aa6277e, type: 3}
       propertyPath: m_Name
       value: IconButton (3)
@@ -556,6 +585,34 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4692447677873909393}
     m_Modifications:
+    - target: {fileID: 2072867733099020429, guid: 6ed1de06e2bde014780ae11d8aa6277e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2072867733099020429, guid: 6ed1de06e2bde014780ae11d8aa6277e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2072867733099020429, guid: 6ed1de06e2bde014780ae11d8aa6277e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 148496699640979181}
+    - target: {fileID: 2072867733099020429, guid: 6ed1de06e2bde014780ae11d8aa6277e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2072867733099020429, guid: 6ed1de06e2bde014780ae11d8aa6277e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: DefendPressed
+      objectReference: {fileID: 0}
+    - target: {fileID: 2072867733099020429, guid: 6ed1de06e2bde014780ae11d8aa6277e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: CombatUIController, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2072867733099020429, guid: 6ed1de06e2bde014780ae11d8aa6277e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 2529036899214600481, guid: 6ed1de06e2bde014780ae11d8aa6277e, type: 3}
       propertyPath: m_Name
       value: IconButton (2)

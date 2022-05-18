@@ -69,11 +69,13 @@ public class CombatUIController : Singleton<CombatUIController>
     public void DefendPressed() {
         if (!manager.IsPlayerTurn())
             return;
+        manager.SetDefendMode();
     }
 
     public void FleePressed() {
         if (!manager.IsPlayerTurn())
             return;
+        manager.EndCombat();
     }
 
     public void SetCombatManager(CombatManager manager) {

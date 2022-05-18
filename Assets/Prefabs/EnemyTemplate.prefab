@@ -171,6 +171,10 @@ PrefabInstance:
       propertyPath: stats.actions
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 4266659130729025017, guid: 0bc75f806f8806641bae013bdd180fd6, type: 3}
+      propertyPath: stats.defense
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4938962799226207605, guid: 0bc75f806f8806641bae013bdd180fd6, type: 3}
       propertyPath: m_RootOrder
       value: 1

@@ -22,6 +22,7 @@ public class CombatEntity : MonoBehaviour
     public CombatReward Reward => reward;
     [SerializeField] private List<SkillID> knownSkills;
     public List<SkillID> KnownSkills => knownSkills;
+    [SerializeField] private SkillID defendSkill;
     [SerializeField] private Sprite uiSprite;
     public Sprite UISprite => uiSprite;
     [SerializeField] private EntityType entityType;
@@ -31,7 +32,12 @@ public class CombatEntity : MonoBehaviour
         skillsMaster.Get(id, skillActions).behavior.Invoke();
     }
 
+    public void UseDefense() {
+        skillsMaster.Get(defendSkill, skillActions).behavior.Invoke();
+    }
+
     private int hp;
+    private int shield;
     private void Start()
     {
         hp = stats.maxHp;
@@ -39,11 +45,20 @@ public class CombatEntity : MonoBehaviour
 
     public void TakeDamage(int dmg)
     {
-        dmg = Mathf.Min(dmg, hp);
-        hp -= dmg;
         var tm = Instantiate(damageNumberPrefab, transform.position, Quaternion.identity).GetComponent<TextMeshPro>();
         tm.text = dmg.ToString();
-        tm.color = Color.red;
+
+        if (shield > 0) {
+            shield -= dmg;
+            if (shield < 0) {
+                hp += shield;
+                shield = 0;
+            }
+            tm.color = Color.gray;
+        } else {
+            hp -= dmg;
+            tm.color = Color.red;
+        }
         GameObject parent = transform.parent.gameObject;
         Debug.Log("Entity " + parent.name + " took " + dmg + " points of damage, new hp: " + hp + "/" + stats.maxHp);
         if (hp <= 0 && entityType == EntityType.enemy) {
@@ -51,6 +66,10 @@ public class CombatEntity : MonoBehaviour
             combatManager.RemoveEntity(this);
             Destroy(parent);
         }
+    }
+
+    public void AddShield(int amt) {
+        shield += amt;
     }
 
     private CombatManager combatManager;
@@ -67,6 +86,7 @@ public struct Stats {
     public int damage;
     public int speed;
     public int actions;
+    public int defense;
 }
 
 [Serializable]

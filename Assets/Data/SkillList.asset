@@ -26,28 +26,55 @@ MonoBehaviour:
     behavior:
       m_PersistentCalls:
         m_Calls: []
-  - name: The Box.
+  - name: Hew
     types: 08000000
     category: 0
-    target: 1
+    target: 0
     range: 1
-    size: 3
+    size: 2
+    speedCost: 10
+    manaCost: 0
+    actionCost: 3
+    requiresValidTarget: 0
+    behavior:
+      m_PersistentCalls:
+        m_Calls: []
+  - name: Block
+    types: 08000000
+    category: 1
+    target: 0
+    range: 0
+    size: 1
+    speedCost: 0
+    manaCost: 0
+    actionCost: 1
+    requiresValidTarget: 0
+    behavior:
+      m_PersistentCalls:
+        m_Calls: []
+  - name: Quickshot
+    types: 08000000
+    category: 0
+    target: 0
+    range: 8
+    size: 1
     speedCost: 0
     manaCost: 0
     actionCost: 2
     requiresValidTarget: 0
     behavior:
       m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: 
-          m_MethodName: 
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: 
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
+        m_Calls: []
+  - name: Fireball
+    types: 08000000
+    category: 1
+    target: 1
+    range: 6
+    size: 3
+    speedCost: 15
+    manaCost: 10
+    actionCost: 3
+    requiresValidTarget: 0
+    behavior:
+      m_PersistentCalls:
+        m_Calls: []

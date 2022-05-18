@@ -67,6 +67,9 @@ MonoBehaviour:
     damage: 0
     speed: 0
     actions: 0
+  reward:
+    exp: 0
   knownSkills: 
+  defendSkill: 2
   uiSprite: {fileID: 0}
   entityType: 0
