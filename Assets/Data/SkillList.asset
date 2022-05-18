@@ -22,20 +22,32 @@ MonoBehaviour:
     speedCost: 0
     manaCost: 0
     actionCost: 2
-    requiresValidTarget: 0
+    requiresValidTarget: 1
     behavior:
       m_PersistentCalls:
         m_Calls: []
   - name: The Box.
     types: 08000000
     category: 0
-    target: 0
-    range: 2
-    size: 4
+    target: 1
+    range: 1
+    size: 3
     speedCost: 0
     manaCost: 0
     actionCost: 2
     requiresValidTarget: 0
     behavior:
       m_PersistentCalls:
-        m_Calls: []
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: 
+          m_MethodName: 
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: 
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2

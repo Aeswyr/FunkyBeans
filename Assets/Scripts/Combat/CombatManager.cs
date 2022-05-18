@@ -70,15 +70,6 @@ public class CombatManager : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if(InputHandler.Instance.interact.pressed)
-        {
-            if (mode == CombatMode.MOVE)
-                SetTargetMode(SkillID.STRIKE);
-            else
-                SetMoveMode();
-        }
-
-
         if (currEntity != null)
         {
             switch (currEntity.EntitiyType)
