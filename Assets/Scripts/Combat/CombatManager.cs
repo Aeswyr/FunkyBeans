@@ -500,8 +500,34 @@ public class CombatManager : MonoBehaviour
         moveGrid.ClearAllTiles();
     }
 
-    public void RemoveEntity(CombatEntity entity) {
+    public void RemoveEntity(CombatEntity entity) 
+    {
+        //Get all entities in the current turn order, and make a new priority queue
+        List<KeyValuePair<float, CombatEntity>> currElements = turnOrder.GetElements();
+        PriorityQueue<CombatEntity> newTurnOrder = new PriorityQueue<CombatEntity>();
 
+        //Add each entity to the new priority queue, but with the updated time till their turn
+        foreach (KeyValuePair<float, CombatEntity> element in currElements)
+        {
+            if(element.Value.Equals(entity))
+            {
+                //don't add this entity back into priorityqueue
+            }
+            else
+            {
+                newTurnOrder.Put(element.Value, element.Key);
+            }
+        }
+
+        turnOrder = newTurnOrder;
+
+        UpdateTurnIndicatorUI();
+
+        if(currEntity.Equals(entity))
+        {
+            //killed entity's turn, so move to next turn
+            StartNextTurn();
+        }
     }
 
     private enum CombatMode {

@@ -326,6 +326,8 @@ public class Utils
         public static List<CombatEntity> GetEntitiesInAttack(Vector3Int sourcePos, Vector3 destPos, CombatManager combatManager, Skill.Target targetType, int range, int size)
         {
             List<Vector3Int> attackTiles = GetTilesInAttack(sourcePos, destPos, combatManager, targetType, range, size);
+            if (attackTiles == null)
+                return null;
 
             List<CombatEntity> entities = new List<CombatEntity>();
 

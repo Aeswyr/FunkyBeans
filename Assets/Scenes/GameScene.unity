@@ -266,6 +266,10 @@ PrefabInstance:
       propertyPath: numMaxActions
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 2997537445852491212, guid: e4f5409a6f2789d4fb3b2dd57c3f700e, type: 3}
+      propertyPath: stats.actions
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 5688980906302191263, guid: e4f5409a6f2789d4fb3b2dd57c3f700e, type: 3}
       propertyPath: m_Name
       value: Player
