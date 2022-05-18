@@ -28,6 +28,18 @@ public class CombatEntity : MonoBehaviour
         skillsMaster.Get(id, skillActions).behavior.Invoke();
     }
 
+    private int hp;
+    private void Start()
+    {
+        hp = stats.maxHp;
+    }
+
+    public void TakeDamage(int dmg)
+    {
+        hp -= dmg;
+        Debug.Log("Entity " + transform.parent.gameObject.name + " took " + dmg + " points of damage, new hp: " + hp + "/" + stats.maxHp);
+    }
+
     private CombatManager combatManager;
     public void SetCombatManager(CombatManager manager)
     {
@@ -38,6 +50,8 @@ public class CombatEntity : MonoBehaviour
 
 [Serializable]
 public struct Stats {
+    public int maxHp;
+    public int damage;
     public int speed;
     public int actions;
 }

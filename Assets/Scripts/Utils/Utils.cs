@@ -331,7 +331,13 @@ public class Utils
 
             foreach (Vector3Int tile in attackTiles)
             {
-                entities.Add(combatManager.GetEntityInCell(tile).entity);
+                EntityReference entityRef = combatManager.GetEntityInCell(tile);
+
+                if (entityRef != null)
+                {
+                    CombatEntity entityToAdd = entityRef.entity;
+                    entities.Add(entityToAdd);
+                }
             }
 
             return entities;

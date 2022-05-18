@@ -73,7 +73,7 @@ public class CombatManager : MonoBehaviour
         if(InputHandler.Instance.interact.pressed)
         {
             if (mode == CombatMode.MOVE)
-                SetTargetMode(SkillID.BOX);
+                SetTargetMode(SkillID.STRIKE);
             else
                 SetMoveMode();
         }
@@ -97,6 +97,11 @@ public class CombatManager : MonoBehaviour
                         else if (mode == CombatMode.SELECT)
                         {
                             DrawCombatHighlight();
+
+                            if (InputHandler.Instance.action.pressed)
+                            {
+                                TryUseSkill(activeSkill);
+                            }
                         }
                         break;
                     }
@@ -151,6 +156,9 @@ public class CombatManager : MonoBehaviour
     }
 
     public void DrawHighlight(List<Vector3Int> positions) {
+        if (positions == null)
+            return;
+
         foreach (var pos in positions)
             highlightGrid.SetTile(pos, highlightTile);
     }
@@ -227,6 +235,7 @@ public class CombatManager : MonoBehaviour
 
     public void SetTargetMode(SkillID activeSkill) {
         ClearSelect();
+        ClearMove();
         this.activeSkill = activeSkill;
         this.mode = CombatMode.SELECT;
         lastMouseCell = int.MaxValue * Vector3Int.one;
@@ -234,6 +243,7 @@ public class CombatManager : MonoBehaviour
 
     public void SetMoveMode() {
         this.mode = CombatMode.MOVE;
+        ClearHighlight();
     }
 
     private void StartNextTurn()
@@ -339,7 +349,6 @@ public class CombatManager : MonoBehaviour
             Skill skill = skillList.Get(activeSkill);
             List<Vector3Int> positions = Utils.CombatUtil.GetTilesInAttack(entityPos, mousePos, this, skill.target, skill.range, skill.size); 
             DrawHighlight(positions);
-            
         }
 
         lastMouseCell = mouseCell;
@@ -375,13 +384,25 @@ public class CombatManager : MonoBehaviour
         }
     }
 
-    private void UseActions(int actionsToUse)
+    private void TryUseSkill(SkillID skill)
+    {
+        int cost = skillList.Get(skill).actionCost;
+        if (numActionsLeft >= cost)
+        {
+            currEntity.UseSkill(skill);
+            //UseActions(cost);
+        }
+    }
+
+    public void UseActions(int actionsToUse)
     {
         numActionsLeft -= actionsToUse;
         ActionUIController.Instance.SetActionUI(numActionsLeft, numMaxActions);
 
         ClearMove();
         ClearSelect();
+        ClearHighlight();
+
         DrawSelect(currEntity.gameObject, numActionsLeft);
 
         if (numActionsLeft <= 0)
