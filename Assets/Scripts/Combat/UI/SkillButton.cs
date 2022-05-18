@@ -15,6 +15,7 @@ public class SkillButton : MonoBehaviour
     }
     
     public void OnPress() {
+        CombatUIController.Instance.menuState = CombatUIController.MenuState.TARGET;
         manager.SetTargetMode(associatedSkill);
         transform.parent.parent.gameObject.SetActive(false);
     }

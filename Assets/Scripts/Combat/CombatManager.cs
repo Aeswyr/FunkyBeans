@@ -72,7 +72,7 @@ public class CombatManager : MonoBehaviour
     {
         if (currEntity != null)
         {
-            switch (currEntity.EntitiyType)
+            switch (currEntity.team)
             {
                 case CombatEntity.EntityType.player:
                     {
@@ -192,7 +192,7 @@ public class CombatManager : MonoBehaviour
     }
 
     public void ClearEntityTiles() {
-
+        entityGrid.ClearAllTiles();
     }
 
     public void SetCombatEntities(List<CombatEntity> newEntities)
@@ -235,6 +235,7 @@ public class CombatManager : MonoBehaviour
     public void SetMoveMode() {
         this.mode = CombatMode.MOVE;
         ClearHighlight();
+        DrawSelect(currEntity.gameObject, numActionsLeft);
     }
 
     private void StartNextTurn()
@@ -285,7 +286,7 @@ public class CombatManager : MonoBehaviour
 
     private void TurnStarted()
     {
-        CombatEntity.EntityType type = currEntity.EntitiyType;
+        CombatEntity.EntityType type = currEntity.team;
         switch (type)
         {
             case CombatEntity.EntityType.player:
@@ -381,7 +382,6 @@ public class CombatManager : MonoBehaviour
         if (numActionsLeft >= cost)
         {
             currEntity.UseSkill(skill);
-            //UseActions(cost);
         }
     }
 
@@ -394,15 +394,33 @@ public class CombatManager : MonoBehaviour
         ClearSelect();
         ClearHighlight();
 
-        DrawSelect(currEntity.gameObject, numActionsLeft);
+        if (mode == CombatMode.MOVE) 
+            DrawSelect(currEntity.gameObject, numActionsLeft);
 
-        if (numActionsLeft <= 0)
+        if (mode == CombatMode.SELECT)
+            StartCoroutine(DelayDrawHighlight());
+
+        if (numActionsLeft <= 0) {
+            if (currEntity.team == CombatEntity.EntityType.player) {
+                CombatUIController.Instance.Reset();
+                SetMoveMode();
+            }
             StartNextTurn();
+        }
     }
-
+    private IEnumerator DelayDrawHighlight() {
+        yield return new WaitForSeconds(0.25f);
+        if (mode == CombatMode.SELECT) {
+            Vector3 mousePos = Camera.main.ScreenToWorldPoint(InputHandler.Instance.mousePos);
+            Vector3Int entityPos = GameHandler.Instance.currentLevel.WorldToCell(currEntity.transform.parent.position);
+            Skill skill = skillList.Get(activeSkill);
+            List<Vector3Int> positions = Utils.CombatUtil.GetTilesInAttack(entityPos, mousePos, this, skill.target, skill.range, skill.size); 
+            DrawHighlight(positions);
+        }
+    }
     private void TurnEnded()
     {
-        CombatEntity.EntityType type = currEntity.EntitiyType;
+        CombatEntity.EntityType type = currEntity.team;
         switch (type)
         {
             case CombatEntity.EntityType.player:
@@ -473,7 +491,9 @@ public class CombatManager : MonoBehaviour
         //Utils.Pathfinding.PrintPathCosts();
     }
 
-
+    public bool IsPlayerTurn() {
+        return currEntity != null && currEntity.team == CombatEntity.EntityType.player;
+    }
 
     public void ClearMove() {
         moveCost.SetActive(false);

@@ -61,8 +61,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillsMaster: {fileID: 11400000, guid: 767c3e5c23ffcbd4dad117bb01187a80, type: 2}
   skillActions: {fileID: -1898813043142187458}
+  damageNumberPrefab: {fileID: 6637239926454590348, guid: 9cbabfc94fa559240902ae1e5707a193, type: 3}
   stats:
+    maxHp: 0
+    damage: 0
     speed: 0
     actions: 0
+  knownSkills: 
   uiSprite: {fileID: 0}
   entityType: 0

@@ -1,4 +1,4 @@
-using System.Collections;
+using TMPro;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -14,6 +14,7 @@ public class CombatEntity : MonoBehaviour
     [Header("Universal data")]
     [SerializeField] private SkillList skillsMaster;
     [SerializeField] private SkillActions skillActions;
+    [SerializeField] private GameObject damageNumberPrefab;
     [Header("Per-entity data")]
     [SerializeField] private Stats stats;
     public Stats Stats => stats;
@@ -22,7 +23,7 @@ public class CombatEntity : MonoBehaviour
     [SerializeField] private Sprite uiSprite;
     public Sprite UISprite => uiSprite;
     [SerializeField] private EntityType entityType;
-    public EntityType EntitiyType => entityType;
+    public EntityType team => entityType;
 
     public void UseSkill(SkillID id) {
         skillsMaster.Get(id, skillActions).behavior.Invoke();
@@ -36,8 +37,15 @@ public class CombatEntity : MonoBehaviour
 
     public void TakeDamage(int dmg)
     {
+        dmg = Mathf.Min(dmg, hp);
         hp -= dmg;
-        Debug.Log("Entity " + transform.parent.gameObject.name + " took " + dmg + " points of damage, new hp: " + hp + "/" + stats.maxHp);
+        Instantiate(damageNumberPrefab, transform.position, Quaternion.identity).GetComponent<TextMeshPro>().text = dmg.ToString();
+        GameObject parent = transform.parent.gameObject;
+        Debug.Log("Entity " + parent.name + " took " + dmg + " points of damage, new hp: " + hp + "/" + stats.maxHp);
+        if (hp <= 0) {
+            combatManager.EntityExitTile(parent);
+            Destroy(parent);
+        }
     }
 
     private CombatManager combatManager;

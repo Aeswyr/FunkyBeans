@@ -12,7 +12,7 @@ public class SkillActions : MonoBehaviour
         //Debug.Log($"OUCH: {entity.Stats.speed}");
         Skill skill = skillList.Get(SkillID.STRIKE);
 
-        if(entity.EntitiyType == CombatEntity.EntityType.player)
+        if(entity.team == CombatEntity.EntityType.player)
         {
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(InputHandler.Instance.mousePos);
 

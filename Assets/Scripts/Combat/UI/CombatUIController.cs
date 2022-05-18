@@ -12,11 +12,28 @@ public class CombatUIController : Singleton<CombatUIController>
     private CombatManager manager;
     private List<SkillID> skills = new List<SkillID>();
 
+    public MenuState menuState = MenuState.START;
+
     void FixedUpdate() {
-        
+        if (InputHandler.Instance.back.pressed) {
+            switch (menuState) {
+                case MenuState.TARGET:
+                    manager.SetMoveMode();
+                    options.SetActive(true);
+                    menuState = MenuState.SELECT;
+                    break;
+                case MenuState.SELECT:
+                    options.SetActive(false);
+                    menuState = MenuState.START;
+                    break;
+            }
+        }
     }
 
     public void AttackPressed() {
+        if (!manager.IsPlayerTurn())
+            return;
+        menuState = MenuState.SELECT;
         foreach (var button in buttons) {
             Destroy(button);
         }
@@ -32,6 +49,9 @@ public class CombatUIController : Singleton<CombatUIController>
     }
 
     public void SkillPressed() {
+        if (!manager.IsPlayerTurn())
+            return;
+        menuState = MenuState.SELECT;
         foreach (var button in buttons) {
             Destroy(button);
         }
@@ -46,6 +66,16 @@ public class CombatUIController : Singleton<CombatUIController>
         }
     }
 
+    public void DefendPressed() {
+        if (!manager.IsPlayerTurn())
+            return;
+    }
+
+    public void FleePressed() {
+        if (!manager.IsPlayerTurn())
+            return;
+    }
+
     public void SetCombatManager(CombatManager manager) {
         this.manager = manager;
     }
@@ -54,4 +84,12 @@ public class CombatUIController : Singleton<CombatUIController>
         this.skills = skills;
     }
 
+    public void Reset() {
+        options.SetActive(false);
+        menuState = MenuState.START;
+    }
+
+    public enum MenuState {
+        START, SELECT, TARGET
+    }
 }

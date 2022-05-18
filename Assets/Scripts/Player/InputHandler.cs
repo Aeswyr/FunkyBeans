@@ -21,12 +21,17 @@ public class InputHandler : Singleton<InputHandler>
     public Button interact {
         get {return m_interact;}
     }
+    private Button m_back;
+    public Button back {
+        get {return m_back;}
+    }
 
     // Update is called once per frame
     void FixedUpdate()
     {
         m_action.Reset();
         m_interact.Reset();
+        m_back.Reset();
     }
 
     public void Move(InputAction.CallbackContext ctx) {
@@ -43,6 +48,10 @@ public class InputHandler : Singleton<InputHandler>
 
     public void Action(InputAction.CallbackContext ctx) {
         m_action.Set(ctx);
+    }
+
+    public void Back(InputAction.CallbackContext ctx) {
+        m_back.Set(ctx);
     }
 }
 
