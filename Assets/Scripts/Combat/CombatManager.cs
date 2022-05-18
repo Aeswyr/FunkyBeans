@@ -64,6 +64,8 @@ public class CombatManager : MonoBehaviour
 
         moveCost.SetActive(false);
         moveText = moveCost.transform.Find("Text").GetComponent<TextMeshPro>();
+
+        CombatUIController.Instance.SetCombatManager(this);
     }
 
     private void FixedUpdate()
@@ -290,6 +292,8 @@ public class CombatManager : MonoBehaviour
                     //Set number of actions
                     numMaxActions = currEntity.Stats.actions;
                     numActionsLeft = numMaxActions;
+
+                    CombatUIController.Instance.SetKnownSkills(currEntity.KnownSkills);
 
                     ActionUIController.Instance.SetActionUI(numActionsLeft, numMaxActions);
 

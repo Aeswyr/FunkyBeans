@@ -17,10 +17,13 @@ public class CombatEntity : MonoBehaviour
     [Header("Per-entity data")]
     [SerializeField] private Stats stats;
     public Stats Stats => stats;
+    [SerializeField] private List<SkillID> knownSkills;
+    public List<SkillID> KnownSkills => knownSkills;
     [SerializeField] private Sprite uiSprite;
     public Sprite UISprite => uiSprite;
     [SerializeField] private EntityType entityType;
     public EntityType EntitiyType => entityType;
+
     public void UseSkill(SkillID id) {
         skillsMaster.Get(id, skillActions).behavior.Invoke();
     }
