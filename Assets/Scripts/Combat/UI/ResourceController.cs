@@ -15,12 +15,18 @@ public class ResourceController : MonoBehaviour
 
     public void SetHP(int val, int max) {
         hp.text = val.ToString();
-        hpBar.fillAmount = ((float)val) / max;
+        if (max > 0)
+            hpBar.fillAmount = ((float)val) / max;
+        else 
+            hpBar.fillAmount = 1;
     }
 
     public void SetMP(int val, int max) {
         mp.text = val.ToString();
-        mpBar.fillAmount = ((float)val) / max;
+        if (max > 0)
+            mpBar.fillAmount = ((float)val) / max;
+        else
+            mpBar.fillAmount = 1;
     }
 
     public void SetNametag(string name) {

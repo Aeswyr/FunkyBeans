@@ -314,8 +314,20 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: 1967d95ad34d8874d85dc1ed885d4e05, type: 3}
     - target: {fileID: 4266659130729025017, guid: 0bc75f806f8806641bae013bdd180fd6, type: 3}
+      propertyPath: entityName
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 4266659130729025017, guid: 0bc75f806f8806641bae013bdd180fd6, type: 3}
+      propertyPath: description
+      value: It's you!
+      objectReference: {fileID: 0}
+    - target: {fileID: 4266659130729025017, guid: 0bc75f806f8806641bae013bdd180fd6, type: 3}
       propertyPath: stats.maxHp
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4266659130729025017, guid: 0bc75f806f8806641bae013bdd180fd6, type: 3}
+      propertyPath: stats.maxMp
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4266659130729025017, guid: 0bc75f806f8806641bae013bdd180fd6, type: 3}
       propertyPath: stats.speed

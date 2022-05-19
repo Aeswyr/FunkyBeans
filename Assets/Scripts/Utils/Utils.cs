@@ -357,7 +357,7 @@ public class Utils
                 Vector3Int entityPos = GameHandler.Instance.currentLevel.WorldToCell(entity.transform.parent.position);
                 targets = Utils.CombatUtil.GetEntitiesInAttack(entityPos, mousePos, entity.CombatManager, skill.target, skill.range, skill.size);
 
-                if ((targets.Count == 0) && (skill.requiresValidTarget))
+                if ((targets == null || targets.Count == 0) && (skill.requiresValidTarget))
                     return;
             }
             else
@@ -365,6 +365,8 @@ public class Utils
                 //Uhhhhhhhhhhhhhhhhhhhhh yeah
             }
 
+            if (!entity.TrySpendMP(skill.manaCost))
+                return;
             
             //calculate combo multiplier
             float multiplier = CalculateComboMultiplier(entity, skill, id);

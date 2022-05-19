@@ -122,6 +122,8 @@ public class CombatUIController : Singleton<CombatUIController>
         currEntityImage.sprite = spr;
     }
 
+
+    // Action Counter
     [Header("Action Display")]
     [SerializeField] private TextMeshProUGUI textRemaining;
     [SerializeField] private TextMeshProUGUI textMax;
@@ -132,4 +134,68 @@ public class CombatUIController : Singleton<CombatUIController>
         textRemaining.text = numActionsLeft.ToString();
         textMax.text = maxActions.ToString();
     }
+
+
+    // Enemy Info Display
+    [Header("Enemy Display")]
+    [SerializeField] private GameObject enemyInfo;
+    [SerializeField] private ResourceController resource;
+    [SerializeField] private TextMeshProUGUI description;
+    private CombatEntity displayedEntity;
+
+    public void SetDisplayedEntity(CombatEntity entity) {
+        enemyInfo.SetActive(true);
+        displayedEntity = entity;
+        resource.SetHP(entity.HP, entity.Stats.maxHp);
+        resource.SetMP(entity.MP, entity.Stats.maxMp);
+        resource.SetNametag(entity.EntityName);
+        description.text = entity.Description;
+    }
+
+    public void UpdateDisplayedEntity() {
+        if (displayedEntity == null)
+            return;
+
+        resource.SetHP(displayedEntity.HP, displayedEntity.Stats.maxHp);
+        resource.SetMP(displayedEntity.MP, displayedEntity.Stats.maxMp);
+        resource.SetNametag(displayedEntity.EntityName);
+        description.text = displayedEntity.Description;
+    }
+
+    public void DisableIfDisplayed(CombatEntity entity) {
+        enemyInfo.SetActive(false);
+        if (entity == displayedEntity) {
+            displayedEntity = null;
+        }
+    }
+
+    public void DisableDisplay() {
+        enemyInfo.SetActive(false);
+    }
+
+    [Header("Player Display")]
+    [SerializeField] private GameObject resourcePrefab;
+    [SerializeField] private GameObject resourceHolder;
+    private Dictionary<CombatEntity, ResourceController> activeBars = new Dictionary<CombatEntity, ResourceController>();
+
+    public void RegisterNewResource(CombatEntity entity) {
+        activeBars[entity] = Instantiate(resourcePrefab, resourceHolder.transform).GetComponent<ResourceController>();
+        UpdatePlayerResource(entity);
+    }
+
+    public void UpdatePlayerResource(CombatEntity entity) {
+        ResourceController resource = activeBars[entity];
+
+        resource.SetNametag(entity.EntityName);
+        resource.SetHP(entity.HP, entity.Stats.maxHp);
+        resource.SetMP(entity.MP, entity.Stats.maxMp);
+    }
+
+    public void ClearPlayerResources() {
+        foreach (var res in activeBars) {
+            Destroy(res.Value.gameObject);
+        }
+        activeBars.Clear();
+    }
+
 }

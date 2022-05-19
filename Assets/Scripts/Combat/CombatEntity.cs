@@ -16,6 +16,10 @@ public class CombatEntity : MonoBehaviour
     [SerializeField] private SkillActions skillActions;
     [SerializeField] private GameObject damageNumberPrefab;
     [Header("Per-entity data")]
+    [SerializeField] private string entityName;
+    public string EntityName => entityName;
+    [SerializeField] private string description;
+    public string Description => description;
     [SerializeField] private Stats stats;
     public Stats Stats => stats;
     [SerializeField] private CombatReward reward;
@@ -37,10 +41,15 @@ public class CombatEntity : MonoBehaviour
     }
 
     private int hp;
+    public int HP => hp;
+    private int mp;
+    public int MP => mp;
     private int shield;
+    public int Shield => shield;
     private void Start()
     {
         hp = stats.maxHp;
+        mp = stats.maxMp;
     }
 
     public void TakeDamage(int dmg)
@@ -59,13 +68,31 @@ public class CombatEntity : MonoBehaviour
             hp -= dmg;
             tm.color = Color.red;
         }
+
+        CombatUIController.Instance.UpdateDisplayedEntity();
+        if (team == EntityType.player)
+            CombatUIController.Instance.UpdatePlayerResource(this);
+
         GameObject parent = transform.parent.gameObject;
         Debug.Log("Entity " + parent.name + " took " + dmg + " points of damage, new hp: " + hp + "/" + stats.maxHp);
         if (hp <= 0 && entityType == EntityType.enemy) {
+            CombatUIController.Instance.DisableIfDisplayed(this);
             combatManager.EntityExitTile(parent);
             combatManager.RemoveEntity(this);
             Destroy(parent);
         }
+    }
+
+    public bool TrySpendMP(int val) {
+        if (mp < val)
+            return false;
+        mp -= val;
+
+        CombatUIController.Instance.UpdateDisplayedEntity();
+        if (team == EntityType.player)
+            CombatUIController.Instance.UpdatePlayerResource(this);
+            
+        return true;
     }
 
     public void AddShield(int amt) {
@@ -83,6 +110,7 @@ public class CombatEntity : MonoBehaviour
 [Serializable]
 public struct Stats {
     public int maxHp;
+    public int maxMp;
     public int damage;
     public int speed;
     public int actions;

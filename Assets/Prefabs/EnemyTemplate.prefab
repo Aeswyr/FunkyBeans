@@ -168,6 +168,10 @@ PrefabInstance:
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4266659130729025017, guid: 0bc75f806f8806641bae013bdd180fd6, type: 3}
+      propertyPath: stats.maxMp
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4266659130729025017, guid: 0bc75f806f8806641bae013bdd180fd6, type: 3}
       propertyPath: stats.speed
       value: 29
       objectReference: {fileID: 0}

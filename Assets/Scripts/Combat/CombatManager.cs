@@ -73,10 +73,22 @@ public class CombatManager : MonoBehaviour
         CombatUIController.Instance.SetCombatManager(this);
     }
 
+    private Vector3Int lastMouseCell, mouseCell;
+    private Vector3 mousePos;
     private void FixedUpdate()
     {
+        mousePos = Camera.main.ScreenToWorldPoint(InputHandler.Instance.mousePos);
+        mouseCell = GameHandler.Instance.currentLevel.WorldToCell(mousePos);
+
         if (currEntity != null)
         {
+
+            if (mouseCell != lastMouseCell)
+                if (CellHasEntity(mouseCell))
+                    CombatUIController.Instance.SetDisplayedEntity(GetEntityInCell(mouseCell).entity);
+                else
+                    CombatUIController.Instance.DisableDisplay();
+
             switch (currEntity.team)
             {
                 case CombatEntity.EntityType.player:
@@ -116,6 +128,7 @@ public class CombatManager : MonoBehaviour
                     }
             }
         }
+        lastMouseCell = mouseCell;
     }
 
     private Dictionary<Vector3Int, int> bfsDist = new Dictionary<Vector3Int, int>();
@@ -208,6 +221,9 @@ public class CombatManager : MonoBehaviour
     public void SetCombatEntities(List<CombatEntity> newEntities)
     {
         combatEntities = newEntities;
+        foreach (var entity in combatEntities)
+            if (entity.team == CombatEntity.EntityType.player)
+                CombatUIController.Instance.RegisterNewResource(entity);
         GenerateTurnOrder();
     }
 
@@ -335,11 +351,8 @@ public class CombatManager : MonoBehaviour
         }
     }
 
-    private Vector3Int lastMouseCell;
     private void DrawCombatMovement()
     {
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(InputHandler.Instance.mousePos);
-        Vector3Int mouseCell = GameHandler.Instance.currentLevel.WorldToCell(mousePos);
 
         if (mouseCell != lastMouseCell)
         {
@@ -351,12 +364,9 @@ public class CombatManager : MonoBehaviour
             }
         }
 
-        lastMouseCell = mouseCell;
+        
     }
     private void DrawCombatHighlight() {
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(InputHandler.Instance.mousePos);
-        Vector3Int mouseCell = GameHandler.Instance.currentLevel.WorldToCell(mousePos);
-
         Vector3Int entityPos = GameHandler.Instance.currentLevel.WorldToCell(currEntity.transform.parent.position);
 
         if (mouseCell != lastMouseCell)
@@ -366,17 +376,12 @@ public class CombatManager : MonoBehaviour
             List<Vector3Int> positions = Utils.CombatUtil.GetTilesInAttack(entityPos, mousePos, this, skill.target, skill.range, skill.size); 
             DrawHighlight(positions);
         }
-
-        lastMouseCell = mouseCell;
     }
 
     private void TryMovePlayer()
     {
         if (lastMouseCell == null)
             return;
-
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(InputHandler.Instance.mousePos);
-        Vector3Int mouseCell = GameHandler.Instance.currentLevel.WorldToCell(mousePos);
 
         if (Utils.GridUtil.IsPointInSelectRange(mouseCell, this) && !Utils.GridUtil.IsCellFilled(mouseCell) && !CellHasEntity(mouseCell))
         {
@@ -435,7 +440,6 @@ public class CombatManager : MonoBehaviour
     private IEnumerator DelayDrawHighlight() {
         yield return new WaitForSeconds(0.25f);
         if (mode == CombatMode.SELECT) {
-            Vector3 mousePos = Camera.main.ScreenToWorldPoint(InputHandler.Instance.mousePos);
             Vector3Int entityPos = GameHandler.Instance.currentLevel.WorldToCell(currEntity.transform.parent.position);
             Skill skill = skillList.Get(activeSkill);
             List<Vector3Int> positions = Utils.CombatUtil.GetTilesInAttack(entityPos, mousePos, this, skill.target, skill.range, skill.size); 
@@ -571,6 +575,7 @@ public class CombatManager : MonoBehaviour
     }
 
     public void EndCombat() {
+        CombatUIController.Instance.ClearPlayerResources();
         GameHandler.Instance.DisableCombatObjects();
         foreach (var centity in combatEntities) {
             if (centity.transform.parent.TryGetComponent(out PlayerController player))
