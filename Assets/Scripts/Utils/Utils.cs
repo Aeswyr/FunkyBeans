@@ -345,7 +345,9 @@ public class Utils
             return entities;
         }
 
-        public static void UseSimpleDamageSkill(CombatEntity entity, Skill skill) {
+        public static void UseSimpleDamageSkill(CombatEntity entity, SkillID id, SkillList skillList) {
+            Skill skill = skillList.Get(id);
+
             List<CombatEntity> targets = null;
 
             // collect targets
@@ -363,14 +365,44 @@ public class Utils
                 //Uhhhhhhhhhhhhhhhhhhhhh yeah
             }
 
+            
+            //calculate combo multiplier
+            float multiplier = CalculateComboMultiplier(entity, skill, id);
+            entity.CombatManager.lastComboTypes = skill.types;
+            entity.CombatManager.comboSkillsUsed.Add(id);
+
             // perform action on targets
             foreach(CombatEntity target in targets)
             {
-                target.TakeDamage(entity.Stats.damage);
+                if (entity.team == CombatEntity.EntityType.player)
+                    entity.CombatManager.currentCombo++;
+                target.TakeDamage((int)(entity.Stats.damage * multiplier));
             }
 
             //use actions
             entity.CombatManager.UseActions(skill.actionCost);
+        }
+
+        public static float CalculateComboMultiplier(CombatEntity entity, Skill skill, SkillID id) {
+            if (entity.team != CombatEntity.EntityType.player)
+                return 1;
+
+            List<Skill.Type> types = new List<Skill.Type>(skill.types);
+            bool endCombo = true;
+            if (!entity.CombatManager.comboSkillsUsed.Contains(id))
+                foreach (Skill.Type type in entity.CombatManager.lastComboTypes)
+                    if (types.Contains(type)) {
+                        endCombo = false;
+                        break;
+                    }
+
+            if (endCombo) {
+                float multiplier = 1 + entity.CombatManager.currentCombo / 10f;
+                entity.CombatManager.currentCombo = -1;
+                return multiplier;
+            } else {
+                return 1 + Mathf.Min(0.5f, entity.CombatManager.currentCombo / 10f);
+            }
         }
     }
 }

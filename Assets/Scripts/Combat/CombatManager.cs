@@ -55,6 +55,10 @@ public class CombatManager : MonoBehaviour
     private CombatMode mode = CombatMode.MOVE;
     private SkillID activeSkill;
     private CombatReward reward;
+    public int currentCombo;
+    public Skill.Type[] lastComboTypes = new Skill.Type[0];
+    public List<SkillID> comboSkillsUsed = new List<SkillID>();
+
 
     void Awake()
     {

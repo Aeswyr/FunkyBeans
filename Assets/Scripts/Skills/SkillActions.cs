@@ -9,13 +9,11 @@ public class SkillActions : MonoBehaviour
     [SerializeField] private CombatEntity entity;
     public void Strike() 
     {
-        Skill skill = skillList.Get(SkillID.STRIKE);
-        Utils.CombatUtil.UseSimpleDamageSkill(entity, skill);
+        Utils.CombatUtil.UseSimpleDamageSkill(entity, SkillID.STRIKE, skillList);
     }
     public void Hew()
     {
-        Skill skill = skillList.Get(SkillID.HEW);
-        Utils.CombatUtil.UseSimpleDamageSkill(entity, skill);
+        Utils.CombatUtil.UseSimpleDamageSkill(entity, SkillID.HEW, skillList);
     }
 
     public void Block() {
@@ -26,11 +24,11 @@ public class SkillActions : MonoBehaviour
 
     public void Quickshot() {
         Skill skill = skillList.Get(SkillID.QUICKSHOT);
-        Utils.CombatUtil.UseSimpleDamageSkill(entity, skill);
+        Utils.CombatUtil.UseSimpleDamageSkill(entity, SkillID.QUICKSHOT, skillList);
     }
 
     public void Fireball() {
         Skill skill = skillList.Get(SkillID.FIREBALL);
-        Utils.CombatUtil.UseSimpleDamageSkill(entity, skill);
+        Utils.CombatUtil.UseSimpleDamageSkill(entity, SkillID.FIREBALL, skillList);
     }
 }
