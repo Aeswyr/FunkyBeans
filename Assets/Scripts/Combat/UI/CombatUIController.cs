@@ -1,9 +1,11 @@
-using System.Collections;
+using UnityEngine.UI;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class CombatUIController : Singleton<CombatUIController>
 {
+    [Header("Action Menu")]
     [SerializeField] private SkillList skillMasterList;
     [SerializeField] private GameObject holder;
     [SerializeField] private GameObject options;
@@ -96,5 +98,38 @@ public class CombatUIController : Singleton<CombatUIController>
 
     public enum MenuState {
         START, SELECT, TARGET
+    }
+
+
+
+    // Turn order management
+    [Header("Turn Order")]
+    [SerializeField] private GameObject turnOrderCanvas;
+    public GameObject TurnOrderCanvas => turnOrderCanvas;
+    [SerializeField] private Image currEntityImage;
+    [SerializeField] private Transform leftBar;
+    [SerializeField] private Transform rightBar;
+
+    public void PlaceTurnEntity(Transform obj, float percentOnBar)
+    {
+        Vector3 offSet = ((rightBar.position - leftBar.position)+new Vector3(0, 0,-50)) * percentOnBar + new Vector3(0, -0.07f, 0);
+
+        obj.transform.position = leftBar.position + offSet;
+    }
+
+    public void SetCurrEntitySprite(Sprite spr)
+    {
+        currEntityImage.sprite = spr;
+    }
+
+    [Header("Action Display")]
+    [SerializeField] private TextMeshProUGUI textRemaining;
+    [SerializeField] private TextMeshProUGUI textMax;
+
+
+    public void SetActionUI(int numActionsLeft, int maxActions)
+    {
+        textRemaining.text = numActionsLeft.ToString();
+        textMax.text = maxActions.ToString();
     }
 }

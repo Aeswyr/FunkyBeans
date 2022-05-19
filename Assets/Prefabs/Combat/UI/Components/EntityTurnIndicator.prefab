@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8500417234774331517}
   - component: {fileID: 6989827770949643221}
   m_Layer: 5
-  m_Name: Entity Turn Indicator
+  m_Name: EntityTurnIndicator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

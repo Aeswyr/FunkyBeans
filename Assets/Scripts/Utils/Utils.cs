@@ -375,7 +375,7 @@ public class Utils
             foreach(CombatEntity target in targets)
             {
                 if (entity.team == CombatEntity.EntityType.player)
-                    entity.CombatManager.currentCombo++;
+                    entity.CombatManager.IncrementCombo();
                 target.TakeDamage((int)(entity.Stats.damage * multiplier));
             }
 
@@ -398,7 +398,7 @@ public class Utils
 
             if (endCombo) {
                 float multiplier = 1 + entity.CombatManager.currentCombo / 10f;
-                entity.CombatManager.currentCombo = -1;
+                entity.CombatManager.CashoutCombo();
                 return multiplier;
             } else {
                 return 1 + Mathf.Min(0.5f, entity.CombatManager.currentCombo / 10f);

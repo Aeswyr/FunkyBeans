@@ -315,7 +315,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1435135179258450819}
   - component: {fileID: 2758401709470093959}
-  - component: {fileID: 148496699640979181}
   m_Layer: 0
   m_Name: CombatMenu
   m_TagString: Untagged
@@ -357,23 +356,6 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
---- !u!114 &148496699640979181
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7899746708508505177}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f3cc99b1e4ecb74418877bc3e14696a1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skillMasterList: {fileID: 11400000, guid: 767c3e5c23ffcbd4dad117bb01187a80, type: 2}
-  holder: {fileID: 4748853222595131833}
-  options: {fileID: 1551212064937326035}
-  buttonPrefab: {fileID: 2529036899214600481, guid: 35196f996b3a40043b7ac27f41b39b65, type: 3}
-  menuState: 0
 --- !u!1 &8818404090752339176
 GameObject:
   m_ObjectHideFlags: 0
@@ -468,7 +450,7 @@ PrefabInstance:
     - target: {fileID: 2072867733099020429, guid: 6ed1de06e2bde014780ae11d8aa6277e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 148496699640979181}
+      objectReference: {fileID: 0}
     - target: {fileID: 2072867733099020429, guid: 6ed1de06e2bde014780ae11d8aa6277e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -596,7 +578,7 @@ PrefabInstance:
     - target: {fileID: 2072867733099020429, guid: 6ed1de06e2bde014780ae11d8aa6277e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 148496699640979181}
+      objectReference: {fileID: 0}
     - target: {fileID: 2072867733099020429, guid: 6ed1de06e2bde014780ae11d8aa6277e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -722,7 +704,7 @@ PrefabInstance:
     - target: {fileID: 2072867733099020429, guid: 6ed1de06e2bde014780ae11d8aa6277e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 148496699640979181}
+      objectReference: {fileID: 0}
     - target: {fileID: 2072867733099020429, guid: 6ed1de06e2bde014780ae11d8aa6277e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -848,7 +830,7 @@ PrefabInstance:
     - target: {fileID: 2072867733099020429, guid: 6ed1de06e2bde014780ae11d8aa6277e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 148496699640979181}
+      objectReference: {fileID: 0}
     - target: {fileID: 2072867733099020429, guid: 6ed1de06e2bde014780ae11d8aa6277e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2

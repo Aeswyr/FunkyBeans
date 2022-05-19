@@ -321,7 +321,7 @@ public class CombatManager : MonoBehaviour
 
                     CombatUIController.Instance.SetKnownSkills(currEntity.KnownSkills);
 
-                    ActionUIController.Instance.SetActionUI(numActionsLeft, numMaxActions);
+                    CombatUIController.Instance.SetActionUI(numActionsLeft, numMaxActions);
 
                     //Show movement grid for player's entities
                     DrawSelect(currEntity.gameObject, numActionsLeft);
@@ -412,7 +412,7 @@ public class CombatManager : MonoBehaviour
     public void UseActions(int actionsToUse)
     {
         numActionsLeft -= actionsToUse;
-        ActionUIController.Instance.SetActionUI(numActionsLeft, numMaxActions);
+        CombatUIController.Instance.SetActionUI(numActionsLeft, numMaxActions);
 
         ClearMove();
         ClearSelect();
@@ -465,7 +465,7 @@ public class CombatManager : MonoBehaviour
     {
         List<KeyValuePair<float, CombatEntity>> currElements = turnOrder.GetElements();
 
-        TurnOrderCanvas.Instance.SetCurrEntitySprite(currEntity.UISprite);
+        CombatUIController.Instance.SetCurrEntitySprite(currEntity.UISprite);
 
         //delete all current turn indicators
         while(turnIndicators.Count > 0)
@@ -477,12 +477,12 @@ public class CombatManager : MonoBehaviour
         //create and set position for every entity in turnOrder
         foreach (KeyValuePair<float, CombatEntity> element in currElements)
         {
-            EntityTurnIndicator newIndicator = Instantiate(entityTurnIndicatorPrefab, TurnOrderCanvas.Instance.transform).GetComponent<EntityTurnIndicator>();
+            EntityTurnIndicator newIndicator = Instantiate(entityTurnIndicatorPrefab, CombatUIController.Instance.TurnOrderCanvas.transform).GetComponent<EntityTurnIndicator>();
             turnIndicators.Add(newIndicator);
 
             newIndicator.SetSprite(element.Value.UISprite);
 
-            TurnOrderCanvas.Instance.PlaceTurnEntity(newIndicator.transform, element.Key / timeToShowOnBar);
+            CombatUIController.Instance.PlaceTurnEntity(newIndicator.transform, element.Key / timeToShowOnBar);
         }
     }
 
@@ -576,6 +576,14 @@ public class CombatManager : MonoBehaviour
             if (centity.transform.parent.TryGetComponent(out PlayerController player))
                 player.EndBattle(reward);
         }
+    }
+
+    public void IncrementCombo() {
+        currentCombo++;
+    }
+
+    public void CashoutCombo() {
+        currentCombo = -1;
     }
 
     private enum CombatMode {
