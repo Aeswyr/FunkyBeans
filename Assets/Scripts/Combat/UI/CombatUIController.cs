@@ -18,11 +18,12 @@ public class CombatUIController : Singleton<CombatUIController>
         if (InputHandler.Instance.back.pressed) {
             switch (menuState) {
                 case MenuState.TARGET:
-                    manager.SetMoveMode();
+                    manager.SetIdleMode();
                     options.SetActive(true);
                     menuState = MenuState.SELECT;
                     break;
                 case MenuState.SELECT:
+                    manager.SetMoveMode();
                     options.SetActive(false);
                     menuState = MenuState.START;
                     break;
@@ -39,6 +40,7 @@ public class CombatUIController : Singleton<CombatUIController>
         }
         buttons.Clear();
         options.SetActive(true);
+        manager.SetIdleMode();
         for (int i = 0; i < skills.Count; i++) {
             if (skillMasterList.Get(skills[i]).category == Skill.Category.ATTACK) {
                 GameObject button = Instantiate(buttonPrefab, holder.transform);
@@ -57,6 +59,7 @@ public class CombatUIController : Singleton<CombatUIController>
         }
         buttons.Clear();
         options.SetActive(true);
+        manager.SetIdleMode();
         for (int i = 0; i < skills.Count; i++) {
             if (skillMasterList.Get(skills[i]).category == Skill.Category.ABILITY) {
                 GameObject button = Instantiate(buttonPrefab, holder.transform);

@@ -7,7 +7,7 @@ public struct Skill
 {
     public enum Type {
         COLD, FLAME, FLURRY, LIGHTNING, PSYCHIC, MIGHT, NATURE, TACTICAL,
-        FUNDEMENTALS, STARNOMAD, SPELLSWORD
+        FUNDEMENTALS, STARNOMAD, SPELLSWORD, INQUISITOR, CHAOS
     }
     public enum Category {
         ATTACK, ABILITY

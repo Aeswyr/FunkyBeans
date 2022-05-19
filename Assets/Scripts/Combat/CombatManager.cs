@@ -251,6 +251,13 @@ public class CombatManager : MonoBehaviour
         ClearHighlight();
     }
 
+    public void SetIdleMode() {
+        this.mode = CombatMode.NONE;
+        ClearSelect();
+        ClearMove();
+        ClearHighlight();
+    }
+
     private void StartNextTurn()
     {
         if(currEntity != null)

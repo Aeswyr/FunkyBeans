@@ -27,7 +27,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
   - name: Hew
-    types: 08000000
+    types: 05000000
     category: 0
     target: 0
     range: 1
@@ -66,7 +66,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
   - name: Fireball
-    types: 08000000
+    types: 0b00000001000000
     category: 1
     target: 1
     range: 6
