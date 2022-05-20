@@ -37,9 +37,9 @@ public class CombatEntity : MonoBehaviour
         skillsMaster.Get(id, skillActions).behavior.Invoke();
     }
 
-    internal void UseSkillAI(SkillID id, List<Vector3Int> skillTargPositions)
+    public void UseSkillAI(SkillID id, List<Vector3Int> skillTargPositions)
     {
-        Debug.Log("Skill "+id+" going to hit "+skillTargPositions.Count+" locations");
+        //Debug.Log("Skill "+id+" going to hit "+skillTargPositions.Count+" locations");
         skillActions.targetPositions = skillTargPositions;
         skillsMaster.Get(id, skillActions).behavior.Invoke();
     }

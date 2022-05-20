@@ -39,6 +39,10 @@ public class PlayerController : MonoBehaviour
     }
 
     public void StartBattle() {
+        if (freeMove == false)
+            return;
+
+        Debug.Log("start battle!");
         GameHandler.Instance.EnableCombatObjects();
 
         var results = new List<RaycastHit2D>();
