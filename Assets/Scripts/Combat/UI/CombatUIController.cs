@@ -148,6 +148,7 @@ public class CombatUIController : Singleton<CombatUIController>
         displayedEntity = entity;
         resource.SetHP(entity.HP, entity.Stats.maxHp);
         resource.SetMP(entity.MP, entity.Stats.maxMp);
+        resource.SetArmor(entity.Armor);
         resource.SetNametag(entity.EntityName);
         description.text = entity.Description;
     }
@@ -158,6 +159,7 @@ public class CombatUIController : Singleton<CombatUIController>
 
         resource.SetHP(displayedEntity.HP, displayedEntity.Stats.maxHp);
         resource.SetMP(displayedEntity.MP, displayedEntity.Stats.maxMp);
+        resource.SetArmor(displayedEntity.Armor);
         resource.SetNametag(displayedEntity.EntityName);
         description.text = displayedEntity.Description;
     }
@@ -189,6 +191,7 @@ public class CombatUIController : Singleton<CombatUIController>
         resource.SetNametag(entity.EntityName);
         resource.SetHP(entity.HP, entity.Stats.maxHp);
         resource.SetMP(entity.MP, entity.Stats.maxMp);
+        resource.SetArmor(entity.Armor);
     }
 
     public void ClearPlayerResources() {

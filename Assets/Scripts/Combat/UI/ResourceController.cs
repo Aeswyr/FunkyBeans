@@ -9,9 +9,12 @@ public class ResourceController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI nametag;
     [SerializeField] private TextMeshProUGUI hp;
     [SerializeField] private TextMeshProUGUI mp;
+    [SerializeField] private TextMeshProUGUI ar;
 
     [SerializeField] private Image hpBar;
     [SerializeField] private Image mpBar;
+
+    [SerializeField] private GameObject armorDisp;
 
     public void SetHP(int val, int max) {
         hp.text = val.ToString();
@@ -27,6 +30,11 @@ public class ResourceController : MonoBehaviour
             mpBar.fillAmount = ((float)val) / max;
         else
             mpBar.fillAmount = 1;
+    }
+
+    public void SetArmor(int val) {
+        armorDisp.SetActive(val > 0);
+        ar.text = val.ToString();
     }
 
     public void SetNametag(string name) {

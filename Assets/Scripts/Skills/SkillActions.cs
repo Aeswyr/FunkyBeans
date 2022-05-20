@@ -20,7 +20,7 @@ public class SkillActions : MonoBehaviour
 
     public void Block() {
         Skill skill = skillList.Get(SkillID.BLOCK);
-        entity.AddShield(entity.Stats.defense);
+        entity.AddArmor(entity.Stats.defense);
         entity.CombatManager.UseActions(skill.actionCost);
     }
 

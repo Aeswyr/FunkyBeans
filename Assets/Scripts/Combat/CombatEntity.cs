@@ -52,8 +52,8 @@ public class CombatEntity : MonoBehaviour
     public int HP => hp;
     private int mp;
     public int MP => mp;
-    private int shield;
-    public int Shield => shield;
+    private int armor;
+    public int Armor => armor;
     private void Start()
     {
         hp = stats.maxHp;
@@ -65,11 +65,11 @@ public class CombatEntity : MonoBehaviour
         var tm = Instantiate(damageNumberPrefab, transform.position, Quaternion.identity).GetComponent<TextMeshPro>();
         tm.text = dmg.ToString();
 
-        if (shield > 0) {
-            shield -= dmg;
-            if (shield < 0) {
-                hp += shield;
-                shield = 0;
+        if (armor > 0) {
+            armor -= dmg;
+            if (armor < 0) {
+                hp += armor;
+                armor = 0;
             }
             tm.color = Color.gray;
         } else {
@@ -103,8 +103,11 @@ public class CombatEntity : MonoBehaviour
         return true;
     }
 
-    public void AddShield(int amt) {
-        shield += amt;
+    public void AddArmor(int amt) {
+        armor += amt;
+        CombatUIController.Instance.UpdateDisplayedEntity();
+        if (team == EntityType.player)
+            CombatUIController.Instance.UpdatePlayerResource(this);
     }
 
     public int GetMagnitudeOfSkill(Skill skill)
