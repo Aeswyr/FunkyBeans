@@ -209,6 +209,36 @@ public class Utils
             }
             return output;
         }
+
+        public static List<KeyValuePair<Vector3Int,int>> GetBFSWithDistances(Vector3Int src, int dist, CombatManager manager, bool respectEntities, bool respectSelection)
+        {
+            bfs.Clear();
+            bfsDist.Clear();
+            List<KeyValuePair<Vector3Int, int>> output = new List<KeyValuePair<Vector3Int, int>>();
+
+            bfs.Enqueue(src);
+            bfsDist[src] = 0;
+
+            while (bfs.Count > 0)
+            {
+                var current = bfs.Dequeue();
+
+                output.Add(new KeyValuePair<Vector3Int, int>(current, bfsDist[current]));
+                var cost = bfsDist[current] + 1;
+                if (cost > dist)
+                    continue;
+                foreach (var next in Utils.GridUtil.GetValidAdjacent(current, manager, respectEntities, respectSelection))
+                {
+                    if (bfsDist.ContainsKey(next))
+                        continue;
+
+                    bfs.Enqueue(next);
+                    bfsDist[next] = cost;
+                }
+            }
+            return output;
+        }
+
         public static void PrintPathCosts() {
             GameHandler.Instance.ClearText();
             foreach (var cost in costs) {
@@ -323,6 +353,102 @@ public class Utils
             return validTiles;
         }
 
+        public static List<List<Vector3Int>> ValidAttackPositionsForSkill(Vector3Int sourcePos, Skill skill, CombatManager combatManager)
+        {
+            Skill.Target targetType = skill.target;
+            int range = skill.range;
+            int size = skill.size;
+            bool requiresValidTarget = skill.requiresValidTarget;
+
+            List<List<Vector3Int>> attackPositions = new List<List<Vector3Int>>();
+
+            List<Vector3Int> attackTiles = new List<Vector3Int>();
+            switch (targetType)
+            {
+                case Skill.Target.SQUARE:
+                    {
+                        //from top left tile, get tiles that will be hit by move
+                        for (int i = 0; i < size; i++)
+                        {
+                            for (int j = 0; j < size; j++)
+                            {
+                                attackTiles.Add(new Vector3Int(i, j, 0));
+                            }
+                        }
+
+                        //attackTiles are a list of squares where the attack will hit, with the top left corner at 0,0
+
+                        int numRows = size + 2*range;
+                        Vector3Int topLeft = sourcePos - new Vector3Int(range + size - 1, range + size - 1, 0);
+
+                        for(int row = 0; row < numRows; row++)
+                        {
+                            int colStart = Mathf.Max(0, range - row, (row+range) - numRows + 1);
+                            int colEnd = numRows - colStart;
+                            for (int col = colStart; col < colEnd; col++)
+                            {
+                                Vector3Int currPos = topLeft + new Vector3Int(col, row, 0);
+
+                                List<Vector3Int> currAttackLocations = new List<Vector3Int>();
+                                foreach (Vector3Int tile in attackTiles)
+                                {
+                                    currAttackLocations.Add(currPos + tile);
+                                }
+
+                                attackPositions.Add(currAttackLocations);
+                            }
+                        }
+
+                        break;
+                    }
+                case Skill.Target.RADIUS:
+                    {
+                        //Diamond
+                        List<Vector3Int> validCenterPositions = Pathfinding.GetBFS(sourcePos, size + range, combatManager, false, false);
+
+                        foreach(Vector3Int centerPosition in validCenterPositions)
+                        {
+                            attackPositions.Add(Pathfinding.GetBFS(centerPosition, size, combatManager, false, false));
+                        }
+
+                        break;
+                    }
+                case Skill.Target.LINE:
+                    {
+                        //Straight line
+
+                        break;
+                    }
+                case Skill.Target.ARC:
+                    {
+                        //Goes around the end of a diamond
+
+                        break;
+                    }
+            }
+
+            if (requiresValidTarget)
+            {
+                List<List<Vector3Int>> validAttackPositions = new List<List<Vector3Int>>();
+                foreach(List<Vector3Int> possibleAttackPos in attackPositions)
+                {
+                    foreach (Vector3Int pos in possibleAttackPos)
+                    {
+                        if(combatManager.GetEntityInCell(pos) != null)
+                        {
+                            //There is at least 1 target being hit by this attack, so the attack is valid
+                            validAttackPositions.Add(possibleAttackPos);
+                            break;
+                        }
+                    }
+                }
+
+                return validAttackPositions;
+            }
+
+            return attackPositions;
+        }
+
         public static List<CombatEntity> GetEntitiesInAttack(Vector3Int sourcePos, Vector3 destPos, CombatManager combatManager, Skill.Target targetType, int range, int size)
         {
             List<Vector3Int> attackTiles = GetTilesInAttack(sourcePos, destPos, combatManager, targetType, range, size);
@@ -345,7 +471,7 @@ public class Utils
             return entities;
         }
 
-        public static void UseSimpleDamageSkill(CombatEntity entity, SkillID id, SkillList skillList) {
+        public static void UseSimpleDamageSkill(CombatEntity entity, SkillID id, SkillList skillList, List<Vector3Int> targetPositions = null) {
             Skill skill = skillList.Get(id);
 
             List<CombatEntity> targets = null;
@@ -362,7 +488,15 @@ public class Utils
             }
             else
             {
-                //Uhhhhhhhhhhhhhhhhhhhhh yeah
+                foreach (Vector3Int pos in targetPositions)
+                {
+                    EntityReference entityRef = entity.CombatManager.GetEntityInCell(pos);
+
+                    if (entityRef != null)
+                    {
+                        targets.Add(entityRef.entity);
+                    }
+                }
             }
 
             if (!entity.TrySpendMP(skill.manaCost))

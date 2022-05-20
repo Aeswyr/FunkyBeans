@@ -46,6 +46,7 @@ public class SkillList : ScriptableObject {
 }
 
 public enum SkillID {
+    NULL,
     STRIKE,
     HEW,
     BLOCK,

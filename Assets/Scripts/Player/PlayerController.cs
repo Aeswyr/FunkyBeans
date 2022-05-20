@@ -60,8 +60,8 @@ public class PlayerController : MonoBehaviour
             
             entities.Add(hitEntity.GetComponentInChildren<CombatEntity>());
         }
-        foreach(var obj in entities)
-            Debug.Log(entities.ToString());
+        //foreach(var obj in entities)
+            //Debug.Log(entities.ToString());
 
         currentCombat.SetCombatEntities(entities);
 

@@ -14,6 +14,7 @@ public class CombatEntity : MonoBehaviour
     [Header("Universal data")]
     [SerializeField] private SkillList skillsMaster;
     [SerializeField] private SkillActions skillActions;
+    public SkillActions SkillActions => skillActions;
     [SerializeField] private GameObject damageNumberPrefab;
     [Header("Per-entity data")]
     [SerializeField] private string entityName;
@@ -33,6 +34,13 @@ public class CombatEntity : MonoBehaviour
     public EntityType team => entityType;
 
     public void UseSkill(SkillID id) {
+        skillsMaster.Get(id, skillActions).behavior.Invoke();
+    }
+
+    internal void UseSkillAI(SkillID id, List<Vector3Int> skillTargPositions)
+    {
+        Debug.Log("Skill "+id+" going to hit "+skillTargPositions.Count+" locations");
+        skillActions.targetPositions = skillTargPositions;
         skillsMaster.Get(id, skillActions).behavior.Invoke();
     }
 
@@ -97,6 +105,11 @@ public class CombatEntity : MonoBehaviour
 
     public void AddShield(int amt) {
         shield += amt;
+    }
+
+    public int GetMagnitudeOfSkill(Skill skill)
+    {
+        return stats.damage;
     }
 
     private CombatManager combatManager;

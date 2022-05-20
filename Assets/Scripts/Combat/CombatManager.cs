@@ -7,6 +7,7 @@ using TMPro;
 public class CombatManager : MonoBehaviour
 {
     [SerializeField] private SkillList skillList;
+    public SkillList SkillList => skillList;
 
     [Header("Combat grid")]
     [SerializeField] private Grid combatOverlay;
@@ -227,6 +228,9 @@ public class CombatManager : MonoBehaviour
         GenerateTurnOrder();
     }
 
+    private List<CombatEntity> playerEntities = new List<CombatEntity>();
+    private List<CombatEntity> enemyEntities = new List<CombatEntity>();
+
     public void GenerateTurnOrder()
     {
         turnOrder = new PriorityQueue<CombatEntity>();
@@ -234,6 +238,20 @@ public class CombatManager : MonoBehaviour
         foreach (CombatEntity entity in combatEntities)
         {
             entity.SetCombatManager(this);
+
+            switch(entity.team)
+            {
+                case CombatEntity.EntityType.player:
+                    {
+                        playerEntities.Add(entity);
+                        break;
+                    }
+                case CombatEntity.EntityType.enemy:
+                    {
+                        enemyEntities.Add(entity);
+                        break;
+                    }
+            }
 
             float posOnBar = speedMultiplier/entity.Stats.speed;
 
@@ -327,14 +345,17 @@ public class CombatManager : MonoBehaviour
     private void TurnStarted()
     {
         CombatEntity.EntityType type = currEntity.team;
+
+        //Set number of actions
+        numMaxActions = currEntity.Stats.actions;
+        numActionsLeft = numMaxActions;
+
+        Debug.Log("Turn started! Current Entity: " + currEntity.transform.parent.name + ", team: " + type);
+
         switch (type)
         {
             case CombatEntity.EntityType.player:
                 {
-                    //Set number of actions
-                    numMaxActions = currEntity.Stats.actions;
-                    numActionsLeft = numMaxActions;
-
                     CombatUIController.Instance.SetKnownSkills(currEntity.KnownSkills);
 
                     CombatUIController.Instance.SetActionUI(numActionsLeft, numMaxActions);
@@ -346,14 +367,231 @@ public class CombatManager : MonoBehaviour
                 }
             case CombatEntity.EntityType.enemy:
                 {
+                    Vector3Int posBeforeMove = GameHandler.Instance.currentLevel.WorldToCell(currEntity.transform.parent.position);
+
+                    List<MoveHeuristic> movesToDo = GetBestMove(posBeforeMove, numActionsLeft, currEntity);
+
+                    foreach(MoveHeuristic move in movesToDo)
+                    {
+                        if(move.movePosition != posBeforeMove) //entity changed position
+                        {
+                            Debug.Log("Moved to " + move.movePosition);
+
+                            GameObject parentOfEntity = currEntity.transform.parent.gameObject;
+
+                            EntityExitTile(parentOfEntity);
+
+                            parentOfEntity.transform.position = move.movePosition;
+                            Utils.GridUtil.SnapToLevelGrid(parentOfEntity, this);
+
+                            EntityEnterTile(parentOfEntity);
+
+                            posBeforeMove = move.movePosition;
+                        }
+                        else //entity used skill
+                        {
+                            Debug.Log("Used Skill: " + move.skillId);
+
+                            if (move.skillId == SkillID.BLOCK)
+                                currEntity.UseDefense();
+                            else
+                                currEntity.UseSkillAI(move.skillId, move.skillTargPositions);
+                        }
+                    }
+
+                    Debug.Log("Turn Over");
+
                     break;
                 }
         }
     }
 
+    private struct MoveHeuristic
+    {
+        public float score;
+        public Vector3Int movePosition;
+        public SkillID skillId;
+        public List<Vector3Int> skillTargPositions;
+    }
+
+    private List<MoveHeuristic> GetBestMove(Vector3Int currPosition, int actionsLeft, CombatEntity entity)
+    {
+        if (actionsLeft <= 0)
+        {
+            //This just means don't move anywhere and don't use a skill
+            return new List<MoveHeuristic> { new MoveHeuristic { score = GetPositionHeuristic(currPosition), movePosition = currPosition, skillId = SkillID.NULL} };
+        }
+        else
+        {
+            #region calulate value of move that starts with blocking
+            List<MoveHeuristic> defendMove = new List<MoveHeuristic> { new MoveHeuristic { score = DefendHeuristic(), movePosition = currPosition, skillId = SkillID.BLOCK } };
+            defendMove.AddRange(GetBestMove(currPosition, actionsLeft - 1, entity));
+            #endregion
+
+
+            #region find best move that starts with moving
+            //Get all possible positions that can be moved to (including staying stationary)
+            List<KeyValuePair<Vector3Int, int>> movePositions = Utils.Pathfinding.GetBFSWithDistances(currPosition, actionsLeft, this, true, false);
+            movePositions.Remove(new KeyValuePair<Vector3Int, int>(currPosition, 0)); //don't just stand still, do something!!
+
+            //track best place to walk to
+            float bestMovementScore = -100000;
+            List<MoveHeuristic> bestMovementMove = new List<MoveHeuristic> { new MoveHeuristic { score = -100000, movePosition = currPosition, skillId = SkillID.NULL } };
+
+            //iterate through all positions, do heuristic + dynamic programming stuff B)
+            foreach (KeyValuePair<Vector3Int, int> possibleMove in movePositions)
+            {
+                Vector3Int posAfterMove = possibleMove.Key; //where are you after moving
+
+                int actionsAfterMove = actionsLeft - possibleMove.Value;
+
+                //check if the player can use a skill after moving here (prevents infite recusion, I hope...)
+                bool canUseSkill = false;
+                foreach (SkillID skill in entity.KnownSkills)
+                {
+                    if (skillList.Get(skill).actionCost <= actionsAfterMove)
+                        canUseSkill = true;
+                }
+
+                List<MoveHeuristic> currMove;
+                if (canUseSkill)
+                {
+                    //represents moving, then using an attack
+                    currMove = GetBestMove(posAfterMove, actionsAfterMove, entity);
+                }
+                else
+                {
+                    //represents ending the turn here, and blocking
+                    currMove = new List<MoveHeuristic>();
+                    for (int i = 0; i < actionsAfterMove; i++)
+                    {
+                        currMove.Add(new MoveHeuristic { movePosition = posAfterMove, score = DefendHeuristic(), skillId = SkillID.BLOCK });
+                    }
+                    currMove.AddRange(GetBestMove(posAfterMove, 0, entity));
+                }
+
+                float moveScore = GetScoreFromMoveHeuristicList(currMove);
+
+                if (moveScore > bestMovementScore)
+                {
+                    bestMovementScore = moveScore;
+                    bestMovementMove = currMove;
+                }
+            }
+            #endregion
+
+
+            #region find best move that starts with a skill
+            float bestSkillScore = -100000;
+            List<MoveHeuristic> bestSkillMove = new List<MoveHeuristic> { new MoveHeuristic { score = -100000, movePosition = currPosition, skillId = SkillID.NULL } }; ;
+
+            foreach (SkillID skillID in entity.KnownSkills)
+            {
+                Skill skill = skillList.Get(skillID);
+
+                int actionsAfterSkill = actionsLeft - skill.actionCost;
+                if (actionsAfterSkill >= 0)
+                {
+                    //has actions left to use this skill
+                    List<List<Vector3Int>> possibleAttackLocations = Utils.CombatUtil.ValidAttackPositionsForSkill(currPosition, skill, this);
+
+                    foreach (List<Vector3Int> attackLocation in possibleAttackLocations)
+                    {
+                        float attackScore = AttackHeuristic(attackLocation, entity, skill);
+                        if(attackScore > bestSkillScore)
+                        {
+                            List<MoveHeuristic> movesAfterAttack = GetBestMove(currPosition, actionsAfterSkill, entity);
+                            movesAfterAttack.Insert(0, new MoveHeuristic { movePosition = currPosition, score = attackScore, skillId = skillID, skillTargPositions = attackLocation });
+
+                            bestSkillMove = movesAfterAttack;
+
+                            bestSkillScore = GetScoreFromMoveHeuristicList(bestSkillMove);
+                        }
+                    }
+                }
+            }
+            #endregion
+
+
+            //Put the UseSkill, Defend, and Walk moves into a priorityqueue
+            PriorityQueue<List<MoveHeuristic>> moveToDoQueue = new PriorityQueue<List<MoveHeuristic>>();
+            moveToDoQueue.Put(bestSkillMove, 1f/bestSkillScore);
+            moveToDoQueue.Put(defendMove, 1f/GetScoreFromMoveHeuristicList(defendMove));
+            moveToDoQueue.Put(bestMovementMove, 1f/bestMovementScore);
+
+            //return the move with the highest heuristic score
+            return moveToDoQueue.Pop();
+        }
+    }
+
+    #region Heuristic helper functions
+    private float GetPositionHeuristic(Vector3Int position)
+    {
+        float dist = 0;
+        foreach (CombatEntity playerEntity in playerEntities)
+        {
+            dist += Vector3.Distance(position, playerEntity.transform.parent.position);
+        }
+
+        return 1f / dist;
+    }
+
+    private float GetScoreFromMoveHeuristicList(List<MoveHeuristic> moves)
+    {
+        float score = 0;
+        foreach (MoveHeuristic move in moves)
+        {
+            score += move.score;
+        }
+        return score;
+    }
+
+    private float DefendHeuristic()
+    {
+        return 0.5f;
+    }
+
+    private float AttackHeuristic(List<Vector3Int> attackPositions, CombatEntity attackingEntity, Skill skillUsing)
+    {
+        float score = 0;
+
+        int dmgToDeal = attackingEntity.GetMagnitudeOfSkill(skillUsing);
+
+        foreach (Vector3Int attackPos in attackPositions)
+        {
+            EntityReference hitEntityRef = GetEntityInCell(attackPos);
+            //Debug.Log("hitentity: "+hitEntityRef);
+            if(hitEntityRef != null)
+            {
+                CombatEntity hitEntity = hitEntityRef.entity;
+                switch (hitEntity.team)
+                {
+                    case CombatEntity.EntityType.player:
+                        {
+                            score += dmgToDeal;
+
+                            if (hitEntity.HP <= dmgToDeal)
+                                score += 500;
+                            break;
+                        }
+                    case CombatEntity.EntityType.enemy:
+                        {
+                            score -= dmgToDeal*1.5f;
+
+                            if (hitEntity.HP <= dmgToDeal)
+                                score -= 100;
+                            break;
+                        }
+                }
+            }
+        }
+
+        return score;
+    }
+    #endregion
+
     private void DrawCombatMovement()
     {
-
         if (mouseCell != lastMouseCell)
         {
             ClearMove();
@@ -416,6 +654,11 @@ public class CombatManager : MonoBehaviour
 
     public void UseActions(int actionsToUse)
     {
+        if (currEntity.team == CombatEntity.EntityType.enemy)
+            return;
+
+        Debug.Log("player used " + actionsToUse + " actions");
+
         numActionsLeft -= actionsToUse;
         CombatUIController.Instance.SetActionUI(numActionsLeft, numMaxActions);
 
@@ -531,6 +774,20 @@ public class CombatManager : MonoBehaviour
     public void RemoveEntity(CombatEntity entity) 
     {
         combatEntities.Remove(entity);
+
+        switch (entity.team)
+        {
+            case CombatEntity.EntityType.player:
+                {
+                    playerEntities.Remove(entity);
+                    break;
+                }
+            case CombatEntity.EntityType.enemy:
+                {
+                    enemyEntities.Remove(entity);
+                    break;
+                }
+        }
 
         // Accumilate rewards for defeated enemies
         if (entity.team == CombatEntity.EntityType.enemy) {
