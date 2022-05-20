@@ -468,15 +468,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7661184331408934461, guid: e935dbd2ec8d55a43b797c4a0f404d32, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.7113183
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 7661184331408934461, guid: e935dbd2ec8d55a43b797c4a0f404d32, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.9035733
+      value: 0.51
       objectReference: {fileID: 0}
     - target: {fileID: 7661184331408934461, guid: e935dbd2ec8d55a43b797c4a0f404d32, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.047172688
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7661184331408934461, guid: e935dbd2ec8d55a43b797c4a0f404d32, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1750,6 +1750,10 @@ PrefabInstance:
       value: 19
       objectReference: {fileID: 0}
     - target: {fileID: 2467019966403178182, guid: e935dbd2ec8d55a43b797c4a0f404d32, type: 3}
+      propertyPath: stats.actions
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2467019966403178182, guid: e935dbd2ec8d55a43b797c4a0f404d32, type: 3}
       propertyPath: knownSkills.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -1763,15 +1767,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7661184331408934461, guid: e935dbd2ec8d55a43b797c4a0f404d32, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.66
+      value: -1.5
       objectReference: {fileID: 0}
     - target: {fileID: 7661184331408934461, guid: e935dbd2ec8d55a43b797c4a0f404d32, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.81
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 7661184331408934461, guid: e935dbd2ec8d55a43b797c4a0f404d32, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.047172688
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7661184331408934461, guid: e935dbd2ec8d55a43b797c4a0f404d32, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1862,7 +1866,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 7.375
+  orthographic size: 5.625
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
