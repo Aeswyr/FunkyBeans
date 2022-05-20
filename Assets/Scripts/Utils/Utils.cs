@@ -491,7 +491,7 @@ public class Utils
                 foreach (Vector3Int pos in targetPositions)
                 {
                     EntityReference entityRef = entity.CombatManager.GetEntityInCell(pos);
-
+                    Debug.Log("EntityRef: " + entityRef + ", isNull: " + entityRef == null);
                     if (entityRef != null)
                     {
                         targets.Add(entityRef.entity);

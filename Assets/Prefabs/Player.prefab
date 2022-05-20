@@ -318,6 +318,10 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 4266659130729025017, guid: 0bc75f806f8806641bae013bdd180fd6, type: 3}
+      propertyPath: defendSkill
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4266659130729025017, guid: 0bc75f806f8806641bae013bdd180fd6, type: 3}
       propertyPath: description
       value: It's you!
       objectReference: {fileID: 0}
@@ -350,16 +354,20 @@ PrefabInstance:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4266659130729025017, guid: 0bc75f806f8806641bae013bdd180fd6, type: 3}
-      propertyPath: knownSkills.Array.data[1]
+      propertyPath: knownSkills.Array.data[0]
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4266659130729025017, guid: 0bc75f806f8806641bae013bdd180fd6, type: 3}
+      propertyPath: knownSkills.Array.data[1]
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4266659130729025017, guid: 0bc75f806f8806641bae013bdd180fd6, type: 3}
       propertyPath: knownSkills.Array.data[2]
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4266659130729025017, guid: 0bc75f806f8806641bae013bdd180fd6, type: 3}
       propertyPath: knownSkills.Array.data[3]
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4938962799226207605, guid: 0bc75f806f8806641bae013bdd180fd6, type: 3}
       propertyPath: m_RootOrder

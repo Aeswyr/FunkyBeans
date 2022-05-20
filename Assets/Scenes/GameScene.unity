@@ -280,11 +280,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2997537445852491212, guid: e4f5409a6f2789d4fb3b2dd57c3f700e, type: 3}
       propertyPath: knownSkills.Array.data[1]
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 2997537445852491212, guid: e4f5409a6f2789d4fb3b2dd57c3f700e, type: 3}
       propertyPath: knownSkills.Array.data[2]
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2997537445852491212, guid: e4f5409a6f2789d4fb3b2dd57c3f700e, type: 3}
       propertyPath: knownSkills.Array.data[3]
@@ -459,6 +459,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2467019966403178182, guid: e935dbd2ec8d55a43b797c4a0f404d32, type: 3}
+      propertyPath: entityName
+      value: Rat Numba One
+      objectReference: {fileID: 0}
+    - target: {fileID: 2467019966403178182, guid: e935dbd2ec8d55a43b797c4a0f404d32, type: 3}
       propertyPath: entityType
       value: 1
       objectReference: {fileID: 0}
@@ -469,6 +473,10 @@ PrefabInstance:
     - target: {fileID: 2467019966403178182, guid: e935dbd2ec8d55a43b797c4a0f404d32, type: 3}
       propertyPath: defendSkill
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2467019966403178182, guid: e935dbd2ec8d55a43b797c4a0f404d32, type: 3}
+      propertyPath: description
+      value: He makes ALL of the rules
       objectReference: {fileID: 0}
     - target: {fileID: 2467019966403178182, guid: e935dbd2ec8d55a43b797c4a0f404d32, type: 3}
       propertyPath: knownSkills.Array.size
@@ -1746,12 +1754,20 @@ PrefabInstance:
       value: 17
       objectReference: {fileID: 0}
     - target: {fileID: 2467019966403178182, guid: e935dbd2ec8d55a43b797c4a0f404d32, type: 3}
+      propertyPath: entityName
+      value: Rat/0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2467019966403178182, guid: e935dbd2ec8d55a43b797c4a0f404d32, type: 3}
       propertyPath: reward.exp
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2467019966403178182, guid: e935dbd2ec8d55a43b797c4a0f404d32, type: 3}
       propertyPath: defendSkill
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2467019966403178182, guid: e935dbd2ec8d55a43b797c4a0f404d32, type: 3}
+      propertyPath: description
+      value: The Original
       objectReference: {fileID: 0}
     - target: {fileID: 2467019966403178182, guid: e935dbd2ec8d55a43b797c4a0f404d32, type: 3}
       propertyPath: stats.speed

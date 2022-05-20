@@ -13,6 +13,19 @@ MonoBehaviour:
   m_Name: SkillList
   m_EditorClassIdentifier: 
   skills:
+  - name: NULL
+    types: 0b0000000100000001000000
+    category: 0
+    target: 0
+    range: 0
+    size: 1
+    speedCost: 0
+    manaCost: 0
+    actionCost: 1
+    requiresValidTarget: 1
+    behavior:
+      m_PersistentCalls:
+        m_Calls: []
   - name: Strike
     types: 08000000
     category: 0
