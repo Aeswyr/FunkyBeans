@@ -259,36 +259,12 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 2997537445852491212, guid: e4f5409a6f2789d4fb3b2dd57c3f700e, type: 3}
-      propertyPath: defendSkill
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 2997537445852491212, guid: e4f5409a6f2789d4fb3b2dd57c3f700e, type: 3}
       propertyPath: stats.speed
       value: 33
       objectReference: {fileID: 0}
     - target: {fileID: 2997537445852491212, guid: e4f5409a6f2789d4fb3b2dd57c3f700e, type: 3}
       propertyPath: numMaxActions
       value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 2997537445852491212, guid: e4f5409a6f2789d4fb3b2dd57c3f700e, type: 3}
-      propertyPath: knownSkills.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 2997537445852491212, guid: e4f5409a6f2789d4fb3b2dd57c3f700e, type: 3}
-      propertyPath: knownSkills.Array.data[0]
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2997537445852491212, guid: e4f5409a6f2789d4fb3b2dd57c3f700e, type: 3}
-      propertyPath: knownSkills.Array.data[1]
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 2997537445852491212, guid: e4f5409a6f2789d4fb3b2dd57c3f700e, type: 3}
-      propertyPath: knownSkills.Array.data[2]
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2997537445852491212, guid: e4f5409a6f2789d4fb3b2dd57c3f700e, type: 3}
-      propertyPath: knownSkills.Array.data[3]
-      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 5688980906302191263, guid: e4f5409a6f2789d4fb3b2dd57c3f700e, type: 3}
       propertyPath: m_Name
