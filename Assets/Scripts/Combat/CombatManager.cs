@@ -187,8 +187,11 @@ public class CombatManager : MonoBehaviour
     }
 
     public EntityReference GetEntityInCell(Vector3Int cell) {
-        GameObject obj = entityGrid.GetInstantiatedObject(cell);
-        if (obj != null) {
+        if (CellHasEntity(cell)) {
+            Collider2D col = Physics2D.OverlapPoint(entityGrid.CellToWorld(cell) + new Vector3(0.5f, 0.5f, 0), LayerMask.GetMask(new string[] {"TileEntity"}));
+            if (col == null)
+                return null;
+            GameObject obj = col.gameObject;
             return obj.GetComponent<EntityReference>();
         }
         return null;
@@ -197,17 +200,6 @@ public class CombatManager : MonoBehaviour
     public void EntityEnterTile(GameObject entity) {
         var pos = entityGrid.WorldToCell(entity.transform.position);
         entityGrid.SetTile(pos, entityTile);
-        StartCoroutine(DelaySetEntityAtTile(entity, pos));
-    }
-
-    private IEnumerator DelaySetEntityAtTile(GameObject entity, Vector3Int pos) {
-        yield return new WaitForSeconds(Time.fixedDeltaTime * 2);
-        GameObject tileObj = entityGrid.GetInstantiatedObject(pos);
-        if (tileObj == null)
-            yield break;
-        EntityReference reference = tileObj.GetComponent<EntityReference>();
-        reference.entity = entity.GetComponentInChildren<CombatEntity>();
-        reference.entityObj = entity;
     }
 
     public void EntityExitTile(GameObject entity) {
