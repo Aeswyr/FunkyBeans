@@ -359,6 +359,7 @@ public class CombatManager : MonoBehaviour
                 }
             case CombatEntity.EntityType.enemy:
                 {
+                    /*
                     Vector3Int posBeforeMove = GameHandler.Instance.currentLevel.WorldToCell(currEntity.transform.parent.position);
 
                     List<MoveHeuristic> movesToDo = GetBestMove(posBeforeMove, numActionsLeft, currEntity);
@@ -389,9 +390,11 @@ public class CombatManager : MonoBehaviour
                             else
                                 currEntity.UseSkillAI(move.skillId, move.skillTargPositions);
                         }
-                    }
+                    }*/
 
-                    Debug.Log("Turn Over");
+                    Debug.Log("Rat no have brain, skipping turn");
+
+                    StartNextTurn();
 
                     break;
                 }
@@ -481,11 +484,14 @@ public class CombatManager : MonoBehaviour
             {
                 Skill skill = skillList.Get(skillID);
 
+                Debug.Log("checking skill: " + skillID);
+
                 int actionsAfterSkill = actionsLeft - skill.actionCost;
                 if (actionsAfterSkill >= 0)
                 {
                     //has actions left to use this skill
                     List<List<Vector3Int>> possibleAttackLocations = Utils.CombatUtil.ValidAttackPositionsForSkill(currPosition, skill, this);
+                    Debug.Log(possibleAttackLocations.Count+" possible locations to cast " + skillID);
 
                     foreach (List<Vector3Int> attackLocation in possibleAttackLocations)
                     {
@@ -507,9 +513,9 @@ public class CombatManager : MonoBehaviour
 
             //Put the UseSkill, Defend, and Walk moves into a priorityqueue
             PriorityQueue<List<MoveHeuristic>> moveToDoQueue = new PriorityQueue<List<MoveHeuristic>>();
-            moveToDoQueue.Put(bestSkillMove, 1f/bestSkillScore);
-            moveToDoQueue.Put(defendMove, 1f/GetScoreFromMoveHeuristicList(defendMove));
-            moveToDoQueue.Put(bestMovementMove, 1f/bestMovementScore);
+            moveToDoQueue.Put(bestSkillMove, -bestSkillScore);
+            moveToDoQueue.Put(defendMove, -GetScoreFromMoveHeuristicList(defendMove));
+            moveToDoQueue.Put(bestMovementMove, -bestMovementScore);
 
             //return the move with the highest heuristic score
             return moveToDoQueue.Pop();
