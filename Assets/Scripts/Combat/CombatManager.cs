@@ -372,16 +372,22 @@ public class CombatManager : MonoBehaviour
 
         Vector3Int posBeforeMove = GameHandler.Instance.currentLevel.WorldToCell(currEntity.transform.parent.position);
 
-        Debug.Log("Pos at start of turn: " + posBeforeMove);
+        //Debug.Log("Pos at start of turn: " + posBeforeMove);
 
         List<MoveHeuristic> movesToDo = GetBestMove(posBeforeMove, numActionsLeft, currEntity);
 
-        int actionsToUse = numMaxActions;
+        int actionsLeft = numMaxActions;
 
         foreach (MoveHeuristic move in movesToDo)
         {
             if (move.movePosition != posBeforeMove) //entity changed position
             {
+                int actionsToUse = Utils.GridUtil.ManhattanDistance(move.movePosition, posBeforeMove);
+                actionsLeft -= actionsToUse;
+                string actionText = actionsToUse == 1 ? " action" : " actions";
+                Debug.Log("Used " + actionsToUse + actionText + ". Moved to " + move.movePosition + ", (change of " + (move.movePosition - posBeforeMove).ToString() + "), " +
+                    actionsLeft + "/" + numMaxActions + " actions left");
+
                 GameObject parentOfEntity = currEntity.transform.parent.gameObject;
 
                 EntityExitTile(parentOfEntity);
@@ -391,28 +397,32 @@ public class CombatManager : MonoBehaviour
 
                 EntityEnterTile(parentOfEntity);
 
-                actionsToUse -= Utils.GridUtil.ManhattanDistance(move.movePosition, posBeforeMove);
-                Debug.Log("Moved to " + move.movePosition + ", " + actionsToUse + " actions left");
-
                 posBeforeMove = move.movePosition;
             }
             else //entity used skill
             {
                 if (move.skillId == SkillID.NULL)
                 {
-                    Debug.Log("About to use Skill NULL, means turn is ending");
+                    //Debug.Log("About to use Skill NULL, means turn is ending");
                     continue;
                 }
+
+                int actionsToUse = skillList.Get(move.skillId).actionCost;
+                actionsLeft -= actionsToUse;
+                string actionText = actionsToUse == 1 ? " action" : " actions";
+                Debug.Log("Used " + actionsToUse + actionText + ". Used Skill: " + move.skillId + ", " + actionsLeft + "/" +
+                    numMaxActions + " actions left");
 
                 if (move.skillId == SkillID.BLOCK)
                     currEntity.UseDefense();
                 else
                     currEntity.UseSkillAI(move.skillId, move.skillTargPositions);
-
-                actionsToUse -= skillList.Get(move.skillId).actionCost;
-                Debug.Log("Used Skill: " + move.skillId + ", " + actionsToUse + " actions left");
             }
+
+            yield return new WaitForSeconds(0.25f);
         }
+
+        yield return new WaitForSeconds(0.75f);
 
         Debug.Log("Turn over");
 
@@ -455,6 +465,8 @@ public class CombatManager : MonoBehaviour
             float bestMovementScore = -100000;
             List<MoveHeuristic> bestMovementMove = new List<MoveHeuristic> { new MoveHeuristic { score = -100000, movePosition = currPosition} };
 
+            int spacesToMoveOnBestMove = 0;
+
             //iterate through all positions, do heuristic + dynamic programming stuff B)
             foreach (KeyValuePair<Vector3Int, int> possibleMove in movePositions)
             {
@@ -475,7 +487,7 @@ public class CombatManager : MonoBehaviour
                 {
                     //represents moving, then using an attack
                     List<MoveHeuristic> movesAfterMoving = GetBestMove(posAfterMove, actionsAfterMove, entity);
-                    movesAfterMoving.Insert(0, new MoveHeuristic { movePosition = posAfterMove, score = 0});
+                    movesAfterMoving.Insert(0, new MoveHeuristic { movePosition = posAfterMove, score = 0 });
 
                     currMove = movesAfterMoving;
                 }
@@ -488,6 +500,7 @@ public class CombatManager : MonoBehaviour
                         currMove.Add(new MoveHeuristic { movePosition = posAfterMove, score = DefendHeuristic(), skillId = SkillID.BLOCK });
                     }
                     currMove.AddRange(GetBestMove(posAfterMove, 0, entity));
+                    currMove.Insert(0, new MoveHeuristic { movePosition = posAfterMove, score = 0 });
                 }
 
                 float moveScore = GetScoreFromMoveHeuristicList(currMove);
@@ -496,6 +509,20 @@ public class CombatManager : MonoBehaviour
                 {
                     bestMovementScore = moveScore;
                     bestMovementMove = currMove;
+                    spacesToMoveOnBestMove = possibleMove.Value;
+                }
+                else
+                {
+                    //This just makes it so the AI prioritizes taking multiple 1-tile moves, for better visual clarity
+                    if(moveScore == bestMovementScore)
+                    {
+                        if(possibleMove.Value < spacesToMoveOnBestMove)
+                        {
+                            bestMovementScore = moveScore;
+                            bestMovementMove = currMove;
+                            spacesToMoveOnBestMove = possibleMove.Value;
+                        }
+                    }
                 }
             }
             #endregion
@@ -516,12 +543,12 @@ public class CombatManager : MonoBehaviour
                 {
                     //has actions left to use this skill
                     List<List<Vector3Int>> possibleAttackLocations = Utils.CombatUtil.ValidAttackPositionsForSkill(currPosition, skill, this);
-                    Debug.Log(possibleAttackLocations.Count+" possible locations to cast " + skillID+" from position "+currPosition);
+                    //Debug.Log(possibleAttackLocations.Count+" possible locations to cast " + skillID+" from position "+currPosition);
 
                     foreach (List<Vector3Int> attackLocation in possibleAttackLocations)
                     {
                         float attackScore = AttackHeuristic(attackLocation, entity, skill);
-                        Debug.Log("Score for attacking position: " + attackLocation[0] + ": " + attackScore);
+                        //Debug.Log("Score for attacking position: " + attackLocation[0] + ": " + attackScore);
                         if(attackScore > bestSkillScore)
                         {
                             List<MoveHeuristic> movesAfterAttack = GetBestMove(currPosition, actionsAfterSkill, entity);
@@ -540,21 +567,21 @@ public class CombatManager : MonoBehaviour
             //Put the UseSkill, Defend, and Walk moves into a priorityqueue
             //PriorityQueue<List<MoveHeuristic>> moveToDoQueue = new PriorityQueue<List<MoveHeuristic>>();
 
-            Debug.Log("Actions Left: "+actionsLeft+", pos: "+currPosition+", scores: \nskill: " + bestSkillScore + ", defend: " + GetScoreFromMoveHeuristicList(defendMove) + ", move: " + bestMovementScore);
+            //Debug.Log("Actions Left: "+actionsLeft+", pos: "+currPosition+", scores: \nskill: " + bestSkillScore + ", defend: " + GetScoreFromMoveHeuristicList(defendMove) + ", move: " + bestMovementScore);
 
             if ((bestSkillScore >= defendScore) && (bestSkillScore >= bestMovementScore))
             {
-                Debug.Log("Chose to use skill " + bestSkillMove[0].skillId);
+                //Debug.Log("Chose to use skill " + bestSkillMove[0].skillId);
                 return bestSkillMove;
             }
 
             if(bestMovementScore >= defendScore)
             {
-                Debug.Log("Chose to move to position: " + bestMovementMove[0].movePosition);
+                //Debug.Log("Chose to move to position: " + bestMovementMove[0].movePosition);
                 return bestMovementMove;
             }
 
-            Debug.Log("Chose to block");
+            //Debug.Log("Chose to block");
             return defendMove;
 
             /*
