@@ -10,13 +10,13 @@ public class MenuHandler : Singleton<MenuHandler>
     [SerializeField] private TMP_InputField inputName;
     [SerializeField] private NetworkManager network;
     public void OnHostPressed() {
-        SceneManager.LoadScene("LobbyScene");
+        SceneManager.LoadScene("GameScene");
         network.StartHost();
     }
 
     public void OnJoinPressed() {
         network.networkAddress = inputIP.text;
-        SceneManager.LoadScene("LobbyScene");
+        SceneManager.LoadScene("GameScene");
         network.StartClient();
     }
 }
