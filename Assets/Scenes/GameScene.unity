@@ -251,73 +251,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7901375420765631134, guid: ae49f4ce966e7d04a814757cda477eef, type: 3}
   m_PrefabInstance: {fileID: 1006399730}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &233004678
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 2997537445852491212, guid: e4f5409a6f2789d4fb3b2dd57c3f700e, type: 3}
-      propertyPath: stats.speed
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 2997537445852491212, guid: e4f5409a6f2789d4fb3b2dd57c3f700e, type: 3}
-      propertyPath: numMaxActions
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 5688980906302191263, guid: e4f5409a6f2789d4fb3b2dd57c3f700e, type: 3}
-      propertyPath: m_Name
-      value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 7463091452514762780, guid: e4f5409a6f2789d4fb3b2dd57c3f700e, type: 3}
-      propertyPath: m_RootOrder
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 7463091452514762780, guid: e4f5409a6f2789d4fb3b2dd57c3f700e, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7463091452514762780, guid: e4f5409a6f2789d4fb3b2dd57c3f700e, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7463091452514762780, guid: e4f5409a6f2789d4fb3b2dd57c3f700e, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7463091452514762780, guid: e4f5409a6f2789d4fb3b2dd57c3f700e, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7463091452514762780, guid: e4f5409a6f2789d4fb3b2dd57c3f700e, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7463091452514762780, guid: e4f5409a6f2789d4fb3b2dd57c3f700e, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7463091452514762780, guid: e4f5409a6f2789d4fb3b2dd57c3f700e, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7463091452514762780, guid: e4f5409a6f2789d4fb3b2dd57c3f700e, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7463091452514762780, guid: e4f5409a6f2789d4fb3b2dd57c3f700e, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7463091452514762780, guid: e4f5409a6f2789d4fb3b2dd57c3f700e, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 1644680548562727459, guid: e4f5409a6f2789d4fb3b2dd57c3f700e, type: 3}
-    - {fileID: 3199200688220628827, guid: e4f5409a6f2789d4fb3b2dd57c3f700e, type: 3}
-  m_SourcePrefab: {fileID: 100100000, guid: e4f5409a6f2789d4fb3b2dd57c3f700e, type: 3}
 --- !u!1 &353463778
 GameObject:
   m_ObjectHideFlags: 0
@@ -426,6 +359,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 132278150}
     m_Modifications:
+    - target: {fileID: 137404659170108803, guid: e935dbd2ec8d55a43b797c4a0f404d32, type: 3}
+      propertyPath: sceneId
+      value: 3889398640
+      objectReference: {fileID: 0}
     - target: {fileID: 267086047199634134, guid: e935dbd2ec8d55a43b797c4a0f404d32, type: 3}
       propertyPath: m_Name
       value: EnemyTemplate (1)
@@ -1717,6 +1654,10 @@ PrefabInstance:
       propertyPath: m_SortingLayer
       value: -3
       objectReference: {fileID: 0}
+    - target: {fileID: 137404659170108803, guid: e935dbd2ec8d55a43b797c4a0f404d32, type: 3}
+      propertyPath: sceneId
+      value: 3507124845
+      objectReference: {fileID: 0}
     - target: {fileID: 267086047199634134, guid: e935dbd2ec8d55a43b797c4a0f404d32, type: 3}
       propertyPath: m_Name
       value: EnemyTemplate
@@ -1866,7 +1807,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5.625
+  orthographic size: 7.375
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2

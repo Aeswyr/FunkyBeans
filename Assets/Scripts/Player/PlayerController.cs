@@ -13,7 +13,9 @@ public class PlayerController : MonoBehaviour
     private bool freeMove = true;
     private CombatManager currentCombat = null;
 
-
+    void Awake() {
+        DontDestroyOnLoad(gameObject);
+    }
     // Start is called before the first frame update
     void Start()
     {
