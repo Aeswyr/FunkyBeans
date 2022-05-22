@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using TMPro;
+using Mirror;
 
-public class CombatManager : MonoBehaviour
+public class CombatManager : NetworkBehaviour
 {
     [SerializeField] private SkillList skillList;
     public SkillList SkillList => skillList;
@@ -199,12 +200,31 @@ public class CombatManager : MonoBehaviour
 
     public void EntityEnterTile(GameObject entity) {
         var pos = entityGrid.WorldToCell(entity.transform.position);
-        entityGrid.SetTile(pos, entityTile);
+        ServerEnterTile(pos);
     }
 
     public void EntityExitTile(GameObject entity) {
         var pos = entityGrid.WorldToCell(entity.transform.position);
-        entityGrid.SetTile(pos, null);
+        ClientEnterTile(pos);
+    }
+    [Command] public void ServerEnterTile(Vector3Int pos) {
+        ClientEnterTile(pos);
+    }
+
+    [Command] public void ServerExitTile(Vector3Int pos) {
+        ClientExitTile(pos);
+    }
+
+    [ClientRpc] public void ClientEnterTile(Vector3Int pos) {
+        SetEntityTile(pos, entityTile);
+    }
+
+    [ClientRpc] public void ClientExitTile(Vector3Int pos) {
+        SetEntityTile(pos, null);
+    }
+
+    private void SetEntityTile(Vector3Int pos, TileBase tile) {
+        entityGrid.SetTile(pos, tile);
     }
 
     public void ClearEntityTiles() {
