@@ -1,19 +1,22 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Mirror;
 
 public class MenuHandler : Singleton<MenuHandler>
 {
 
-    [SerializeField] private TMP_InputField input;
+    [SerializeField] private TMP_InputField inputIP;
+    [SerializeField] private TMP_InputField inputName;
+    [SerializeField] private NetworkManager network;
     public void OnHostPressed() {
-        LobbyHandler.Instance.shouldHost = true;
         SceneManager.LoadScene("LobbyScene");
+        network.StartHost();
     }
 
     public void OnJoinPressed() {
-        LobbyHandler.Instance.shouldHost = false;
-        LobbyHandler.Instance.addresss = input.text;
+        network.networkAddress = inputIP.text;
         SceneManager.LoadScene("LobbyScene");
+        network.StartClient();
     }
 }
