@@ -1,8 +1,9 @@
 using TMPro;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : NetworkBehaviour
 {
     [SerializeField] private Rigidbody2D rbody;
     [SerializeField] private float speed;
@@ -13,9 +14,11 @@ public class PlayerController : MonoBehaviour
     private bool freeMove = true;
     private CombatManager currentCombat = null;
 
-    void Awake() {
+    void Awake() 
+    {
         DontDestroyOnLoad(gameObject);
     }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -25,6 +28,9 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (!isLocalPlayer)
+            return;
+
         if (freeMove)
             rbody.velocity = speed * InputHandler.Instance.dir;
 
@@ -41,7 +47,7 @@ public class PlayerController : MonoBehaviour
     }
 
     public void StartBattle() {
-        if (freeMove == false)
+        if ((freeMove == false) || (isLocalPlayer == false))
             return;
 
         Debug.Log("start battle!");

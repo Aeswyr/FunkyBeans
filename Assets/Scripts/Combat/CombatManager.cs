@@ -95,6 +95,9 @@ public class CombatManager : NetworkBehaviour
             {
                 case CombatEntity.EntityType.player:
                     {
+                        if (!currEntity.transform.parent.GetComponent<PlayerController>().isLocalPlayer)
+                            break;
+
                         if (mode == CombatMode.MOVE)
                         {
                             DrawCombatMovement();
@@ -124,7 +127,7 @@ public class CombatManager : NetworkBehaviour
                     {
                         if (InputHandler.Instance.action.pressed)
                         {
-                            StartNextTurn();
+                            //StartNextTurn();
                         }
                         break;
                     }
@@ -205,8 +208,10 @@ public class CombatManager : NetworkBehaviour
 
     public void EntityExitTile(GameObject entity) {
         var pos = entityGrid.WorldToCell(entity.transform.position);
-        ClientEnterTile(pos);
+        ServerExitTile(pos);
     }
+
+
     [Command] public void ServerEnterTile(Vector3Int pos) {
         ClientEnterTile(pos);
     }
@@ -214,6 +219,7 @@ public class CombatManager : NetworkBehaviour
     [Command] public void ServerExitTile(Vector3Int pos) {
         ClientExitTile(pos);
     }
+
 
     [ClientRpc] public void ClientEnterTile(Vector3Int pos) {
         SetEntityTile(pos, entityTile);
@@ -231,6 +237,7 @@ public class CombatManager : NetworkBehaviour
         entityGrid.ClearAllTiles();
     }
 
+    //This should probably be a clientRPC
     public void SetCombatEntities(List<CombatEntity> newEntities)
     {
         combatEntities = newEntities;
@@ -308,6 +315,18 @@ public class CombatManager : NetworkBehaviour
         ClearHighlight();
     }
 
+    [Command]
+    private void StartNextTurnServer()
+    {
+        StartNextTurnClient();
+    }
+
+    [ClientRpc]
+    private void StartNextTurnClient()
+    {
+        StartNextTurn();
+    }
+
     private void StartNextTurn()
     {
         if(currEntity != null)
@@ -354,6 +373,7 @@ public class CombatManager : NetworkBehaviour
         TurnStarted();
     }
 
+    //Called on each of the clients
     private void TurnStarted()
     {
         CombatEntity.EntityType type = currEntity.team;
@@ -767,7 +787,9 @@ public class CombatManager : NetworkBehaviour
                 CombatUIController.Instance.Reset();
                 SetMoveMode();
             }
-            StartNextTurn();
+
+            //Send command to server that will start next turn for all clients
+            StartNextTurnServer();
         }
     }
     private IEnumerator DelayDrawHighlight() {
