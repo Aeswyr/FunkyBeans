@@ -505,8 +505,6 @@ public class Utils
             
             //calculate combo multiplier
             float multiplier = CalculateComboMultiplier(entity, skill, id);
-            entity.CombatManager.lastComboTypes = skill.types;
-            entity.CombatManager.comboSkillsUsed.Add(id);
 
             // perform action on targets
             foreach(CombatEntity target in targets)
@@ -538,6 +536,8 @@ public class Utils
                 entity.CombatManager.CashoutCombo();
                 return multiplier;
             } else {
+                entity.CombatManager.lastComboTypes = skill.types;
+                entity.CombatManager.comboSkillsUsed.Add(id);
                 return 1 + Mathf.Min(0.5f, entity.CombatManager.currentCombo / 10f);
             }
         }

@@ -201,4 +201,13 @@ public class CombatUIController : Singleton<CombatUIController>
         activeBars.Clear();
     }
 
+    [Header("Combo Counter")]
+    [SerializeField] private TextMeshProUGUI comboCounter;
+    public void SetComboCounter(int val) {
+        comboCounter.text = $"combo {val}";
+        if (val > 0)
+            comboCounter.gameObject.SetActive(true);
+        else
+            comboCounter.gameObject.SetActive(false);
+    }
 }

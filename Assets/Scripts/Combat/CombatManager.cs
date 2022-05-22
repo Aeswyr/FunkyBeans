@@ -912,10 +912,13 @@ public class CombatManager : MonoBehaviour
 
     public void IncrementCombo() {
         currentCombo++;
+        CombatUIController.Instance.SetComboCounter(currentCombo);
     }
 
     public void CashoutCombo() {
+        comboSkillsUsed.Clear();
         currentCombo = -1;
+        CombatUIController.Instance.SetComboCounter(currentCombo);
     }
 
     private enum CombatMode {
