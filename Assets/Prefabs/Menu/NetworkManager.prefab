@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6995551124393879099}
-  - component: {fileID: 2998769472333717846}
+  - component: {fileID: 4002266722397055989}
   - component: {fileID: 5674774539844548467}
   - component: {fileID: 5940982480979416971}
   m_Layer: 0
@@ -34,7 +34,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2998769472333717846
+--- !u!114 &4002266722397055989
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -43,7 +43,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2396686787259666622}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8aab4c8111b7c411b9b92cf3dbc5bd4e, type: 3}
+  m_Script: {fileID: 11500000, guid: 997c5e1fca4af53448c3ee6c2faf4c54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   dontDestroyOnLoad: 1
@@ -54,7 +54,7 @@ MonoBehaviour:
   onlineScene: 
   transport: {fileID: 5674774539844548467}
   networkAddress: localhost
-  maxConnections: 100
+  maxConnections: 4
   authenticator: {fileID: 0}
   playerPrefab: {fileID: 5688980906302191263, guid: e4f5409a6f2789d4fb3b2dd57c3f700e, type: 3}
   autoCreatePlayer: 1

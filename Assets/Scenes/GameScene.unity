@@ -369,7 +369,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 267086047199634134, guid: e935dbd2ec8d55a43b797c4a0f404d32, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2467019966403178182, guid: e935dbd2ec8d55a43b797c4a0f404d32, type: 3}
       propertyPath: entityName
@@ -401,7 +401,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7661184331408934461, guid: e935dbd2ec8d55a43b797c4a0f404d32, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7661184331408934461, guid: e935dbd2ec8d55a43b797c4a0f404d32, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1643,6 +1643,78 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ae49f4ce966e7d04a814757cda477eef, type: 3}
+--- !u!4 &1006399731 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3276810713118806141, guid: ae49f4ce966e7d04a814757cda477eef, type: 3}
+  m_PrefabInstance: {fileID: 1006399730}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1597085332
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1597085333}
+  - component: {fileID: 1597085334}
+  - component: {fileID: 1597085335}
+  m_Layer: 0
+  m_Name: EnemySpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1597085333
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1597085332}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -1.5, y: 2.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1006399731}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1597085334
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1597085332}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c94396bbcbe2b484a91a632e3d008a45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  enemyPrefab: {fileID: 267086047199634134, guid: e935dbd2ec8d55a43b797c4a0f404d32, type: 3}
+  enemyParent: {fileID: 132278150}
+  spawnTime: 2
+--- !u!114 &1597085335
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1597085332}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 825654169
+  serverOnly: 0
+  visible: 2
+  m_AssetId: 
+  hasSpawned: 0
 --- !u!1001 &1638157664
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1664,7 +1736,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 267086047199634134, guid: e935dbd2ec8d55a43b797c4a0f404d32, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2467019966403178182, guid: e935dbd2ec8d55a43b797c4a0f404d32, type: 3}
       propertyPath: speed
@@ -1704,7 +1776,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7661184331408934461, guid: e935dbd2ec8d55a43b797c4a0f404d32, type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7661184331408934461, guid: e935dbd2ec8d55a43b797c4a0f404d32, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1807,7 +1879,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 7.375
+  orthographic size: 8.75
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
