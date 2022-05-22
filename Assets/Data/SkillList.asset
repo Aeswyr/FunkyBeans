@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skills:
   - name: NULL
-    types: 0b0000000100000001000000
+    types: 
     category: 0
     target: 0
     range: 0
