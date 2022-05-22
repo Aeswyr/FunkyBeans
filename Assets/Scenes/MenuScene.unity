@@ -710,6 +710,18 @@ PrefabInstance:
       propertyPath: input
       value: 
       objectReference: {fileID: 1881036822}
+    - target: {fileID: -212305626576744386, guid: e91e99c54436eee46a6fd0f82d7b0e66, type: 3}
+      propertyPath: inputIP
+      value: 
+      objectReference: {fileID: 1881036822}
+    - target: {fileID: -212305626576744386, guid: e91e99c54436eee46a6fd0f82d7b0e66, type: 3}
+      propertyPath: network
+      value: 
+      objectReference: {fileID: 1557399869}
+    - target: {fileID: -212305626576744386, guid: e91e99c54436eee46a6fd0f82d7b0e66, type: 3}
+      propertyPath: inputName
+      value: 
+      objectReference: {fileID: 2068650911}
     - target: {fileID: 4012702983020546807, guid: e91e99c54436eee46a6fd0f82d7b0e66, type: 3}
       propertyPath: m_Name
       value: MenuHandler
@@ -1417,6 +1429,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1508651223}
   m_CullTransparentMesh: 1
+--- !u!114 &1557399869 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2998769472333717846, guid: 1038fc85af15dff4f98818390d108a15, type: 3}
+  m_PrefabInstance: {fileID: 1887084275}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8aab4c8111b7c411b9b92cf3dbc5bd4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1775873707
 GameObject:
   m_ObjectHideFlags: 0
