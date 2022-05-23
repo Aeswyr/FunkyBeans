@@ -9,20 +9,11 @@ public class PlayerController : NetworkBehaviour
     [SerializeField] private float speed;
     [SerializeField] private GameObject attackPrefab;
     [SerializeField] private GameObject combatTextPrefab;
-    private int maxMove = 4;
-    private ContactFilter2D filter = new ContactFilter2D();
     private bool freeMove = true;
-    private CombatManager currentCombat = null;
 
     void Awake() 
     {
         DontDestroyOnLoad(gameObject);
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        filter.SetLayerMask(LayerMask.GetMask(new []{"Hurtbox"}));
     }
 
     // Update is called once per frame
@@ -49,46 +40,19 @@ public class PlayerController : NetworkBehaviour
     public void StartBattle() {
         if ((freeMove == false) || (isLocalPlayer == false))
             return;
-
-        Debug.Log("start battle!");
-        GameHandler.Instance.EnableCombatObjects();
-
-        var results = new List<RaycastHit2D>();
-        Physics2D.CircleCast(transform.position, maxMove, Vector2.right, filter, results, 0);
-
-        currentCombat = GameHandler.Instance.CreateCombatManager();
-
         freeMove = false;
+        
         rbody.velocity = Vector2.zero;
-
-        //Make list of all entities that will be in combat
-        List<CombatEntity> entities = new List<CombatEntity>();
-
-        foreach (var hit in results) {
-            GameObject hitEntity = hit.collider.transform.parent.gameObject;
-
-            Utils.GridUtil.SnapToLevelGrid(hitEntity, currentCombat);
-            currentCombat.EntityEnterTile(hitEntity);
-            
-            entities.Add(hitEntity.GetComponentInChildren<CombatEntity>());
-        }
-        //foreach(var obj in entities)
-            //Debug.Log(entities.ToString());
-
-        currentCombat.SetCombatEntities(entities);
-
-        //currentCombat.DrawSelect(gameObject, maxMove);
+        GameHandler.Instance.EnterCombat(transform.position);
     }
 
-    public void EndBattle(CombatReward reward) {
+    public void EndBattle(CombatReward reward, long id) {
         var tm = Instantiate(combatTextPrefab, transform.position, Quaternion.identity).GetComponent<TextMeshPro>();
         tm.text = $"+{reward.exp} EXP";
         tm.color = Color.yellow;
 
         freeMove = true;
-        currentCombat.ClearMove();
-        currentCombat.ClearSelect();
 
-        Destroy(currentCombat.gameObject);
+        GameHandler.Instance.ExitCombat(id);
     }
 }

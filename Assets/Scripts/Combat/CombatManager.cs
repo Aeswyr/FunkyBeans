@@ -60,6 +60,11 @@ public class CombatManager : NetworkBehaviour
     public int currentCombo;
     public Skill.Type[] lastComboTypes = new Skill.Type[0];
     public List<SkillID> comboSkillsUsed = new List<SkillID>();
+    private long id;
+    public long ID {
+        get {return id;}
+        set {id = value;}
+    }
 
 
     void Awake()
@@ -212,11 +217,11 @@ public class CombatManager : NetworkBehaviour
     }
 
 
-    [Command] public void ServerEnterTile(Vector3Int pos) {
+    [Command(requiresAuthority = false)] public void ServerEnterTile(Vector3Int pos) {
         ClientEnterTile(pos);
     }
 
-    [Command] public void ServerExitTile(Vector3Int pos) {
+    [Command(requiresAuthority = false)] public void ServerExitTile(Vector3Int pos) {
         ClientExitTile(pos);
     }
 
@@ -315,7 +320,7 @@ public class CombatManager : NetworkBehaviour
         ClearHighlight();
     }
 
-    [Command]
+    [Command(requiresAuthority = false)]
     private void StartNextTurnServer()
     {
         StartNextTurnClient();
@@ -948,7 +953,7 @@ public class CombatManager : NetworkBehaviour
         GameHandler.Instance.DisableCombatObjects();
         foreach (var centity in combatEntities) {
             if (centity.transform.parent.TryGetComponent(out PlayerController player))
-                player.EndBattle(reward);
+                player.EndBattle(reward, id);
         }
     }
 

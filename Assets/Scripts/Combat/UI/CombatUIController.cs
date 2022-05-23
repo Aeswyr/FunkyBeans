@@ -186,6 +186,8 @@ public class CombatUIController : Singleton<CombatUIController>
     }
 
     public void UpdatePlayerResource(CombatEntity entity) {
+        if (!activeBars.ContainsKey(entity))
+            return;
         ResourceController resource = activeBars[entity];
 
         resource.SetNametag(entity.EntityName);
