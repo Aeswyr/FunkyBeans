@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7863051334537503129}
   - component: {fileID: 2188970297290658064}
+  - component: {fileID: 1015032285811125940}
   m_Layer: 0
   m_Name: CombatManager
   m_TagString: Untagged
@@ -46,6 +47,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65861dd444d3e194a95ad71d19b1b759, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
   skillList: {fileID: 11400000, guid: 767c3e5c23ffcbd4dad117bb01187a80, type: 2}
   combatOverlay: {fileID: 5071642083883760748}
   selectTile: {fileID: 11400000, guid: ac0783522c05c6447851fc096368a371, type: 2}
@@ -56,6 +59,26 @@ MonoBehaviour:
   entityTurnIndicatorPrefab: {fileID: 350310851504152826, guid: 11c80f3b1ce278541ab2285d4e0f8163, type: 3}
   timeToShowOnBar: 4
   speedMultiplier: 50
+  currentCombo: 0
+  lastComboTypes: 
+  comboSkillsUsed: 
+--- !u!114 &1015032285811125940
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1823533853649431128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  serverOnly: 0
+  visible: 0
+  m_AssetId: 6440cb84e283ace4cae843fb52559ff1
+  hasSpawned: 0
 --- !u!1001 &5661763653960225224
 PrefabInstance:
   m_ObjectHideFlags: 0

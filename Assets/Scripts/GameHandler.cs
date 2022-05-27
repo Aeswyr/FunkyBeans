@@ -70,7 +70,7 @@ public class GameHandler : NetworkSingleton<GameHandler>
             return;
         }
         Debug.Log($"Creating combat manager with ID {id}");
-        GameObject combatManager = Instantiate(combatManagerPrefab, Vector3.zero, Quaternion.identity);
+        GameObject combatManager = Instantiate(NetworkManager.singleton.spawnPrefabs.Find(prefab => prefab.name == "CombatManager"));
         NetworkServer.Spawn(combatManager);
         CombatManager currentCombat = combatManager.GetComponent<CombatManager>();
         currentCombat.ID = id;
