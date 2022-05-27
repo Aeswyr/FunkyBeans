@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using Mirror;
 
 public class SkillButton : MonoBehaviour
 {
@@ -15,7 +16,8 @@ public class SkillButton : MonoBehaviour
     }
     
     public void OnPress() {
-        CombatUIController.Instance.menuState = CombatUIController.MenuState.TARGET;
+        if (CombatUIController.Instance != null)
+            CombatUIController.Instance.menuState = CombatUIController.MenuState.TARGET;
         manager.SetTargetMode(associatedSkill);
         transform.parent.parent.gameObject.SetActive(false);
     }

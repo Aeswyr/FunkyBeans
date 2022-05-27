@@ -76,15 +76,14 @@ public class CombatEntity : MonoBehaviour
             hp -= dmg;
             tm.color = Color.red;
         }
-
-        CombatUIController.Instance.UpdateDisplayedEntity();
+        CombatUIController.Instance?.UpdateDisplayedEntity();
         if (team == EntityType.player)
-            CombatUIController.Instance.UpdatePlayerResource(this);
+            CombatUIController.Instance?.UpdatePlayerResource(this);
 
         GameObject parent = transform.parent.gameObject;
         Debug.Log("Entity " + parent.name + " took " + dmg + " points of damage, new hp: " + hp + "/" + stats.maxHp);
         if (hp <= 0 && entityType == EntityType.enemy) {
-            CombatUIController.Instance.DisableIfDisplayed(this);
+            CombatUIController.Instance?.DisableIfDisplayed(this);
             combatManager.EntityExitTile(parent);
             combatManager.RemoveEntity(this);
             Destroy(parent);
@@ -96,18 +95,18 @@ public class CombatEntity : MonoBehaviour
             return false;
         mp -= val;
 
-        CombatUIController.Instance.UpdateDisplayedEntity();
+        CombatUIController.Instance?.UpdateDisplayedEntity();
         if (team == EntityType.player)
-            CombatUIController.Instance.UpdatePlayerResource(this);
+            CombatUIController.Instance?.UpdatePlayerResource(this);
             
         return true;
     }
 
     public void AddArmor(int amt) {
         armor += amt;
-        CombatUIController.Instance.UpdateDisplayedEntity();
+        CombatUIController.Instance?.UpdateDisplayedEntity();
         if (team == EntityType.player)
-            CombatUIController.Instance.UpdatePlayerResource(this);
+            CombatUIController.Instance?.UpdatePlayerResource(this);
     }
 
     public int GetMagnitudeOfSkill(Skill skill)

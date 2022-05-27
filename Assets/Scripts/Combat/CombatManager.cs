@@ -77,7 +77,7 @@ public class CombatManager : NetworkBehaviour
         moveCost.SetActive(false);
         moveText = moveCost.transform.Find("Text").GetComponent<TextMeshPro>();
 
-        CombatUIController.Instance.SetCombatManager(this);
+        CombatUIController.Instance?.SetCombatManager(this);
     }
 
     private Vector3Int lastMouseCell, mouseCell;
@@ -92,9 +92,9 @@ public class CombatManager : NetworkBehaviour
 
             if (mouseCell != lastMouseCell)
                 if (CellHasEntity(mouseCell))
-                    CombatUIController.Instance.SetDisplayedEntity(GetEntityInCell(mouseCell).entity);
+                    CombatUIController.Instance?.SetDisplayedEntity(GetEntityInCell(mouseCell).entity);
                 else
-                    CombatUIController.Instance.DisableDisplay();
+                    CombatUIController.Instance?.DisableDisplay();
 
             switch (currEntity.team)
             {
@@ -248,7 +248,7 @@ public class CombatManager : NetworkBehaviour
         combatEntities = newEntities;
         foreach (var entity in combatEntities)
             if (entity.team == CombatEntity.EntityType.player)
-                CombatUIController.Instance.RegisterNewResource(entity);
+                CombatUIController.Instance?.RegisterNewResource(entity);
         GenerateTurnOrder();
     }
 
@@ -393,9 +393,9 @@ public class CombatManager : NetworkBehaviour
         {
             case CombatEntity.EntityType.player:
                 {
-                    CombatUIController.Instance.SetKnownSkills(currEntity.KnownSkills);
+                    CombatUIController.Instance?.SetKnownSkills(currEntity.KnownSkills);
 
-                    CombatUIController.Instance.SetActionUI(numActionsLeft, numMaxActions);
+                    CombatUIController.Instance?.SetActionUI(numActionsLeft, numMaxActions);
 
                     //Show movement grid for player's entities
                     DrawSelect(currEntity.gameObject, numActionsLeft);
@@ -775,7 +775,7 @@ public class CombatManager : NetworkBehaviour
         //Debug.Log("player used " + actionsToUse + " actions");
 
         numActionsLeft -= actionsToUse;
-        CombatUIController.Instance.SetActionUI(numActionsLeft, numMaxActions);
+        CombatUIController.Instance?.SetActionUI(numActionsLeft, numMaxActions);
 
         ClearMove();
         ClearSelect();
@@ -789,7 +789,7 @@ public class CombatManager : NetworkBehaviour
 
         if (numActionsLeft <= 0) {
             if (currEntity.team == CombatEntity.EntityType.player) {
-                CombatUIController.Instance.Reset();
+                CombatUIController.Instance?.Reset();
                 SetMoveMode();
             }
 
@@ -829,7 +829,7 @@ public class CombatManager : NetworkBehaviour
     {
         List<KeyValuePair<float, CombatEntity>> currElements = turnOrder.GetElements();
 
-        CombatUIController.Instance.SetCurrEntitySprite(currEntity.UISprite);
+        CombatUIController.Instance?.SetCurrEntitySprite(currEntity.UISprite);
 
         //delete all current turn indicators
         while(turnIndicators.Count > 0)
@@ -841,12 +841,12 @@ public class CombatManager : NetworkBehaviour
         //create and set position for every entity in turnOrder
         foreach (KeyValuePair<float, CombatEntity> element in currElements)
         {
-            EntityTurnIndicator newIndicator = Instantiate(entityTurnIndicatorPrefab, CombatUIController.Instance.TurnOrderCanvas.transform).GetComponent<EntityTurnIndicator>();
+            EntityTurnIndicator newIndicator = Instantiate(entityTurnIndicatorPrefab, CombatUIController.Instance?.TurnOrderCanvas.transform).GetComponent<EntityTurnIndicator>();
             turnIndicators.Add(newIndicator);
 
             newIndicator.SetSprite(element.Value.UISprite);
 
-            CombatUIController.Instance.PlaceTurnEntity(newIndicator.transform, element.Key / timeToShowOnBar);
+            CombatUIController.Instance?.PlaceTurnEntity(newIndicator.transform, element.Key / timeToShowOnBar);
         }
     }
 
@@ -949,7 +949,7 @@ public class CombatManager : NetworkBehaviour
     }
 
     public void EndCombat() {
-        CombatUIController.Instance.ClearPlayerResources();
+        CombatUIController.Instance?.ClearPlayerResources();
         GameHandler.Instance.DisableCombatObjects();
         foreach (var centity in combatEntities) {
             if (centity.transform.parent.TryGetComponent(out PlayerController player))
@@ -959,13 +959,13 @@ public class CombatManager : NetworkBehaviour
 
     public void IncrementCombo() {
         currentCombo++;
-        CombatUIController.Instance.SetComboCounter(currentCombo);
+        CombatUIController.Instance?.SetComboCounter(currentCombo);
     }
 
     public void CashoutCombo() {
         comboSkillsUsed.Clear();
         currentCombo = -1;
-        CombatUIController.Instance.SetComboCounter(currentCombo);
+        CombatUIController.Instance?.SetComboCounter(currentCombo);
     }
 
     private enum CombatMode {
