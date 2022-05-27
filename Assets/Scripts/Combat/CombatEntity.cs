@@ -2,18 +2,14 @@ using TMPro;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using Mirror;
 
-public class CombatEntity : NetworkBehaviour
+public class CombatEntity : MonoBehaviour
 {
     [System.Serializable] public enum EntityType
     {
         player, 
         enemy
     }
-
-    [SyncVar] private long m_cid;
-    public long CID => m_cid;
     [Header("Universal data")]
     [SerializeField] private SkillList skillsMaster;
     [SerializeField] private SkillActions skillActions;
@@ -59,9 +55,6 @@ public class CombatEntity : NetworkBehaviour
     public int Armor => armor;
     void Start()
     {
-        if (isServer)
-            m_cid = (long)(UnityEngine.Random.value * long.MaxValue);
-
         hp = stats.maxHp;
         mp = stats.maxMp;
     }

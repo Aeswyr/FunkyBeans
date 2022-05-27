@@ -58,9 +58,8 @@ public class GameHandler : NetworkSingleton<GameHandler>
         List<CombatEntity> entities = new List<CombatEntity>();
         long id = 0;
         foreach (var hit in results) {
-            CombatEntity ce = hit.collider.transform.parent.gameObject.GetComponentInChildren<CombatEntity>();
-            id += ce.CID; 
-            entities.Add(ce);
+            id += hit.collider.transform.parent.GetComponent<CombatID>().CID; 
+            entities.Add(hit.collider.transform.parent.gameObject.GetComponentInChildren<CombatEntity>());
         }
 
         if (activeCombats.ContainsKey(id)) {
