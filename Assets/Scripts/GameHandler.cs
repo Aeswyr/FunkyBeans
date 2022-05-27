@@ -51,7 +51,6 @@ public class GameHandler : NetworkSingleton<GameHandler>
 
     [Command(requiresAuthority = false)] public void EnterCombat(Vector3 position) { 
         Debug.Log("start battle!");
-        GameHandler.Instance.EnableCombatObjects();
 
         var results = new List<RaycastHit2D>();
         Physics2D.CircleCast(position, 5, Vector2.right, filter, results, 0);

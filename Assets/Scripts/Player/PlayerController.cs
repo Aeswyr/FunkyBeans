@@ -43,6 +43,8 @@ public class PlayerController : NetworkBehaviour
         freeMove = false;
         
         rbody.velocity = Vector2.zero;
+        GameHandler.Instance.EnableCombatObjects();
+        
         GameHandler.Instance.EnterCombat(transform.position);
     }
 
