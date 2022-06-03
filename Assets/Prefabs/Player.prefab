@@ -100,6 +100,7 @@ GameObject:
   - component: {fileID: 1232737909512343589}
   - component: {fileID: 5162966748086538592}
   - component: {fileID: 8770973760051272881}
+  - component: {fileID: 3137590738874056035}
   - component: {fileID: -6632300986950945161}
   - component: {fileID: 1339811089993054097}
   - component: {fileID: 4031835404114361965}
@@ -256,6 +257,20 @@ MonoBehaviour:
   speed: 5
   attackPrefab: {fileID: 4637698849271149972, guid: b387c12bf18ba0f40837514ca61d7fd8, type: 3}
   combatTextPrefab: {fileID: 6637239926454590348, guid: 9cbabfc94fa559240902ae1e5707a193, type: 3}
+--- !u!114 &3137590738874056035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5688980906302191263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ed450d567902cd4ba48ccc4eedde403, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
 --- !u!114 &-6632300986950945161
 MonoBehaviour:
   m_ObjectHideFlags: 0

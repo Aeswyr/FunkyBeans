@@ -140,3 +140,8 @@ public struct CombatReward
 {
     public int exp;
 }
+
+public enum ResourceType {
+    DEFAULT, HEALTH, MANA, ACTIONS, ARMOR,
+}
+ 
