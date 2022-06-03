@@ -10,7 +10,7 @@ public class PlayerController : NetworkBehaviour
     [SerializeField] private GameObject attackPrefab;
     [SerializeField] private GameObject combatTextPrefab;
     [SerializeField] private PlayerCombatInterface combatInterface;
-    [SerializeField] private ClientCombatManager combatPrefab;
+    [SerializeField] private GameObject combatPrefab;
     private bool freeMove = true;
 
     void Awake() 
@@ -78,7 +78,7 @@ public class PlayerController : NetworkBehaviour
 
         GameHandler.Instance.EnableCombatObjects();
 
-        combatInterface.clientCombat = Instantiate(combatPrefab).GetComponent<ClientCombatManager>();
+        combatInterface.clientCombat = Instantiate(combatPrefab, Vector3.zero, Quaternion.identity).GetComponent<ClientCombatManager>();
         combatInterface.clientCombat.combatInterface = combatInterface;
     }
 
