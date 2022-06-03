@@ -5,15 +5,32 @@ using Mirror;
 
 public class PlayerCombatInterface : NetworkBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+    [ClientRpc] public void NotifyTurnStart() {
+        if (!isLocalPlayer)
+            return;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    [ClientRpc] public void NotifyTurnEnd() {
+        if (!isLocalPlayer)
+            return;
+
+    }
+
+    [ClientRpc] public void NotifyTurnOrder() {
+        if (!isLocalPlayer)
+            return;
+    }
+
+    [ClientRpc] public void NotifyResourceChange(long id, ResourceType type, int delta) {
+        if (!isLocalPlayer)
+            return;
+    }
+
+    [Command] public void TryUseSkill(SkillID skill, Vector3 position) {
+
+    }
+
+    [Command] public void TryMove(Vector3 position) {
+
     }
 }
