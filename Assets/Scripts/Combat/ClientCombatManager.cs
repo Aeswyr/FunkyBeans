@@ -41,7 +41,7 @@ public class ClientCombatManager : CombatManager
         moveCost.SetActive(false);
         moveText = moveCost.transform.Find("Text").GetComponent<TextMeshPro>();
 
-        CombatUIController.Instance?.SetCombatManager(this);
+        CombatUIController.Instance.SetCombatManager(this);
     }
 
     private Vector3Int lastMouseCell, mouseCell;
@@ -53,9 +53,9 @@ public class ClientCombatManager : CombatManager
 
         if (mouseCell != lastMouseCell)
             if (CellHasEntity(mouseCell))
-                CombatUIController.Instance?.SetDisplayedEntity(GetEntityInCell(mouseCell).entity);
+                CombatUIController.Instance.SetDisplayedEntity(GetEntityInCell(mouseCell).entity);
             else
-                CombatUIController.Instance?.DisableDisplay();
+                CombatUIController.Instance.DisableDisplay();
 
 
         if (mode == CombatMode.MOVE)
@@ -242,6 +242,14 @@ public class ClientCombatManager : CombatManager
     public bool IsPlayerTurn()
     {
         return isTurn;
+    }
+
+    public void SetEntityTile(Vector3Int pos, bool entering)
+    {
+        if (entering)
+            entityGrid.SetTile(pos, entityTile);
+        else
+            entityGrid.SetTile(pos, null);
     }
 
     private enum CombatMode

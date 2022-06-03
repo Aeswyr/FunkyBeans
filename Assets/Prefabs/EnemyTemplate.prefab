@@ -171,7 +171,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   skillsMaster: {fileID: 11400000, guid: 767c3e5c23ffcbd4dad117bb01187a80, type: 2}
-  skillActions: {fileID: 0}
+  skillActions: {fileID: 7861593843303858824}
   damageNumberPrefab: {fileID: 6637239926454590348, guid: 9cbabfc94fa559240902ae1e5707a193, type: 3}
   entityName: Default
   description: A lad befitting the name
@@ -184,7 +184,7 @@ MonoBehaviour:
     defense: 3
   reward:
     exp: 0
-  knownSkills: 
+  knownSkills: 01000000
   defendSkill: 3
   uiSprite: {fileID: 21300000, guid: 2067088142e27434f972e23edd680e9f, type: 3}
   entityType: 1
@@ -201,7 +201,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillList: {fileID: 11400000, guid: 767c3e5c23ffcbd4dad117bb01187a80, type: 2}
-  entity: {fileID: 0}
+  entity: {fileID: 1917366916678259146}
 --- !u!1 &8557835786773117510
 GameObject:
   m_ObjectHideFlags: 0

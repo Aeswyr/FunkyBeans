@@ -63,10 +63,38 @@ public class CombatEntity : NetworkBehaviour
         mp = stats.maxMp;
     }
 
+    [Client] public void UpdateResource(ResourceType type, int amt) {
+
+        TextMeshPro tm;
+        switch (type) {
+            case ResourceType.HEALTH:
+                tm = Instantiate(damageNumberPrefab, transform.position, Quaternion.identity).GetComponent<TextMeshPro>();
+                tm.text = amt.ToString();
+                tm.color = Color.red;
+                break;
+            case ResourceType.MANA:
+                tm = Instantiate(damageNumberPrefab, transform.position, Quaternion.identity).GetComponent<TextMeshPro>();
+                tm.text = amt.ToString();
+                tm.color = Color.blue;
+                break;
+            case ResourceType.ARMOR:
+                tm = Instantiate(damageNumberPrefab, transform.position, Quaternion.identity).GetComponent<TextMeshPro>();
+                tm.text = amt.ToString();
+                tm.color = Color.grey;
+                break;
+            default:
+                break;
+
+            if (entityType == EntityType.player)
+                CombatUIController.Instance.UpdatePlayerResource(this);
+            else
+                CombatUIController.Instance.UpdateDisplayedEntity();
+        }
+    }
+
     [Server] public void TakeDamage(int dmg)
     {
-        var tm = Instantiate(damageNumberPrefab, transform.position, Quaternion.identity).GetComponent<TextMeshPro>();
-        tm.text = dmg.ToString();
+
 
         if (armor > 0) {
             armor -= dmg;

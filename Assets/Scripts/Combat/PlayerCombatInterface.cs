@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using UnityEngine.Tilemaps;
 
 public class PlayerCombatInterface : NetworkBehaviour
 {
@@ -9,6 +10,9 @@ public class PlayerCombatInterface : NetworkBehaviour
 
     public ServerCombatManager serverCombatManager { get; set; }
 
+    [ClientRpc] public void NotifyMovement(Vector3Int pos, bool entering) {
+        clientCombat.SetEntityTile(pos, entering);
+    }
     [ClientRpc] public void NotifyTurnStart() {
         if (!isLocalPlayer)
             return;
@@ -29,6 +33,10 @@ public class PlayerCombatInterface : NetworkBehaviour
     [ClientRpc] public void NotifyResourceChange(long id, ResourceType type, int delta) {
         if (!isLocalPlayer)
             return;
+
+        foreach (var entity in FindObjectsOfType<CombatID>())
+            if (entity.CID == id)
+                entity.transform.GetComponent<CombatEntity>().UpdateResource(type, delta);
     }
 
     [Command] public void TryUseSkill(SkillID skill, Vector3 position) {

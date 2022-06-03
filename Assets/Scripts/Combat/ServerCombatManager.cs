@@ -19,6 +19,12 @@ public class ServerCombatManager : CombatManager
     [SerializeField] private float speedMultiplier = 50;
     [SerializeField] private float timeToShowOnBar;
 
+    void Awake()
+    {
+        selectGrid = combatOverlay.transform.Find("SelectGrid").GetComponent<Tilemap>();
+        entityGrid = combatOverlay.transform.Find("EntityGrid").GetComponent<Tilemap>();
+    }
+
     /// <summary>
     /// Sets which entities should be in this combat, and generates the turn order
     /// </summary>
@@ -525,7 +531,9 @@ public class ServerCombatManager : CombatManager
 
     private void SetEntityTile(Vector3Int pos, TileBase tile)
     {
+        bool entering = tile != null;
         entityGrid.SetTile(pos, tile);
+        NotifyMovement(pos, entering);
     }
 
     public int currentCombo;
@@ -602,6 +610,12 @@ public class ServerCombatManager : CombatManager
         foreach (CombatEntity entity in playerEntities)
             if (TryGetPlayerCombatInterface(out var player))
                 player.NotifyResourceChange(id, type, delta);
+    }
+
+    public void NotifyMovement(Vector3Int pos, bool entering) {
+        foreach (CombatEntity entity in playerEntities)
+            if (TryGetPlayerCombatInterface(out var player))
+                player.NotifyMovement(pos, entering);
     }
 
     public bool TryGetPlayerCombatInterface(out PlayerCombatInterface player)
