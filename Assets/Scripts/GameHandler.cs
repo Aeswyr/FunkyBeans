@@ -94,7 +94,7 @@ public class GameHandler : NetworkSingleton<GameHandler>
         */
     }
 
-    [Command] public void ExitCombat(long id) {
+    [Command(requiresAuthority = false)] public void ExitCombat(long id) {
         foreach (var entity in entities)
             if (entity.transform.parent.TryGetComponent(out PlayerController player))
                 player.ExitCombat(new CombatReward {exp = 5});
