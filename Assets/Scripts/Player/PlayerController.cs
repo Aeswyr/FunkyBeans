@@ -37,24 +37,42 @@ public class PlayerController : NetworkBehaviour
             }
     }
 
-    public void StartBattle() {
-        if ((freeMove == false) || (isLocalPlayer == false))
-            return;
-        freeMove = false;
-        
-        rbody.velocity = Vector2.zero;
-        GameHandler.Instance.EnableCombatObjects();
-        
+    [Server] public void StartBattle() {
         GameHandler.Instance.EnterCombat(transform.position);
     }
 
-    public void EndBattle(CombatReward reward, long id) {
+    [ClientRpc] public void EndBattle(CombatReward reward, long id) {
+
         var tm = Instantiate(combatTextPrefab, transform.position, Quaternion.identity).GetComponent<TextMeshPro>();
         tm.text = $"+{reward.exp} EXP";
         tm.color = Color.yellow;
 
         freeMove = true;
+    }
 
-        GameHandler.Instance.ExitCombat(id);
+    /**
+    * places this player into the combat state and enables associated UI
+    */
+    [ClientRpc] public void EnterCombat () {
+        freeMove = false;
+        
+        rbody.velocity = Vector2.zero;
+        GameHandler.Instance.EnableCombatObjects();
+    }
+
+    /**
+    * removes this player from the combat state while disabling associated UI
+    */
+    [ClientRpc] public void ExitCombat(CombatReward reward) {
+
+        var tm = Instantiate(combatTextPrefab, transform.position, Quaternion.identity).GetComponent<TextMeshPro>();
+        tm.text = $"+{reward.exp} EXP";
+        tm.color = Color.yellow;
+
+        freeMove = true;
+    }
+
+    public bool IsInCombat() {
+        return !freeMove;
     }
 }

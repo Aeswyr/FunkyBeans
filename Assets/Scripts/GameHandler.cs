@@ -49,23 +49,33 @@ public class GameHandler : NetworkSingleton<GameHandler>
         textList.Clear();
     }
 
-    [Command(requiresAuthority = false)] public void EnterCombat(Vector3 position) { 
+    [Server] public void EnterCombat(Vector3 position) { 
         Debug.Log("start battle!");
 
         var results = new List<RaycastHit2D>();
         Physics2D.CircleCast(position, 5, Vector2.right, filter, results, 0);
 
         List<CombatEntity> entities = new List<CombatEntity>();
+
         long id = 0;
         foreach (var hit in results) {
+            if (hit.collider.transform.parent.TryGetComponent(out PlayerController player)) {
+                if (player.IsInCombat())
+                    continue;
+                player.StartBattle();
+            }
+
+
             id += hit.collider.transform.parent.GetComponent<CombatID>().CID; 
             entities.Add(hit.collider.transform.parent.gameObject.GetComponentInChildren<CombatEntity>());
         }
 
+        /*
         if (activeCombats.ContainsKey(id)) {
             Debug.Log($"Combat manager with ID {id} already exists");
             return;
         }
+        
         Debug.Log($"Creating combat manager with ID {id}");
         GameObject combatManager = Instantiate(NetworkManager.singleton.spawnPrefabs.Find(prefab => prefab.name == "CombatManager"));
         NetworkServer.Spawn(combatManager);
@@ -81,6 +91,7 @@ public class GameHandler : NetworkSingleton<GameHandler>
 
         currentCombat.SetCombatEntities(entities);
         activeCombats[id] = currentCombat;
+        */
     }
 
     [Command(requiresAuthority = false)] public void ExitCombat(long id) {
