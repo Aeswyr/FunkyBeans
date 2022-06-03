@@ -26,15 +26,24 @@ public class PlayerController : NetworkBehaviour
             rbody.velocity = speed * InputHandler.Instance.dir;
 
         if (InputHandler.Instance.action.pressed)
-            if (freeMove) {
-                GameObject attack = Instantiate(attackPrefab, transform);
-                attack.GetComponent<AttackController>().SetSource(this);
-                attack.transform.rotation = Utils.Rotate(Camera.main.ScreenToWorldPoint(InputHandler.Instance.mousePos) - transform.position);
-            }
-            else
-            {
-                //EndBattle();
-            }
+            if (freeMove)
+                ServerAttack(Camera.main.ScreenToWorldPoint(InputHandler.Instance.mousePos));
+
+    }
+
+    [Command] public void ServerAttack(Vector3 mousePos) {
+        GameObject attack = Instantiate(attackPrefab, transform);
+        attack.transform.rotation = Utils.Rotate(mousePos - transform.position);
+        attack.GetComponent<AttackController>().SetSource(this);
+        attack.GetComponent<SpriteRenderer>().enabled = false;
+        ClientAttack(mousePos);
+    }
+
+    [ClientRpc] public void ClientAttack(Vector3 mousePos) {
+        GameObject attack = Instantiate(attackPrefab, transform);
+        attack.transform.rotation = Utils.Rotate(mousePos - transform.position);
+        attack.GetComponent<AttackController>().enabled = false;
+        attack.GetComponent<Collider2D>().enabled = false;
     }
 
     [Server] public void StartBattle() {

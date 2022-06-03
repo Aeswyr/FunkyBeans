@@ -1,9 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Mirror;
 
-public class AttackController : NetworkBehaviour
+public class AttackController : MonoBehaviour
 {
 
     private PlayerController source;
