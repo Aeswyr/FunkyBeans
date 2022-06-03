@@ -7,6 +7,8 @@ public class PlayerCombatInterface : NetworkBehaviour
 {
     public ClientCombatManager clientCombat {get; set;}
 
+    public ServerCombatManager serverCombatManager { get; set; }
+
     [ClientRpc] public void NotifyTurnStart() {
         if (!isLocalPlayer)
             return;
@@ -30,14 +32,14 @@ public class PlayerCombatInterface : NetworkBehaviour
     }
 
     [Command] public void TryUseSkill(SkillID skill, Vector3 position) {
-
+        serverCombatManager.TryUseSkill(skill, position);
     }
 
     [Command] public void TryMove(Vector3 position) {
-
+        serverCombatManager.TryMovePlayer(position);
     }
 
     [Command] public void TryDefend() {
-
+        serverCombatManager.TryUseDefend();
     }
 }

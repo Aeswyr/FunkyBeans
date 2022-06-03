@@ -86,10 +86,11 @@ public class ServerCombatManager : CombatManager
             {
                 case CombatEntity.EntityType.player:
                     {
-                        //TODO
-                        //Get rid of UI movement stuff
-                        //ClearMove();
-                        //ClearSelect();
+                        if(TryGetPlayerCombatInterface(out var player))
+                        {
+                            player.NotifyTurnEnd();
+                        }
+
                         break;
                     }
                 case CombatEntity.EntityType.enemy:
@@ -143,7 +144,13 @@ public class ServerCombatManager : CombatManager
             case CombatEntity.EntityType.player:
                 {
                     //Enable UI stuff for the player who owns this unit (also draw movement grid)
+
                     //TODO LocalPlayerOnTurnStarted();
+                    if (TryGetPlayerCombatInterface(out var player))
+                    {
+                        player.NotifyTurnStart();
+                    }
+
                     break;
                 }
             case CombatEntity.EntityType.enemy:
@@ -537,35 +544,15 @@ public class ServerCombatManager : CombatManager
         CombatUIController.Instance?.SetComboCounter(currentCombo);
     }
 
-    private void TryMovePlayer()
+    public void TryMovePlayer(Vector3 position)
     {
-        if (lastMouseCell == null)
-            return;
-
-        if (Utils.GridUtil.IsPointInSelectRange(mouseCell, this) && !Utils.GridUtil.IsCellFilled(mouseCell) && !CellHasEntity(mouseCell))
-        {
-            Vector3Int srcPos = GameHandler.Instance.currentLevel.WorldToCell(currEntity.transform.parent.position);
-
-            List<Vector3Int> positions = Utils.Pathfinding.GetPath(srcPos, mouseCell, this, true, true);
-            if (positions.Count > 0)
-            {
-                GameObject parentOfEntity = currEntity.transform.parent.gameObject;
-
-                //path is valid, move to destination
-                EntityExitTile(parentOfEntity);
-
-                parentOfEntity.transform.position = selectGrid.CellToWorld(positions[0]);
-                Utils.GridUtil.SnapToLevelGrid(parentOfEntity, this);
-
-                EntityEnterTile(parentOfEntity);
-
-                UseActions(positions.Count);
-            }
-        }
+        throw new NotImplementedException();
     }
 
-    private void TryUseSkill(SkillID skill)
+    public void TryUseSkill(SkillID skill, Vector3 position)
     {
+        throw new NotImplementedException();
+
         int cost = skillList.Get(skill).actionCost;
         if (numActionsLeft >= cost)
         {
@@ -573,26 +560,31 @@ public class ServerCombatManager : CombatManager
         }
     }
 
+    public void TryUseDefend()
+    {
+        //if(numActionsLeft >= 1)
+        currEntity.UseDefense();
+    }
+
     public void UseActions(int actionsToUse)
     {
         if (currEntity.team == CombatEntity.EntityType.enemy)
+        {
+            Debug.LogError("Useactions should not be called on enemies");
             return;
+        }
 
         //Debug.Log("player used " + actionsToUse + " actions");
 
         numActionsLeft -= actionsToUse;
-        CombatUIController.Instance?.SetActionUI(numActionsLeft, numMaxActions);
 
-        //ClearMove();
-        //ClearSelect();
-        //ClearHighlight();
+        //update turn ui for local player
+        if (TryGetPlayerCombatInterface(out var player))
+        {
+            player.NotifyResourceChange(player.transform.GetComponent<CombatID>().CID, ResourceType.ACTIONS, actionsToUse);
+        }
 
-        //if (mode == CombatMode.MOVE)
-        //DrawSelect(currEntity.gameObject, numActionsLeft);
-
-        //if (mode == CombatMode.SELECT)
-        //StartCoroutine(DelayDrawHighlight());
-
+        //check if should end turn
         if (numActionsLeft <= 0)
         {
             StartNextTurn();
@@ -603,12 +595,13 @@ public class ServerCombatManager : CombatManager
 
     public void EndCombat()
     {
-        CombatUIController.Instance?.ClearPlayerResources();
-        GameHandler.Instance.DisableCombatObjects();
-        foreach (var centity in combatEntities)
-        {
-            if (centity.transform.parent.TryGetComponent(out PlayerController player))
-                player.EndBattle(reward, id);
-        }
+        GameHandler.Instance.ExitCombat(id);
+    }
+
+
+
+    public bool TryGetPlayerCombatInterface(out PlayerCombatInterface player)
+    {
+        return currEntity.transform.parent.TryGetComponent(out player);
     }
 }

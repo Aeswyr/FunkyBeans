@@ -2,8 +2,9 @@ using TMPro;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Mirror;
 
-public class CombatEntity : MonoBehaviour
+public class CombatEntity : NetworkBehaviour
 {
     private bool localIsMine;
     public bool LocalIsMine => localIsMine;
@@ -50,11 +51,11 @@ public class CombatEntity : MonoBehaviour
         skillsMaster.Get(defendSkill, skillActions).behavior.Invoke();
     }
 
-    private int hp;
+    [SyncVar] private int hp;
     public int HP => hp;
-    private int mp;
+    [SyncVar] private int mp;
     public int MP => mp;
-    private int armor;
+    [SyncVar] private int armor;
     public int Armor => armor;
     void Start()
     {
@@ -120,17 +121,7 @@ public class CombatEntity : MonoBehaviour
         serverCombatManager = newServerCombatManager;
     }
 
-    private ClientCombatManager clientCombatManager;
     private ServerCombatManager serverCombatManager;
-
-    public CombatManager GetCombatManager()
-    {
-        //if is client
-        return clientCombatManager;
-        //else
-        return serverCombatManager;
-    }
-
     public ServerCombatManager GetServerCombatManager()
     {
         return serverCombatManager;
