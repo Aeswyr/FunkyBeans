@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using TMPro;
 
-public class ClientCombatManager : MonoBehaviour
+public class ClientCombatManager : CombatManager
 {
     [SerializeField] private SkillList skillList;
     public SkillList SkillList => skillList;

@@ -78,7 +78,7 @@ public class CombatManager : NetworkBehaviour
         moveCost.SetActive(false);
         moveText = moveCost.transform.Find("Text").GetComponent<TextMeshPro>();
 
-        CombatUIController.Instance?.SetCombatManager(this);
+        //CombatUIController.Instance?.SetCombatManager(this);
     }
 
     private Vector3Int lastMouseCell, mouseCell;
