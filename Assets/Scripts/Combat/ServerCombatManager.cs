@@ -601,9 +601,19 @@ public class ServerCombatManager : CombatManager
         }
     }
 
+    public int currentCombo;
+    public Skill.Type[] lastComboTypes = new Skill.Type[0];
+    public List<SkillID> comboSkillsUsed = new List<SkillID>();
     public void IncrementCombo()
     {
-        //currentCombo++;
-        //CombatUIController.Instance?.SetComboCounter(currentCombo);
+        currentCombo++;
+        CombatUIController.Instance?.SetComboCounter(currentCombo);
+    }
+
+    public void CashoutCombo()
+    {
+        comboSkillsUsed.Clear();
+        currentCombo = -1;
+        CombatUIController.Instance?.SetComboCounter(currentCombo);
     }
 }

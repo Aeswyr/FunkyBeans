@@ -115,20 +115,24 @@ public class CombatEntity : MonoBehaviour
     {
         return stats.damage;
     }
-
-    private ServerCombatManager serverCombatManager;
     public void SetServerCombatManager(ServerCombatManager newServerCombatManager)
     {
         serverCombatManager = newServerCombatManager;
     }
 
     private ClientCombatManager clientCombatManager;
+    private ServerCombatManager serverCombatManager;
 
     public CombatManager GetCombatManager()
     {
         //if is client
         return clientCombatManager;
         //else
+        return serverCombatManager;
+    }
+
+    public ServerCombatManager GetServerCombatManager()
+    {
         return serverCombatManager;
     }
 }

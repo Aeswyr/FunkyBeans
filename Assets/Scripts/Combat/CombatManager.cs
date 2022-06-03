@@ -7,7 +7,7 @@ using Mirror;
 
 public class CombatManager : NetworkBehaviour
 {
-
+    /*
     [SerializeField] private SkillList skillList;
     public SkillList SkillList => skillList;
 
@@ -630,13 +630,13 @@ public class CombatManager : NetworkBehaviour
             //Debug.Log("Chose to block");
             return defendMove;
 
-            /*
+            
             moveToDoQueue.Put(bestSkillMove, -bestSkillScore);
             moveToDoQueue.Put(defendMove, -GetScoreFromMoveHeuristicList(defendMove));
             moveToDoQueue.Put(bestMovementMove, -bestMovementScore);
 
             //return the move with the highest heuristic score
-            return moveToDoQueue.Pop();*/
+            return moveToDoQueue.Pop();
         }
     }
 
@@ -972,6 +972,7 @@ public class CombatManager : NetworkBehaviour
     private enum CombatMode {
     NONE, MOVE, SELECT, GUARD,
     }
+*/
 }
 
 
