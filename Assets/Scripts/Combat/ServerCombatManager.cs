@@ -137,7 +137,7 @@ public class ServerCombatManager : CombatManager
         numMaxActions = currEntity.Stats.actions;
         numActionsLeft = numMaxActions;
 
-        Debug.Log("Turn started! Current Entity: " + currEntity.transform.parent.name + ", team: " + type);
+        Debug.Log("Turn started! Current Entity: " + currEntity.transform.name + ", team: " + type);
 
         switch (type)
         {
@@ -166,7 +166,7 @@ public class ServerCombatManager : CombatManager
     {
         yield return new WaitForSeconds(0.25f);
 
-        Vector3Int posBeforeMove = GameHandler.Instance.currentLevel.WorldToCell(currEntity.transform.parent.position);
+        Vector3Int posBeforeMove = GameHandler.Instance.currentLevel.WorldToCell(currEntity.transform.position);
 
         //Debug.Log("Pos at start of turn: " + posBeforeMove);
 
@@ -184,14 +184,14 @@ public class ServerCombatManager : CombatManager
                 Debug.Log("Used " + actionsToUse + actionText + ". Moved to " + move.movePosition + ", (change of " + (move.movePosition - posBeforeMove).ToString() + "), " +
                     actionsLeft + "/" + numMaxActions + " actions left");
 
-                GameObject parentOfEntity = currEntity.transform.parent.gameObject;
+                GameObject entity = currEntity.transform.gameObject;
 
-                EntityExitTile(parentOfEntity);
+                EntityExitTile(entity);
 
-                parentOfEntity.transform.position = move.movePosition;
-                Utils.GridUtil.SnapToLevelGrid(parentOfEntity, this);
+                entity.transform.position = move.movePosition;
+                Utils.GridUtil.SnapToLevelGrid(entity, this);
 
-                EntityEnterTile(parentOfEntity);
+                EntityEnterTile(entity);
 
                 posBeforeMove = move.movePosition;
             }
@@ -387,7 +387,7 @@ public class ServerCombatManager : CombatManager
         float dist = 0;
         foreach (CombatEntity playerEntity in playerEntities)
         {
-            dist += Vector3.Distance(position, playerEntity.transform.parent.position);
+            dist += Vector3.Distance(position, playerEntity.transform.position);
         }
 
         return 10f / dist;
@@ -598,10 +598,14 @@ public class ServerCombatManager : CombatManager
         GameHandler.Instance.ExitCombat(id);
     }
 
-
+    public void NotifyResourceChange(long id, ResourceType type, int delta) {
+        foreach (CombatEntity entity in playerEntities)
+            if (TryGetPlayerCombatInterface(out var player))
+                player.NotifyResourceChange(id, type, delta);
+    }
 
     public bool TryGetPlayerCombatInterface(out PlayerCombatInterface player)
     {
-        return currEntity.transform.parent.TryGetComponent(out player);
+        return currEntity.transform.TryGetComponent(out player);
     }
 }

@@ -481,7 +481,7 @@ public class Utils
             if(entity.team == CombatEntity.EntityType.player)
             {
                 Vector3 mousePos = Camera.main.ScreenToWorldPoint(InputHandler.Instance.mousePos);
-                Vector3Int entityPos = GameHandler.Instance.currentLevel.WorldToCell(entity.transform.parent.position);
+                Vector3Int entityPos = GameHandler.Instance.currentLevel.WorldToCell(entity.transform.position);
                 targets = GetEntitiesInAttack(entityPos, mousePos, entity.GetServerCombatManager(), skill.target, skill.range, skill.size);
 
                 if ((targets == null || targets.Count == 0) && (skill.requiresValidTarget))

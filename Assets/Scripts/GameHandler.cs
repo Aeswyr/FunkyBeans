@@ -67,7 +67,7 @@ public class GameHandler : NetworkSingleton<GameHandler>
 
 
             id += hit.collider.transform.parent.GetComponent<CombatID>().CID; 
-            entities.Add(hit.collider.transform.parent.gameObject.GetComponentInChildren<CombatEntity>());
+            entities.Add(hit.collider.transform.parent.GetComponent<CombatEntity>());
         }
 
         
@@ -95,7 +95,7 @@ public class GameHandler : NetworkSingleton<GameHandler>
 
     [Command(requiresAuthority = false)] public void ExitCombat(long id) {
         foreach (var entity in entities)
-            if (entity.transform.parent.TryGetComponent(out PlayerController player))
+            if (entity.transform.TryGetComponent(out PlayerController player))
                 player.ExitCombat(new CombatReward {exp = 5});
 
         /*string output = "\nDictionary:";

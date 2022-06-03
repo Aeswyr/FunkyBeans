@@ -63,7 +63,7 @@ public class CombatEntity : NetworkBehaviour
         mp = stats.maxMp;
     }
 
-    public void TakeDamage(int dmg)
+    [Server] public void TakeDamage(int dmg)
     {
         var tm = Instantiate(damageNumberPrefab, transform.position, Quaternion.identity).GetComponent<TextMeshPro>();
         tm.text = dmg.ToString();
@@ -74,16 +74,13 @@ public class CombatEntity : NetworkBehaviour
                 hp += armor;
                 armor = 0;
             }
-            tm.color = Color.gray;
+            serverCombatManager.NotifyResourceChange(transform.GetComponent<CombatID>().CID, ResourceType.ARMOR, dmg);
         } else {
             hp -= dmg;
-            tm.color = Color.red;
+            serverCombatManager.NotifyResourceChange(transform.GetComponent<CombatID>().CID, ResourceType.HEALTH, dmg);
         }
-        CombatUIController.Instance?.UpdateDisplayedEntity();
-        if (team == EntityType.player)
-            CombatUIController.Instance?.UpdatePlayerResource(this);
 
-        GameObject parent = transform.parent.gameObject;
+        GameObject parent = transform.gameObject;
         Debug.Log("Entity " + parent.name + " took " + dmg + " points of damage, new hp: " + hp + "/" + stats.maxHp);
         if (hp <= 0 && entityType == EntityType.enemy) {
             CombatUIController.Instance?.DisableIfDisplayed(this);
@@ -93,23 +90,19 @@ public class CombatEntity : NetworkBehaviour
         }
     }
 
-    public bool TrySpendMP(int val) {
+    [Server] public bool TrySpendMP(int val) {
         if (mp < val)
             return false;
         mp -= val;
 
-        CombatUIController.Instance?.UpdateDisplayedEntity();
-        if (team == EntityType.player)
-            CombatUIController.Instance?.UpdatePlayerResource(this);
+        serverCombatManager.NotifyResourceChange(transform.GetComponent<CombatID>().CID, ResourceType.MANA, val);
             
         return true;
     }
 
-    public void AddArmor(int amt) {
+    [Server] public void AddArmor(int amt) {
         armor += amt;
-        CombatUIController.Instance?.UpdateDisplayedEntity();
-        if (team == EntityType.player)
-            CombatUIController.Instance?.UpdatePlayerResource(this);
+        serverCombatManager.NotifyResourceChange(transform.GetComponent<CombatID>().CID, ResourceType.ARMOR, -amt);
     }
 
     public int GetMagnitudeOfSkill(Skill skill)
