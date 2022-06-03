@@ -5,6 +5,9 @@ using System;
 
 public class CombatEntity : MonoBehaviour
 {
+    private bool localIsMine;
+    public bool LocalIsMine => localIsMine;
+
     [System.Serializable] public enum EntityType
     {
         player, 
