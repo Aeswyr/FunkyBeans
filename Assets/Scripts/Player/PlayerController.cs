@@ -9,6 +9,8 @@ public class PlayerController : NetworkBehaviour
     [SerializeField] private float speed;
     [SerializeField] private GameObject attackPrefab;
     [SerializeField] private GameObject combatTextPrefab;
+    [SerializeField] private PlayerCombatInterface combatInterface;
+    [SerializeField] private ClientCombatManager combatPrefab;
     private bool freeMove = true;
 
     void Awake() 
@@ -70,21 +72,32 @@ public class PlayerController : NetworkBehaviour
         freeMove = false;
         
         rbody.velocity = Vector2.zero;
+
+        if (!isLocalPlayer)
+            return;
+
         GameHandler.Instance.EnableCombatObjects();
+
+        combatInterface.clientCombat = Instantiate(combatPrefab).GetComponent<ClientCombatManager>();
+        combatInterface.clientCombat.combatInterface = combatInterface;
     }
 
     /**
     * removes this player from the combat state while disabling associated UI
     */
     [ClientRpc] public void ExitCombat(CombatReward reward) {
-
         var tm = Instantiate(combatTextPrefab, transform.position, Quaternion.identity).GetComponent<TextMeshPro>();
         tm.text = $"+{reward.exp} EXP";
         tm.color = Color.yellow;
 
         freeMove = true;
 
+        if (!isLocalPlayer)
+            return;
+
         GameHandler.Instance.DisableCombatObjects();
+
+        Destroy(combatInterface.clientCombat);
     }
 
     public bool IsInCombat() {

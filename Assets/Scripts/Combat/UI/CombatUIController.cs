@@ -11,7 +11,7 @@ public class CombatUIController : Singleton<CombatUIController>
     [SerializeField] private GameObject options;
     [SerializeField] private GameObject buttonPrefab;
     private List<GameObject> buttons = new List<GameObject>();
-    private CombatManager manager;
+    private ClientCombatManager manager;
     private List<SkillID> skills = new List<SkillID>();
 
     public MenuState menuState = MenuState.START;
@@ -80,10 +80,10 @@ public class CombatUIController : Singleton<CombatUIController>
     public void FleePressed() {
         if (!manager.IsPlayerTurn())
             return;
-        manager.EndCombat();
+        GameHandler.Instance.ExitCombat(0); //TODO make id work
     }
 
-    public void SetCombatManager(CombatManager manager) {
+    public void SetCombatManager(ClientCombatManager manager) {
         this.manager = manager;
     }
 

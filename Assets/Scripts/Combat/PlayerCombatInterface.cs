@@ -5,15 +5,18 @@ using Mirror;
 
 public class PlayerCombatInterface : NetworkBehaviour
 {
+    public ClientCombatManager clientCombat {get; set;}
+
     [ClientRpc] public void NotifyTurnStart() {
         if (!isLocalPlayer)
             return;
+        clientCombat.isTurn = true;
     }
 
     [ClientRpc] public void NotifyTurnEnd() {
         if (!isLocalPlayer)
             return;
-
+        clientCombat.isTurn = false;
     }
 
     [ClientRpc] public void NotifyTurnOrder() {
@@ -31,6 +34,10 @@ public class PlayerCombatInterface : NetworkBehaviour
     }
 
     [Command] public void TryMove(Vector3 position) {
+
+    }
+
+    [Command] public void TryDefend() {
 
     }
 }
