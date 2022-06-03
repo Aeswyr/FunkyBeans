@@ -6,28 +6,12 @@ using TMPro;
 
 public class ClientCombatManager : CombatManager
 {
-    [SerializeField] private SkillList skillList;
-    public SkillList SkillList => skillList;
-
-    [Header("Combat grid")]
-    [SerializeField] private Grid combatOverlay;
-    public Tilemap selectGrid
-    {
-        get;
-        private set;
-    }
-
     public Tilemap moveGrid
     {
         get;
         private set;
     }
 
-    public Tilemap entityGrid
-    {
-        get;
-        private set;
-    }
     public Tilemap highlightGrid
     {
         get;
@@ -37,14 +21,12 @@ public class ClientCombatManager : CombatManager
     [Header("Tiles for battle map overlay")]
     [SerializeField] private RuleTile selectTile;
     [SerializeField] private RuleTile pointerTile;
-    [SerializeField] private RuleTile entityTile;
     [SerializeField] private RuleTile highlightTile;
 
     [Header("UI Components")]
     [SerializeField] private GameObject moveCost;
     private TextMeshPro moveText;
-    private int numActionsLeft;
-    private int numMaxActions;
+
     public PlayerCombatInterface combatInterface { get; set; }
     public bool isTurn { get; set; }
     private SkillID activeSkill;
@@ -186,10 +168,6 @@ public class ClientCombatManager : CombatManager
         highlightGrid.ClearAllTiles();
     }
 
-    public bool CellHasEntity(Vector3Int cell)
-    {
-        return entityGrid.GetTile(cell) != null;
-    }
 
     public void SetTargetMode(SkillID activeSkill)
     {
@@ -259,19 +237,6 @@ public class ClientCombatManager : CombatManager
     {
         moveCost.SetActive(false);
         moveGrid.ClearAllTiles();
-    }
-
-    public EntityReference GetEntityInCell(Vector3Int cell)
-    {
-        if (CellHasEntity(cell))
-        {
-            Collider2D col = Physics2D.OverlapPoint(entityGrid.CellToWorld(cell) + new Vector3(0.5f, 0.5f, 0), LayerMask.GetMask(new string[] { "TileEntity" }));
-            if (col == null)
-                return null;
-            GameObject obj = col.gameObject;
-            return obj.GetComponent<EntityReference>();
-        }
-        return null;
     }
 
     public bool IsPlayerTurn()

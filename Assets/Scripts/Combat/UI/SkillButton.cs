@@ -6,9 +6,9 @@ public class SkillButton : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI text;
     private SkillID associatedSkill;
-    private CombatManager manager;
+    private ClientCombatManager manager;
 
-    public void Init(SkillID id, SkillList masterSkillList, CombatManager manager) {
+    public void Init(SkillID id, SkillList masterSkillList, ClientCombatManager manager) {
         this.associatedSkill = id;
         Skill skill = masterSkillList.Get(id);
         text.text = skill.name;
