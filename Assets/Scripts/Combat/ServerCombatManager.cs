@@ -8,8 +8,6 @@ using System;
 
 public class ServerCombatManager : CombatManager
 {
-    private SkillList skillList;
-
     //Combat data
     private CombatEntity currEntity;
     private List<CombatEntity> combatEntities;
@@ -20,40 +18,6 @@ public class ServerCombatManager : CombatManager
 
     [SerializeField] private float speedMultiplier = 50;
     [SerializeField] private float timeToShowOnBar;
-
-    private int numActionsLeft;
-    private int numMaxActions;
-
-    [Header("Combat grid")]
-    [SerializeField] private Grid combatOverlay;
-    public Tilemap selectGrid
-    {
-        get;
-        private set;
-    }
-
-    public Tilemap moveGrid
-    {
-        get;
-        private set;
-    }
-
-    public Tilemap entityGrid
-    {
-        get;
-        private set;
-    }
-    public Tilemap highlightGrid
-    {
-        get;
-        private set;
-    }
-
-    [Header("Tiles for battle map overlay")]
-    [SerializeField] private RuleTile selectTile;
-    [SerializeField] private RuleTile pointerTile;
-    [SerializeField] private RuleTile entityTile;
-    [SerializeField] private RuleTile highlightTile;
 
     /// <summary>
     /// Sets which entities should be in this combat, and generates the turn order
@@ -535,7 +499,7 @@ public class ServerCombatManager : CombatManager
         }
         if (team == CombatEntity.EntityType.player)
         {
-            //EndCombat();
+            EndCombat();
         }
     }
 
@@ -557,22 +521,56 @@ public class ServerCombatManager : CombatManager
         entityGrid.SetTile(pos, tile);
     }
 
-    public EntityReference GetEntityInCell(Vector3Int cell)
+    public int currentCombo;
+    public Skill.Type[] lastComboTypes = new Skill.Type[0];
+    public List<SkillID> comboSkillsUsed = new List<SkillID>();
+    public void IncrementCombo()
     {
-        if (CellHasEntity(cell))
-        {
-            Collider2D col = Physics2D.OverlapPoint(entityGrid.CellToWorld(cell) + new Vector3(0.5f, 0.5f, 0), LayerMask.GetMask(new string[] { "TileEntity" }));
-            if (col == null)
-                return null;
-            GameObject obj = col.gameObject;
-            return obj.GetComponent<EntityReference>();
-        }
-        return null;
+        currentCombo++;
+        CombatUIController.Instance?.SetComboCounter(currentCombo);
     }
 
-    public bool CellHasEntity(Vector3Int cell)
+    public void CashoutCombo()
     {
-        return entityGrid.GetTile(cell) != null;
+        comboSkillsUsed.Clear();
+        currentCombo = -1;
+        CombatUIController.Instance?.SetComboCounter(currentCombo);
+    }
+
+    private void TryMovePlayer()
+    {
+        if (lastMouseCell == null)
+            return;
+
+        if (Utils.GridUtil.IsPointInSelectRange(mouseCell, this) && !Utils.GridUtil.IsCellFilled(mouseCell) && !CellHasEntity(mouseCell))
+        {
+            Vector3Int srcPos = GameHandler.Instance.currentLevel.WorldToCell(currEntity.transform.parent.position);
+
+            List<Vector3Int> positions = Utils.Pathfinding.GetPath(srcPos, mouseCell, this, true, true);
+            if (positions.Count > 0)
+            {
+                GameObject parentOfEntity = currEntity.transform.parent.gameObject;
+
+                //path is valid, move to destination
+                EntityExitTile(parentOfEntity);
+
+                parentOfEntity.transform.position = selectGrid.CellToWorld(positions[0]);
+                Utils.GridUtil.SnapToLevelGrid(parentOfEntity, this);
+
+                EntityEnterTile(parentOfEntity);
+
+                UseActions(positions.Count);
+            }
+        }
+    }
+
+    private void TryUseSkill(SkillID skill)
+    {
+        int cost = skillList.Get(skill).actionCost;
+        if (numActionsLeft >= cost)
+        {
+            currEntity.UseSkill(skill);
+        }
     }
 
     public void UseActions(int actionsToUse)
@@ -590,10 +588,10 @@ public class ServerCombatManager : CombatManager
         //ClearHighlight();
 
         //if (mode == CombatMode.MOVE)
-            //DrawSelect(currEntity.gameObject, numActionsLeft);
+        //DrawSelect(currEntity.gameObject, numActionsLeft);
 
         //if (mode == CombatMode.SELECT)
-            //StartCoroutine(DelayDrawHighlight());
+        //StartCoroutine(DelayDrawHighlight());
 
         if (numActionsLeft <= 0)
         {
@@ -601,19 +599,16 @@ public class ServerCombatManager : CombatManager
         }
     }
 
-    public int currentCombo;
-    public Skill.Type[] lastComboTypes = new Skill.Type[0];
-    public List<SkillID> comboSkillsUsed = new List<SkillID>();
-    public void IncrementCombo()
-    {
-        currentCombo++;
-        CombatUIController.Instance?.SetComboCounter(currentCombo);
-    }
+    private CombatReward reward;
 
-    public void CashoutCombo()
+    public void EndCombat()
     {
-        comboSkillsUsed.Clear();
-        currentCombo = -1;
-        CombatUIController.Instance?.SetComboCounter(currentCombo);
+        CombatUIController.Instance?.ClearPlayerResources();
+        GameHandler.Instance.DisableCombatObjects();
+        foreach (var centity in combatEntities)
+        {
+            if (centity.transform.parent.TryGetComponent(out PlayerController player))
+                player.EndBattle(reward, id);
+        }
     }
 }
