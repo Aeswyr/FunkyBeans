@@ -62,7 +62,7 @@ public class GameHandler : NetworkSingleton<GameHandler>
             if (hit.collider.transform.parent.TryGetComponent(out PlayerController player)) {
                 if (player.IsInCombat())
                     continue;
-                player.StartBattle();
+                player.EnterCombat();
             }
 
 
