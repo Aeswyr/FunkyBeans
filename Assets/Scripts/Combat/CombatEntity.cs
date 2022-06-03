@@ -116,12 +116,13 @@ public class CombatEntity : MonoBehaviour
         return stats.damage;
     }
 
-    private CombatManager combatManager;
-    public void SetCombatManager(CombatManager manager)
+    private ServerCombatManager serverCombatManager;
+    public void SetServerCombatManager(ServerCombatManager newServerCombatManager)
     {
-        combatManager = manager;
+        serverCombatManager = newServerCombatManager;
     }
-    public CombatManager CombatManager => combatManager;
+
+    public ServerCombatManager ServerCombatManager => serverCombatManager;
 }
 
 [Serializable]
