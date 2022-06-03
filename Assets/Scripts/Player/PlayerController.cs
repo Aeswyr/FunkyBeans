@@ -38,7 +38,8 @@ public class PlayerController : NetworkBehaviour
     }
 
     [Server] public void StartBattle() {
-        GameHandler.Instance.EnterCombat(transform.position);
+        if (freeMove)
+            GameHandler.Instance.EnterCombat(transform.position);
     }
 
     [ClientRpc] public void EndBattle(CombatReward reward, long id) {
