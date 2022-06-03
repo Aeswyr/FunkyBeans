@@ -48,14 +48,14 @@ public class GameHandler : NetworkSingleton<GameHandler>
             Destroy(txt);
         textList.Clear();
     }
-
+    List<CombatEntity> entities;
     [Server] public void EnterCombat(Vector3 position) { 
         Debug.Log("start battle!");
 
         var results = new List<RaycastHit2D>();
         Physics2D.CircleCast(position, 5, Vector2.right, filter, results, 0);
 
-        List<CombatEntity> entities = new List<CombatEntity>();
+        entities = new List<CombatEntity>();
 
         long id = 0;
         foreach (var hit in results) {
@@ -94,8 +94,12 @@ public class GameHandler : NetworkSingleton<GameHandler>
         */
     }
 
-    [Command(requiresAuthority = false)] public void ExitCombat(long id) {
-        string output = "\nDictionary:";
+    [Command] public void ExitCombat(long id) {
+        foreach (var entity in entities)
+            if (entity.transform.parent.TryGetComponent(out PlayerController player))
+                player.ExitCombat(new CombatReward {exp = 5});
+
+        /*string output = "\nDictionary:";
         foreach (var val in activeCombats)
             output += $"\n{val.Key.ToString()}, {val.Value.ToString()}";
         Debug.Log($"Searching for combat manager with ID {id} {output}");
@@ -103,7 +107,7 @@ public class GameHandler : NetworkSingleton<GameHandler>
             Debug.Log($"Trying to destroy combat manager with ID {id}");
             NetworkServer.Destroy(activeCombats[id].gameObject);
             activeCombats.Remove(id);
-        }
+        }*/
     }
 
 

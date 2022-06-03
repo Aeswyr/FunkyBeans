@@ -29,6 +29,9 @@ public class PlayerController : NetworkBehaviour
             if (freeMove)
                 ServerAttack(Camera.main.ScreenToWorldPoint(InputHandler.Instance.mousePos));
 
+        if (InputHandler.Instance.back.pressed)
+            GameHandler.Instance.ExitCombat(0);
+
     }
 
     [Command] public void ServerAttack(Vector3 mousePos) {
@@ -51,7 +54,7 @@ public class PlayerController : NetworkBehaviour
             GameHandler.Instance.EnterCombat(transform.position);
     }
 
-    [ClientRpc] public void EndBattle(CombatReward reward, long id) {
+    [Server] public void EndBattle(CombatReward reward, long id) {
 
         var tm = Instantiate(combatTextPrefab, transform.position, Quaternion.identity).GetComponent<TextMeshPro>();
         tm.text = $"+{reward.exp} EXP";
@@ -80,6 +83,8 @@ public class PlayerController : NetworkBehaviour
         tm.color = Color.yellow;
 
         freeMove = true;
+
+        GameHandler.Instance.DisableCombatObjects();
     }
 
     public bool IsInCombat() {
