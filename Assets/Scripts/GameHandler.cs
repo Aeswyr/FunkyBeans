@@ -22,7 +22,7 @@ public class GameHandler : NetworkSingleton<GameHandler>
         get {return m_currentLevel;}
     }
 
-    public Dictionary<long, CombatManager> activeCombats = new Dictionary<long, CombatManager>();
+    public Dictionary<long, ServerCombatManager> activeCombats = new Dictionary<long, ServerCombatManager>();
 
     [Header("Prefabs")]
     [SerializeField] private GameObject combatManagerPrefab;
@@ -70,28 +70,27 @@ public class GameHandler : NetworkSingleton<GameHandler>
             entities.Add(hit.collider.transform.parent.gameObject.GetComponentInChildren<CombatEntity>());
         }
 
-        /*
+        
         if (activeCombats.ContainsKey(id)) {
             Debug.Log($"Combat manager with ID {id} already exists");
             return;
         }
         
         Debug.Log($"Creating combat manager with ID {id}");
-        GameObject combatManager = Instantiate(NetworkManager.singleton.spawnPrefabs.Find(prefab => prefab.name == "CombatManager"));
-        NetworkServer.Spawn(combatManager);
-        CombatManager currentCombat = combatManager.GetComponent<CombatManager>();
+        GameObject combatManager = Instantiate(combatManagerPrefab, Vector3.zero, Quaternion.identity);
+        ServerCombatManager currentCombat = combatManager.GetComponent<ServerCombatManager>();
         currentCombat.ID = id;
 
         foreach (var hit in results) {
             GameObject hitEntity = hit.collider.transform.parent.gameObject;
-
+            if (hitEntity.TryGetComponent(out PlayerCombatInterface player))
+                player.serverCombatManager = currentCombat;
             Utils.GridUtil.SnapToLevelGrid(hitEntity, currentCombat);
             currentCombat.EntityEnterTile(hitEntity);
         }
 
         currentCombat.SetCombatEntities(entities);
         activeCombats[id] = currentCombat;
-        */
     }
 
     [Command(requiresAuthority = false)] public void ExitCombat(long id) {

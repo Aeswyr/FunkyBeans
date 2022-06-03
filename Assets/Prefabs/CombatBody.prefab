@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4938962799226207605}
   - component: {fileID: -1898813043142187458}
   - component: {fileID: 4266659130729025017}
+  - component: {fileID: 1448483502112819340}
   m_Layer: 0
   m_Name: CombatBody
   m_TagString: Untagged
@@ -59,6 +60,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8f3b51b277574e41be7f752b9b5faec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
   skillsMaster: {fileID: 11400000, guid: 767c3e5c23ffcbd4dad117bb01187a80, type: 2}
   skillActions: {fileID: -1898813043142187458}
   damageNumberPrefab: {fileID: 6637239926454590348, guid: 9cbabfc94fa559240902ae1e5707a193, type: 3}
@@ -77,3 +80,20 @@ MonoBehaviour:
   defendSkill: 2
   uiSprite: {fileID: 0}
   entityType: 0
+--- !u!114 &1448483502112819340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8593825070881082496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  serverOnly: 0
+  visible: 1
+  m_AssetId: 0bc75f806f8806641bae013bdd180fd6
+  hasSpawned: 0

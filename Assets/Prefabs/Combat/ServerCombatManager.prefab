@@ -9,10 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7863051334537503129}
-  - component: {fileID: 2188970297290658064}
   - component: {fileID: 1015032285811125940}
+  - component: {fileID: -6018775163259132015}
   m_Layer: 0
-  m_Name: CombatManager
+  m_Name: ServerCombatManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -35,33 +35,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2188970297290658064
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1823533853649431128}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65861dd444d3e194a95ad71d19b1b759, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  skillList: {fileID: 11400000, guid: 767c3e5c23ffcbd4dad117bb01187a80, type: 2}
-  combatOverlay: {fileID: 5071642083883760748}
-  selectTile: {fileID: 11400000, guid: ac0783522c05c6447851fc096368a371, type: 2}
-  pointerTile: {fileID: 11400000, guid: dbebd63645defb34689e2729f82b4e5b, type: 2}
-  entityTile: {fileID: 11400000, guid: 0339acc570e7fdd49aa4a52bedd43f23, type: 2}
-  highlightTile: {fileID: 11400000, guid: c504c5338e804914ea26ad2a705b1702, type: 2}
-  moveCost: {fileID: 5119163333748181731}
-  entityTurnIndicatorPrefab: {fileID: 350310851504152826, guid: 11c80f3b1ce278541ab2285d4e0f8163, type: 3}
-  timeToShowOnBar: 4
-  speedMultiplier: 50
-  currentCombo: 0
-  lastComboTypes: 
-  comboSkillsUsed: 
 --- !u!114 &1015032285811125940
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -79,6 +52,28 @@ MonoBehaviour:
   visible: 0
   m_AssetId: 6440cb84e283ace4cae843fb52559ff1
   hasSpawned: 0
+--- !u!114 &-6018775163259132015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1823533853649431128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62b32eefc4832e6428abc6f756fb56fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  skillList: {fileID: 11400000, guid: 767c3e5c23ffcbd4dad117bb01187a80, type: 2}
+  combatOverlay: {fileID: 5071642083883760748}
+  entityTile: {fileID: 11400000, guid: 0339acc570e7fdd49aa4a52bedd43f23, type: 2}
+  speedMultiplier: 50
+  timeToShowOnBar: 0
+  currentCombo: 0
+  lastComboTypes: 
+  comboSkillsUsed: 
 --- !u!1001 &5661763653960225224
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -139,11 +134,6 @@ PrefabInstance:
 --- !u!4 &3815269096702860104 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8818099802131368576, guid: b508cc82466056d48a95ea58bcfc0199, type: 3}
-  m_PrefabInstance: {fileID: 5661763653960225224}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &5119163333748181731 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 691385994884651819, guid: b508cc82466056d48a95ea58bcfc0199, type: 3}
   m_PrefabInstance: {fileID: 5661763653960225224}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &9160770201057940544
