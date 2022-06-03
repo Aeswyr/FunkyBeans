@@ -86,8 +86,8 @@ public class CombatEntity : MonoBehaviour
         Debug.Log("Entity " + parent.name + " took " + dmg + " points of damage, new hp: " + hp + "/" + stats.maxHp);
         if (hp <= 0 && entityType == EntityType.enemy) {
             CombatUIController.Instance?.DisableIfDisplayed(this);
-            combatManager.EntityExitTile(parent);
-            combatManager.RemoveEntity(this);
+            serverCombatManager.EntityExitTile(parent);
+            serverCombatManager.RemoveEntity(this);
             Destroy(parent);
         }
     }
@@ -122,7 +122,15 @@ public class CombatEntity : MonoBehaviour
         serverCombatManager = newServerCombatManager;
     }
 
-    public ServerCombatManager ServerCombatManager => serverCombatManager;
+    private ClientCombatManager clientCombatManager;
+
+    public CombatManager GetCombatManager()
+    {
+        //if is client
+        return clientCombatManager;
+        //else
+        return serverCombatManager;
+    }
 }
 
 [Serializable]

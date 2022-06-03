@@ -6,7 +6,7 @@ using TMPro;
 using Mirror;
 using System;
 
-public class ServerCombatManager : NetworkBehaviour
+public class ServerCombatManager : CombatManager
 {
     private SkillList skillList;
 
@@ -23,6 +23,37 @@ public class ServerCombatManager : NetworkBehaviour
 
     private int numActionsLeft;
     private int numMaxActions;
+
+    [Header("Combat grid")]
+    [SerializeField] private Grid combatOverlay;
+    public Tilemap selectGrid
+    {
+        get;
+        private set;
+    }
+
+    public Tilemap moveGrid
+    {
+        get;
+        private set;
+    }
+
+    public Tilemap entityGrid
+    {
+        get;
+        private set;
+    }
+    public Tilemap highlightGrid
+    {
+        get;
+        private set;
+    }
+
+    [Header("Tiles for battle map overlay")]
+    [SerializeField] private RuleTile selectTile;
+    [SerializeField] private RuleTile pointerTile;
+    [SerializeField] private RuleTile entityTile;
+    [SerializeField] private RuleTile highlightTile;
 
     /// <summary>
     /// Sets which entities should be in this combat, and generates the turn order
@@ -91,9 +122,10 @@ public class ServerCombatManager : NetworkBehaviour
             {
                 case CombatEntity.EntityType.player:
                     {
+                        //TODO
                         //Get rid of UI movement stuff
-                        ClearMove();
-                        ClearSelect();
+                        //ClearMove();
+                        //ClearSelect();
                         break;
                     }
                 case CombatEntity.EntityType.enemy:
@@ -126,7 +158,7 @@ public class ServerCombatManager : NetworkBehaviour
 
         turnOrder = newTurnOrder;
 
-        SetTurnOrderUIOnClients();
+        //TODO SetTurnOrderUIOnClients();
 
         ServerOnTurnStarted();
     }
@@ -147,7 +179,7 @@ public class ServerCombatManager : NetworkBehaviour
             case CombatEntity.EntityType.player:
                 {
                     //Enable UI stuff for the player who owns this unit (also draw movement grid)
-                    LocalPlayerOnTurnStarted();
+                    //TODO LocalPlayerOnTurnStarted();
                     break;
                 }
             case CombatEntity.EntityType.enemy:
@@ -444,6 +476,70 @@ public class ServerCombatManager : NetworkBehaviour
     }
     #endregion
 
+    public void RemoveEntity(CombatEntity entity)
+    {
+        combatEntities.Remove(entity);
+
+        switch (entity.team)
+        {
+            case CombatEntity.EntityType.player:
+                {
+                    playerEntities.Remove(entity);
+                    break;
+                }
+            case CombatEntity.EntityType.enemy:
+                {
+                    enemyEntities.Remove(entity);
+                    break;
+                }
+        }
+
+        // Accumilate rewards for defeated enemies
+        if (entity.team == CombatEntity.EntityType.enemy)
+        {
+            //TODO reward.exp += entity.Reward.exp;
+        }
+
+        //Get all entities in the current turn order, and make a new priority queue
+        List<KeyValuePair<float, CombatEntity>> currElements = turnOrder.GetElements();
+        PriorityQueue<CombatEntity> newTurnOrder = new PriorityQueue<CombatEntity>();
+
+        //Add each entity to the new priority queue, but with the updated time till their turn
+        foreach (KeyValuePair<float, CombatEntity> element in currElements)
+        {
+            if (element.Value.Equals(entity))
+            {
+                //don't add this entity back into priorityqueue
+            }
+            else
+            {
+                newTurnOrder.Put(element.Value, element.Key);
+            }
+        }
+
+        turnOrder = newTurnOrder;
+
+        // TODO UpdateTurnIndicatorUI();
+
+        if (currEntity.Equals(entity))
+        {
+            //killed entity's turn, so move to next turn
+            StartNextTurn();
+        }
+
+        var team = combatEntities[0].team;
+        foreach (var centity in combatEntities)
+        {
+            if (team != centity.team)
+                return;
+        }
+        if (team == CombatEntity.EntityType.player)
+        {
+            //EndCombat();
+        }
+    }
+
+
     public void EntityEnterTile(GameObject entity)
     {
         var pos = entityGrid.WorldToCell(entity.transform.position);
@@ -454,5 +550,60 @@ public class ServerCombatManager : NetworkBehaviour
     {
         var pos = entityGrid.WorldToCell(entity.transform.position);
         SetEntityTile(pos, null);
+    }
+
+    private void SetEntityTile(Vector3Int pos, TileBase tile)
+    {
+        entityGrid.SetTile(pos, tile);
+    }
+
+    public EntityReference GetEntityInCell(Vector3Int cell)
+    {
+        if (CellHasEntity(cell))
+        {
+            Collider2D col = Physics2D.OverlapPoint(entityGrid.CellToWorld(cell) + new Vector3(0.5f, 0.5f, 0), LayerMask.GetMask(new string[] { "TileEntity" }));
+            if (col == null)
+                return null;
+            GameObject obj = col.gameObject;
+            return obj.GetComponent<EntityReference>();
+        }
+        return null;
+    }
+
+    public bool CellHasEntity(Vector3Int cell)
+    {
+        return entityGrid.GetTile(cell) != null;
+    }
+
+    public void UseActions(int actionsToUse)
+    {
+        if (currEntity.team == CombatEntity.EntityType.enemy)
+            return;
+
+        //Debug.Log("player used " + actionsToUse + " actions");
+
+        numActionsLeft -= actionsToUse;
+        CombatUIController.Instance?.SetActionUI(numActionsLeft, numMaxActions);
+
+        //ClearMove();
+        //ClearSelect();
+        //ClearHighlight();
+
+        //if (mode == CombatMode.MOVE)
+            //DrawSelect(currEntity.gameObject, numActionsLeft);
+
+        //if (mode == CombatMode.SELECT)
+            //StartCoroutine(DelayDrawHighlight());
+
+        if (numActionsLeft <= 0)
+        {
+            StartNextTurn();
+        }
+    }
+
+    public void IncrementCombo()
+    {
+        //currentCombo++;
+        //CombatUIController.Instance?.SetComboCounter(currentCombo);
     }
 }

@@ -471,6 +471,7 @@ public class Utils
             return entities;
         }
 
+        //[Server]
         public static void UseSimpleDamageSkill(CombatEntity entity, SkillID id, SkillList skillList, List<Vector3Int> targetPositions = null) {
             Skill skill = skillList.Get(id);
 
@@ -481,7 +482,7 @@ public class Utils
             {
                 Vector3 mousePos = Camera.main.ScreenToWorldPoint(InputHandler.Instance.mousePos);
                 Vector3Int entityPos = GameHandler.Instance.currentLevel.WorldToCell(entity.transform.parent.position);
-                targets = Utils.CombatUtil.GetEntitiesInAttack(entityPos, mousePos, entity.CombatManager, skill.target, skill.range, skill.size);
+                targets = CombatUtil.GetEntitiesInAttack(entityPos, mousePos, entity.GetCombatManager(), skill.target, skill.range, skill.size);
 
                 if ((targets == null || targets.Count == 0) && (skill.requiresValidTarget))
                     return;
@@ -492,7 +493,7 @@ public class Utils
 
                 foreach (Vector3Int pos in targetPositions)
                 {
-                    EntityReference entityRef = entity.CombatManager.GetEntityInCell(pos);
+                    EntityReference entityRef = entity.GetCombatManager().GetEntityInCell(pos);
                     if (entityRef != null)
                     {
                         targets.Add(entityRef.entity);
@@ -510,12 +511,12 @@ public class Utils
             foreach(CombatEntity target in targets)
             {
                 if (entity.team == CombatEntity.EntityType.player)
-                    entity.CombatManager.IncrementCombo();
+                    entity.GetCombatManager().IncrementCombo();
                 target.TakeDamage((int)(entity.Stats.damage * multiplier));
             }
 
             //use actions
-            entity.CombatManager.UseActions(skill.actionCost);
+            entity.GetCombatManager().UseActions(skill.actionCost);
         }
 
         public static float CalculateComboMultiplier(CombatEntity entity, Skill skill, SkillID id) {
@@ -524,21 +525,21 @@ public class Utils
 
             List<Skill.Type> types = new List<Skill.Type>(skill.types);
             bool endCombo = true;
-            if (!entity.CombatManager.comboSkillsUsed.Contains(id))
-                foreach (Skill.Type type in entity.CombatManager.lastComboTypes)
+            if (!entity.GetCombatManager().comboSkillsUsed.Contains(id))
+                foreach (Skill.Type type in entity.GetCombatManager().lastComboTypes)
                     if (types.Contains(type)) {
                         endCombo = false;
                         break;
                     }
 
             if (endCombo) {
-                float multiplier = 1 + entity.CombatManager.currentCombo / 10f;
-                entity.CombatManager.CashoutCombo();
+                float multiplier = 1 + entity.GetCombatManager().currentCombo / 10f;
+                entity.GetCombatManager().CashoutCombo();
                 return multiplier;
             } else {
-                entity.CombatManager.lastComboTypes = skill.types;
-                entity.CombatManager.comboSkillsUsed.Add(id);
-                return 1 + Mathf.Min(0.5f, entity.CombatManager.currentCombo / 10f);
+                entity.GetCombatManager().lastComboTypes = skill.types;
+                entity.GetCombatManager().comboSkillsUsed.Add(id);
+                return 1 + Mathf.Min(0.5f, entity.GetCombatManager().currentCombo / 10f);
             }
         }
     }

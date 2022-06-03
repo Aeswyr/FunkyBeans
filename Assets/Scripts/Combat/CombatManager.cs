@@ -7,6 +7,7 @@ using Mirror;
 
 public class CombatManager : NetworkBehaviour
 {
+
     [SerializeField] private SkillList skillList;
     public SkillList SkillList => skillList;
 
@@ -261,7 +262,7 @@ public class CombatManager : NetworkBehaviour
 
         foreach (CombatEntity entity in combatEntities)
         {
-            entity.SetCombatManager(this);
+            //entity.SetServerCombatManager(this);
 
             switch(entity.team)
             {
