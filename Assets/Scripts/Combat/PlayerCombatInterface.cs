@@ -11,7 +11,6 @@ public class PlayerCombatInterface : NetworkBehaviour
     public ServerCombatManager serverCombatManager { get; set; }
 
     [ClientRpc] public void NotifyMovement(Vector3Int pos, bool entering) {
-        Debug.Log("Im walkin here");
         if (clientCombat == null)
             StartCoroutine(MoveAfterClientInit(pos, entering));
         else
@@ -22,7 +21,7 @@ public class PlayerCombatInterface : NetworkBehaviour
         yield return new WaitUntil(() => clientCombat != null);
         clientCombat.SetEntityTile(pos, entering);
     }
-    
+
     [ClientRpc] public void NotifyTurnStart(int actions) {
         if (!isLocalPlayer)
             return;

@@ -54,9 +54,11 @@ public class ClientCombatManager : CombatManager
         mouseCell = GameHandler.Instance.currentLevel.WorldToCell(mousePos);
 
         if (mouseCell != lastMouseCell)
-            if (CellHasEntity(mouseCell))
-                CombatUIController.Instance.SetDisplayedEntity(GetEntityInCell(mouseCell).entity);
-            else
+            if (CellHasEntity(mouseCell)) {
+                EntityReference obj = GetEntityInCell(mouseCell);
+                if (obj != null)
+                    CombatUIController.Instance.SetDisplayedEntity(obj.entity);
+            } else
                 CombatUIController.Instance.DisableDisplay();
 
         
