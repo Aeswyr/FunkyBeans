@@ -59,15 +59,18 @@ public class ClientCombatManager : CombatManager
             else
                 CombatUIController.Instance.DisableDisplay();
 
-
+        
         if (mode == CombatMode.MOVE)
         {
-            DrawSelect(combatInterface.gameObject, actionsLeft);
-            DrawCombatMovement();
+            ClearSelect();
+            if (actionsLeft > 0) {
+                DrawSelect(combatInterface.gameObject, actionsLeft);
+                DrawCombatMovement();
 
-            if (InputHandler.Instance.action.pressed && selectGrid.GetTile(mouseCell) != null)
-            {
-                combatInterface.TryMove(mousePos);
+                if (InputHandler.Instance.action.pressed && selectGrid.GetTile(mouseCell) != null)
+                {
+                    combatInterface.TryMove(mousePos);
+                }
             }
         }
         else if (mode == CombatMode.SELECT)
@@ -87,9 +90,9 @@ public class ClientCombatManager : CombatManager
         lastMouseCell = mouseCell;
     }
 
-    private void DrawCombatMovement()
+    public void DrawCombatMovement( bool force = false)
     {
-        if (mouseCell != lastMouseCell)
+        if (mouseCell != lastMouseCell || force)
         {
             ClearMove();
 

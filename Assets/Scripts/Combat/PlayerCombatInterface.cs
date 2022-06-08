@@ -37,6 +37,7 @@ public class PlayerCombatInterface : NetworkBehaviour
             return;
         if (type == ResourceType.ACTIONS) {
             clientCombat.actionsLeft = clientCombat.actionsLeft - delta;
+            clientCombat.DrawCombatMovement(true);
         }
 
         foreach (var entity in FindObjectsOfType<CombatID>())
