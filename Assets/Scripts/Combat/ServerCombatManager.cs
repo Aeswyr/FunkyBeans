@@ -602,7 +602,7 @@ public class ServerCombatManager : CombatManager
     {
         if (currEntity.team == CombatEntity.EntityType.enemy)
         {
-            Debug.LogError("Useactions should not be called on enemies");
+            Debug.Log("Useactions should not be called on enemies, get outta heeeeeeeeeeeere");
             return;
         }
 
