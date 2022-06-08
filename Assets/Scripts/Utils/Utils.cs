@@ -472,7 +472,8 @@ public class Utils
         }
 
         //[Server]
-        public static void UseSimpleDamageSkill(CombatEntity entity, SkillID id, SkillList skillList, List<Vector3Int> targetPositions = null) {
+        public static void UseSimpleDamageSkill(CombatEntity entity, SkillID id, SkillList skillList, List<Vector3Int> targetPositions = null, Vector3? mousePos = null) 
+        {
             Skill skill = skillList.Get(id);
 
             List<CombatEntity> targets = null;
@@ -480,9 +481,8 @@ public class Utils
             // collect targets
             if(entity.team == CombatEntity.EntityType.player)
             {
-                Vector3 mousePos = Camera.main.ScreenToWorldPoint(InputHandler.Instance.mousePos);
                 Vector3Int entityPos = GameHandler.Instance.currentLevel.WorldToCell(entity.transform.position);
-                targets = GetEntitiesInAttack(entityPos, mousePos, entity.GetServerCombatManager(), skill.target, skill.range, skill.size);
+                targets = GetEntitiesInAttack(entityPos, mousePos.Value, entity.GetServerCombatManager(), skill.target, skill.range, skill.size);
 
                 if ((targets == null || targets.Count == 0) && (skill.requiresValidTarget))
                     return;

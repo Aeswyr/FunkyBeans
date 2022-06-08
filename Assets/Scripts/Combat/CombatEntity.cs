@@ -31,6 +31,7 @@ public class CombatEntity : NetworkBehaviour
     [SerializeField] private List<SkillID> knownSkills;
     public List<SkillID> KnownSkills => knownSkills;
     [SerializeField] private SkillID defendSkill;
+    public SkillID DefendSkill => defendSkill;
     [SerializeField] private Sprite uiSprite;
     public Sprite UISprite => uiSprite;
     [SerializeField] private EntityType entityType;

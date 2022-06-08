@@ -554,24 +554,48 @@ public class ServerCombatManager : CombatManager
 
     public void TryMovePlayer(Vector3 position)
     {
-        throw new NotImplementedException();
+        Vector3Int source = combatOverlay.WorldToCell(currEntity.transform.position);
+        Vector3Int dest = combatOverlay.WorldToCell(position);
+
+        List<Vector3Int> pathToDest = Utils.Pathfinding.GetPath(source, dest, this, true, false);
+        if (pathToDest.Count <= numActionsLeft) 
+        {
+            //have enough actions to move
+
+            //Remove entity from prev tile
+            EntityExitTile(currEntity.gameObject);
+
+            //Move that lad to the destination (might need to wait here, idk if next line will work)
+            currEntity.transform.position = combatOverlay.CellToWorld(pathToDest[0]);
+
+            //Have entity enter new tile
+            EntityEnterTile(currEntity.gameObject);
+
+            //Update remaining actions and check to end turn
+            UseActions(pathToDest.Count);
+        }
+        else
+        {
+            //Bro stop CHEATIN!
+            Debug.LogError("Entity " + currEntity.gameObject.name + " tried to move to invalid location");
+        }
     }
 
     public void TryUseSkill(SkillID skill, Vector3 position)
     {
-        throw new NotImplementedException();
-
         int cost = skillList.Get(skill).actionCost;
         if (numActionsLeft >= cost)
         {
+            currEntity.GetComponent<SkillActions>().mousePos = position;
+
             currEntity.UseSkill(skill);
         }
     }
 
     public void TryUseDefend()
     {
-        //if(numActionsLeft >= 1)
-        currEntity.UseDefense();
+        if(numActionsLeft >= skillList.Get(currEntity.DefendSkill).actionCost)
+            currEntity.UseDefense();
     }
 
     public void UseActions(int actionsToUse)
