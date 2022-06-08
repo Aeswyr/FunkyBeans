@@ -62,7 +62,7 @@ public class ClientCombatManager : CombatManager
         {
             DrawCombatMovement();
 
-            if (InputHandler.Instance.action.pressed)
+            if (InputHandler.Instance.action.pressed && selectGrid.GetTile(mouseCell) != null)
             {
                 combatInterface.TryMove(mousePos);
             }

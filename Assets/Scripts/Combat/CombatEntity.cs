@@ -64,10 +64,8 @@ public class CombatEntity : NetworkBehaviour
         mp = stats.maxMp;
     }
 
-    [Client]
-    public void UpdateResource(ResourceType type, int amt)
+    [Client] public void UpdateResource(ResourceType type, int amt)
     {
-
         TextMeshPro tm;
         switch (type)
         {
