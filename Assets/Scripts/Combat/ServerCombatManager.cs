@@ -33,9 +33,13 @@ public class ServerCombatManager : CombatManager
     public void SetCombatEntities(List<CombatEntity> newEntities)
     {
         combatEntities = newEntities;
-        foreach (var entity in combatEntities)
+        foreach (var entity in combatEntities) {
             if (entity.team == CombatEntity.EntityType.player)
                 CombatUIController.Instance?.RegisterNewResource(entity);
+
+            Utils.GridUtil.SnapToLevelGrid(entity.gameObject, this);
+            EntityEnterTile(entity.gameObject);
+        }
         GenerateTurnOrder();
     }
 
@@ -633,14 +637,14 @@ public class ServerCombatManager : CombatManager
     }
 
     public void NotifyResourceChange(long id, ResourceType type, int delta) {
-        foreach (CombatEntity entity in playerEntities)
-            if (TryGetPlayerCombatInterface(out var player))
+        foreach (CombatEntity entity in combatEntities)
+            if (entity.transform.TryGetComponent(out PlayerCombatInterface player))
                 player.NotifyResourceChange(id, type, delta);
     }
 
     public void NotifyMovement(Vector3Int pos, bool entering) {
-        foreach (CombatEntity entity in playerEntities)
-            if (TryGetPlayerCombatInterface(out var player))
+        foreach (CombatEntity entity in combatEntities)
+            if (entity.transform.TryGetComponent(out PlayerCombatInterface player))
                 player.NotifyMovement(pos, entering);
     }
 

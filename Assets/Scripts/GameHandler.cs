@@ -85,8 +85,6 @@ public class GameHandler : NetworkSingleton<GameHandler>
             GameObject hitEntity = hit.collider.transform.parent.gameObject;
             if (hitEntity.TryGetComponent(out PlayerCombatInterface player))
                 player.serverCombatManager = currentCombat;
-            Utils.GridUtil.SnapToLevelGrid(hitEntity, currentCombat);
-            currentCombat.EntityEnterTile(hitEntity);
         }
 
         currentCombat.SetCombatEntities(entities);

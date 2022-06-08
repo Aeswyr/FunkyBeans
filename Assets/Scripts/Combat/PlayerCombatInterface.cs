@@ -11,6 +11,7 @@ public class PlayerCombatInterface : NetworkBehaviour
     public ServerCombatManager serverCombatManager { get; set; }
 
     [ClientRpc] public void NotifyMovement(Vector3Int pos, bool entering) {
+        Debug.Log("Im walkin here");
         clientCombat.SetEntityTile(pos, entering);
     }
     [ClientRpc] public void NotifyTurnStart(int actions) {

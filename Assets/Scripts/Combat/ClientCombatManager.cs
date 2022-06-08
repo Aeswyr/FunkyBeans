@@ -126,7 +126,6 @@ public class ClientCombatManager : CombatManager
         bfsDist.Clear();
 
         Vector3Int start = GameHandler.Instance.currentLevel.WorldToCell(src.transform.position);
-        Debug.Log(start);
 
         bfs.Enqueue(start);
         bfsDist[start] = 0;
