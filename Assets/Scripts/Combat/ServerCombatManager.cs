@@ -415,7 +415,7 @@ public class ServerCombatManager : CombatManager
 
     private float DefendHeuristic()
     {
-        return 0.5f;
+        return 0.00005f;
     }
 
     private float AttackHeuristic(List<Vector3Int> attackPositions, CombatEntity attackingEntity, Skill skillUsing)
