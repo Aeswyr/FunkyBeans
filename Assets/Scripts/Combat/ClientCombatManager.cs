@@ -28,6 +28,8 @@ public class ClientCombatManager : CombatManager
     private TextMeshPro moveText;
 
     public PlayerCombatInterface combatInterface { get; set; }
+    public int actionsLeft {get {return numActionsLeft;} set {numActionsLeft = value;}}
+    public int maxActions {get {return numMaxActions;} set {numMaxActions = value;}}
     public bool isTurn { get; set; }
     private SkillID activeSkill;
     private CombatMode mode = CombatMode.MOVE;
@@ -60,6 +62,7 @@ public class ClientCombatManager : CombatManager
 
         if (mode == CombatMode.MOVE)
         {
+            DrawSelect(combatInterface.gameObject, actionsLeft);
             DrawCombatMovement();
 
             if (InputHandler.Instance.action.pressed && selectGrid.GetTile(mouseCell) != null)
@@ -120,6 +123,7 @@ public class ClientCombatManager : CombatManager
         bfsDist.Clear();
 
         Vector3Int start = GameHandler.Instance.currentLevel.WorldToCell(src.transform.position);
+        Debug.Log(start);
 
         bfs.Enqueue(start);
         bfsDist[start] = 0;
@@ -182,7 +186,7 @@ public class ClientCombatManager : CombatManager
     {
         this.mode = CombatMode.MOVE;
         ClearHighlight();
-        DrawSelect(combatInterface.gameObject, numActionsLeft);
+        DrawSelect(combatInterface.gameObject, actionsLeft);
     }
 
     public void SetDefendMode()

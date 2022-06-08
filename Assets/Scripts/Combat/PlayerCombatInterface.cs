@@ -13,10 +13,12 @@ public class PlayerCombatInterface : NetworkBehaviour
     [ClientRpc] public void NotifyMovement(Vector3Int pos, bool entering) {
         clientCombat.SetEntityTile(pos, entering);
     }
-    [ClientRpc] public void NotifyTurnStart() {
+    [ClientRpc] public void NotifyTurnStart(int actions) {
         if (!isLocalPlayer)
             return;
         clientCombat.isTurn = true;
+        clientCombat.actionsLeft = actions;
+        clientCombat.maxActions = actions;
     }
 
     [ClientRpc] public void NotifyTurnEnd() {
@@ -33,6 +35,9 @@ public class PlayerCombatInterface : NetworkBehaviour
     [ClientRpc] public void NotifyResourceChange(long id, ResourceType type, int delta) {
         if (!isLocalPlayer)
             return;
+        if (type == ResourceType.ACTIONS) {
+            clientCombat.actionsLeft = clientCombat.actionsLeft - delta;
+        }
 
         foreach (var entity in FindObjectsOfType<CombatID>())
             if (entity.CID == id)

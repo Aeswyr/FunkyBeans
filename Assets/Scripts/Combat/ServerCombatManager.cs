@@ -154,7 +154,7 @@ public class ServerCombatManager : CombatManager
                     //TODO LocalPlayerOnTurnStarted();
                     if (TryGetPlayerCombatInterface(out var player))
                     {
-                        player.NotifyTurnStart();
+                        player.NotifyTurnStart(numMaxActions);
                     }
 
                     break;
