@@ -589,6 +589,9 @@ public class ServerCombatManager : CombatManager
 
     public void TryUseSkill(SkillID skill, Vector3 position)
     {
+        if (!currEntity.KnownSkills.Contains(skill))
+            return;
+
         int cost = skillList.Get(skill).actionCost;
         if (numActionsLeft >= cost)
         {
