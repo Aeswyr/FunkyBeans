@@ -63,10 +63,13 @@ public class CombatEntity : NetworkBehaviour
         mp = stats.maxMp;
     }
 
-    [Client] public void UpdateResource(ResourceType type, int amt) {
+    [Client]
+    public void UpdateResource(ResourceType type, int amt)
+    {
 
         TextMeshPro tm;
-        switch (type) {
+        switch (type)
+        {
             case ResourceType.HEALTH:
                 tm = Instantiate(damageNumberPrefab, transform.position, Quaternion.identity).GetComponent<TextMeshPro>();
                 tm.text = amt.ToString();
@@ -84,12 +87,13 @@ public class CombatEntity : NetworkBehaviour
                 break;
             default:
                 break;
-
-            if (entityType == EntityType.player)
-                CombatUIController.Instance.UpdatePlayerResource(this);
-            else
-                CombatUIController.Instance.UpdateDisplayedEntity();
         }
+
+        if (entityType == EntityType.player)
+            CombatUIController.Instance.UpdatePlayerResource(this);
+        else
+            CombatUIController.Instance.UpdateDisplayedEntity();
+
     }
 
     [Server] public void TakeDamage(int dmg)
