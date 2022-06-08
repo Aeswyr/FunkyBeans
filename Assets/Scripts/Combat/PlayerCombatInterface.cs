@@ -34,6 +34,8 @@ public class PlayerCombatInterface : NetworkBehaviour
         if (!isLocalPlayer)
             return;
         clientCombat.isTurn = false;
+        clientCombat.ClearMove();
+        clientCombat.ClearSelect();
     }
 
     [ClientRpc] public void NotifyTurnOrder() {
