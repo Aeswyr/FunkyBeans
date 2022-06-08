@@ -562,7 +562,7 @@ public class ServerCombatManager : CombatManager
         Vector3Int dest = combatOverlay.WorldToCell(position);
 
         List<Vector3Int> pathToDest = Utils.Pathfinding.GetPath(source, dest, this, true, false);
-        if (pathToDest.Count <= numActionsLeft) 
+        if ((pathToDest.Count <= numActionsLeft) && (pathToDest.Count > 0))
         {
             //have enough actions to move
 
