@@ -69,7 +69,7 @@ MonoBehaviour:
   combatOverlay: {fileID: 5071642083883760748}
   entityTile: {fileID: 11400000, guid: 0339acc570e7fdd49aa4a52bedd43f23, type: 2}
   speedMultiplier: 50
-  timeToShowOnBar: 0
+  timeToShowOnBar: 5
   currentCombo: 0
   lastComboTypes: 
   comboSkillsUsed: 

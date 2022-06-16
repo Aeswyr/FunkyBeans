@@ -105,10 +105,33 @@ public class CombatUIController : Singleton<CombatUIController>
     // Turn order management
     [Header("Turn Order")]
     [SerializeField] private GameObject turnOrderCanvas;
-    public GameObject TurnOrderCanvas => turnOrderCanvas;
     [SerializeField] private Image currEntityImage;
     [SerializeField] private Transform leftBar;
     [SerializeField] private Transform rightBar;
+    [SerializeField] private GameObject entityTurnIndicatorPrefab;
+
+    private List<EntityTurnIndicator> turnIndicators = new List<EntityTurnIndicator>();
+
+    public void UpdateTurnIndicatorUI(List<CombatEntity> combatEntities, List<float> positions)
+    {
+        SetCurrEntitySprite(combatEntities[0].UISprite);
+
+        //delete all current turn indicators
+        while (turnIndicators.Count > 0)
+        {
+            Destroy(turnIndicators[0].gameObject);
+            turnIndicators.RemoveAt(0);
+        }
+
+        //create and set position for every entity in turnOrder
+        for(int i = 1; i<combatEntities.Count; i++)
+        {
+            EntityTurnIndicator newIndicator = Instantiate(entityTurnIndicatorPrefab, turnOrderCanvas.transform).GetComponent<EntityTurnIndicator>();
+            turnIndicators.Add(newIndicator);
+            newIndicator.SetSprite(combatEntities[i].UISprite);
+            PlaceTurnEntity(newIndicator.transform, positions[i]);
+        }
+    }
 
     public void PlaceTurnEntity(Transform obj, float percentOnBar)
     {
@@ -121,7 +144,6 @@ public class CombatUIController : Singleton<CombatUIController>
     {
         currEntityImage.sprite = spr;
     }
-
 
     // Action Counter
     [Header("Action Display")]

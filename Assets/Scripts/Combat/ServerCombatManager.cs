@@ -110,6 +110,8 @@ public class ServerCombatManager : CombatManager
             }
         }
 
+        NotifyTurnOrder(turnOrder);
+
         //find how much to shift the current "time" and set new currEneity
         float timeChange = turnOrder.GetLowestPriority();
 
@@ -132,8 +134,6 @@ public class ServerCombatManager : CombatManager
         newTurnOrder.Put(currEntity, (speedMultiplier / currEntity.Stats.speed) * numCopies);
 
         turnOrder = newTurnOrder;
-
-        //TODO SetTurnOrderUIOnClients();
 
         ServerOnTurnStarted();
     }
@@ -645,6 +645,23 @@ public class ServerCombatManager : CombatManager
     public void EndCombat()
     {
         GameHandler.Instance.ExitCombat(id);
+    }
+
+    public void NotifyTurnOrder(PriorityQueue<CombatEntity> turnOrder)
+    {
+        List<long> entityIDs = new List<long>();
+        List<float> positions = new List<float>();
+
+        List<KeyValuePair<float, CombatEntity>> turnElements = turnOrder.GetElements();
+        for(int i = 0; i< turnElements.Count; i++)
+        {
+            entityIDs.Add(turnElements[i].Value.GetComponent<CombatID>().CID);
+            positions.Add(turnElements[i].Key/timeToShowOnBar);
+        }
+
+        foreach (CombatEntity entity in combatEntities)
+            if (entity.transform.TryGetComponent(out PlayerCombatInterface player))
+                player.NotifyTurnOrder(entityIDs, positions);
     }
 
     public void NotifyResourceChange(long id, ResourceType type, int delta) {

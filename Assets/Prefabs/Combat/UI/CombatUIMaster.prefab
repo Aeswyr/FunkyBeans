@@ -64,6 +64,7 @@ MonoBehaviour:
   currEntityImage: {fileID: 2271169191269329775}
   leftBar: {fileID: 2271169191745919857}
   rightBar: {fileID: 2271169192055450172}
+  entityTurnIndicatorPrefab: {fileID: 350310851504152826, guid: 11c80f3b1ce278541ab2285d4e0f8163, type: 3}
   textRemaining: {fileID: 1258855278981213522}
   textMax: {fileID: 486586546088713820}
   enemyInfo: {fileID: 5120338021321453396}

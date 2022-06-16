@@ -48,9 +48,27 @@ public class PlayerCombatInterface : NetworkBehaviour
         clientCombat.ClearHighlight();
     }
 
-    [ClientRpc] public void NotifyTurnOrder() {
+    [ClientRpc]
+    public void NotifyTurnOrder(List<long> entityIDs, List<float> positions)
+    {
         if (!isLocalPlayer)
             return;
+
+        List<CombatEntity> combatEntities = new List<CombatEntity>();
+
+        for (int i = 0; i < entityIDs.Count; i++)
+        {
+            foreach (var entity in FindObjectsOfType<CombatID>())
+            {
+                if (entity.CID == entityIDs[i])
+                {
+                    combatEntities.Add(entity.transform.GetComponent<CombatEntity>());
+                    break;
+                }
+            }
+        }
+
+        CombatUIController.Instance.UpdateTurnIndicatorUI(combatEntities, positions);
     }
 
     [ClientRpc] public void NotifyResourceChange(long id, ResourceType type, int delta) {
