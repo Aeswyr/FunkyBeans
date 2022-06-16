@@ -452,10 +452,12 @@ public class Utils
         public static List<CombatEntity> GetEntitiesInAttack(Vector3Int sourcePos, Vector3 destPos, CombatManager combatManager, Skill.Target targetType, int range, int size)
         {
             List<Vector3Int> attackTiles = GetTilesInAttack(sourcePos, destPos, combatManager, targetType, range, size);
-            if (attackTiles == null)
+            if (attackTiles == null) //null means out of range
                 return null;
 
             List<CombatEntity> entities = new List<CombatEntity>();
+            if (attackTiles.Count == 0) //this means attack is valid (in-range) but no entities will be hit
+                return entities;
 
             foreach (Vector3Int tile in attackTiles)
             {
@@ -472,19 +474,19 @@ public class Utils
         }
 
         //[Server]
-        public static void UseSimpleDamageSkill(CombatEntity entity, SkillID id, SkillList skillList, List<Vector3Int> targetPositions = null, Vector3? mousePos = null) 
+        public static void UseSimpleDamageSkill(CombatEntity entity, SkillID id, SkillList skillList, List<Vector3Int> targetPositions = null, Vector3? mousePos = null)
         {
             Skill skill = skillList.Get(id);
 
             List<CombatEntity> targets = null;
 
             // collect targets
-            if(entity.team == CombatEntity.EntityType.player)
+            if (entity.team == CombatEntity.EntityType.player)
             {
                 Vector3Int entityPos = GameHandler.Instance.currentLevel.WorldToCell(entity.transform.position);
                 targets = GetEntitiesInAttack(entityPos, mousePos.Value, entity.GetServerCombatManager(), skill.target, skill.range, skill.size);
 
-                if ((targets == null || targets.Count == 0) && (skill.requiresValidTarget))
+                if (targets == null || (targets.Count == 0 && skill.requiresValidTarget))
                     return;
             }
             else
@@ -503,12 +505,12 @@ public class Utils
 
             if (!entity.TrySpendMP(skill.manaCost))
                 return;
-            
+
             //calculate combo multiplier
             float multiplier = CalculateComboMultiplier(entity, skill, id);
 
             // perform action on targets
-            foreach(CombatEntity target in targets)
+            foreach (CombatEntity target in targets)
             {
                 if (entity.team == CombatEntity.EntityType.player)
                     entity.GetServerCombatManager().IncrementCombo();
