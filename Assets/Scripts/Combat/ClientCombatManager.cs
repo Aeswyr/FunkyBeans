@@ -260,6 +260,10 @@ public class ClientCombatManager : CombatManager
             entityGrid.SetTile(pos, null);
     }
 
+    public void TryFlee() {
+        combatInterface.TryFlee();
+    }
+
     private enum CombatMode
     {
         NONE, MOVE, SELECT, GUARD,

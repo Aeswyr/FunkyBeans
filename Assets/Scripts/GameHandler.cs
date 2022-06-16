@@ -96,15 +96,15 @@ public class GameHandler : NetworkSingleton<GameHandler>
             if (entity.transform.TryGetComponent(out PlayerController player))
                 player.ExitCombat(new CombatReward {exp = 5});
 
-        /*string output = "\nDictionary:";
+        string output = "\nDictionary:";
         foreach (var val in activeCombats)
             output += $"\n{val.Key.ToString()}, {val.Value.ToString()}";
         Debug.Log($"Searching for combat manager with ID {id} {output}");
         if (activeCombats.ContainsKey(id)) {
             Debug.Log($"Trying to destroy combat manager with ID {id}");
-            NetworkServer.Destroy(activeCombats[id].gameObject);
+            Destroy(activeCombats[id].gameObject);
             activeCombats.Remove(id);
-        }*/
+        }
     }
 
 

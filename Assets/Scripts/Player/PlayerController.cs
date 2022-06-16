@@ -30,9 +30,6 @@ public class PlayerController : NetworkBehaviour
         if (InputHandler.Instance.action.pressed)
             if (freeMove)
                 ServerAttack(Camera.main.ScreenToWorldPoint(InputHandler.Instance.mousePos));
-
-        if (InputHandler.Instance.back.pressed)
-            GameHandler.Instance.ExitCombat(0);
     }
 
     [Command] public void ServerAttack(Vector3 mousePos) {
@@ -97,7 +94,7 @@ public class PlayerController : NetworkBehaviour
 
         GameHandler.Instance.DisableCombatObjects();
 
-        Destroy(combatInterface.clientCombat);
+        Destroy(combatInterface.clientCombat.gameObject);
     }
 
     public bool IsInCombat() {

@@ -78,4 +78,8 @@ public class PlayerCombatInterface : NetworkBehaviour
     [Command] public void TryDefend() {
         serverCombatManager.TryUseDefend(GetComponent<CombatEntity>());
     }
+
+    [Command] public void TryFlee() {
+        serverCombatManager.EndCombat();
+    }
 }

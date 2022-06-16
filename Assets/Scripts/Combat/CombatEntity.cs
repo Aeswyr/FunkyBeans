@@ -122,6 +122,8 @@ public class CombatEntity : NetworkBehaviour
     }
 
     [Server] public bool TrySpendMP(int val) {
+        if (val == 0)
+            return true;
         if (mp < val)
             return false;
         mp -= val;

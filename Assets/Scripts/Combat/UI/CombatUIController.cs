@@ -80,7 +80,7 @@ public class CombatUIController : Singleton<CombatUIController>
     public void FleePressed() {
         if (!manager.IsPlayerTurn())
             return;
-        GameHandler.Instance.ExitCombat(0); //TODO make id work
+        manager.TryFlee();
     }
 
     public void SetCombatManager(ClientCombatManager manager) {
