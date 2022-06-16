@@ -48,14 +48,14 @@ public class GameHandler : NetworkSingleton<GameHandler>
             Destroy(txt);
         textList.Clear();
     }
-    List<CombatEntity> entities;
+    
     [Server] public void EnterCombat(Vector3 position) { 
         Debug.Log("start battle!");
 
         var results = new List<RaycastHit2D>();
         Physics2D.CircleCast(position, 5, Vector2.right, filter, results, 0);
 
-        entities = new List<CombatEntity>();
+        List<CombatEntity> entities = new List<CombatEntity>();
 
         long id = 0;
         foreach (var hit in results) {
@@ -91,7 +91,7 @@ public class GameHandler : NetworkSingleton<GameHandler>
         activeCombats[id] = currentCombat;
     }
 
-    [Command(requiresAuthority = false)] public void ExitCombat(long id) {
+    [Command(requiresAuthority = false)] public void ExitCombat(long id, List<CombatEntity> entities) {
         foreach (var entity in entities)
             if (entity.transform.TryGetComponent(out PlayerController player))
                 player.ExitCombat(new CombatReward {exp = 5});

@@ -646,7 +646,7 @@ public class ServerCombatManager : CombatManager
 
     public void EndCombat()
     {
-        GameHandler.Instance.ExitCombat(id);
+        GameHandler.Instance.ExitCombat(id, combatEntities);
     }
 
     public void NotifyTurnOrder(PriorityQueue<CombatEntity> turnOrder)
