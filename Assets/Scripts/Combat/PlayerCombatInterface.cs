@@ -11,10 +11,18 @@ public class PlayerCombatInterface : NetworkBehaviour
     public ServerCombatManager serverCombatManager { get; set; }
 
     [ClientRpc] public void NotifyMovement(Vector3Int pos, bool entering) {
+        if (!isLocalPlayer)
+            return;
         if (clientCombat == null)
             StartCoroutine(MoveAfterClientInit(pos, entering));
         else
             clientCombat.SetEntityTile(pos, entering);
+    }
+
+    [ClientRpc] public void NotifyMovePlayer(Vector3 pos) {
+        if (!isLocalPlayer)
+            return;
+        transform.position = pos;
     }
 
     private IEnumerator MoveAfterClientInit(Vector3Int pos, bool entering) {

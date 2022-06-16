@@ -33,7 +33,6 @@ public class PlayerController : NetworkBehaviour
 
         if (InputHandler.Instance.back.pressed)
             GameHandler.Instance.ExitCombat(0);
-
     }
 
     [Command] public void ServerAttack(Vector3 mousePos) {

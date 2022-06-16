@@ -570,9 +570,11 @@ public class ServerCombatManager : CombatManager
             EntityExitTile(currEntity.gameObject);
 
             //Move that lad to the destination (might need to wait here, idk if next line will work)
-            currEntity.transform.position = combatOverlay.CellToWorld(pathToDest[0]);
-
-            Utils.GridUtil.SnapToLevelGrid(currEntity.gameObject, this);
+            if (TryGetPlayerCombatInterface(out var combatInterface)) {
+                currEntity.transform.position = combatOverlay.CellToWorld(pathToDest[0]);
+                Utils.GridUtil.SnapToLevelGrid(currEntity.gameObject, this);
+                combatInterface.NotifyMovePlayer(currEntity.transform.position);
+            }
 
             //Have entity enter new tile
             EntityEnterTile(currEntity.gameObject);
