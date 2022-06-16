@@ -38,6 +38,8 @@ public class ServerCombatManager : CombatManager
                 CombatUIController.Instance?.RegisterNewResource(entity);
 
             Utils.GridUtil.SnapToLevelGrid(entity.gameObject, this);
+            if (TryGetPlayerCombatInterface(out var combatInterface))
+                combatInterface.NotifyMovePlayer(entity.transform.position);
             EntityEnterTile(entity.gameObject);
         }
         GenerateTurnOrder();
