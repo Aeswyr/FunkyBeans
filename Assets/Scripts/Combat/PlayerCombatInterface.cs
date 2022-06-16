@@ -36,6 +36,7 @@ public class PlayerCombatInterface : NetworkBehaviour
         clientCombat.isTurn = true;
         clientCombat.actionsLeft = actions;
         clientCombat.maxActions = actions;
+        CombatUIController.Instance.SetActionUI(clientCombat.actionsLeft, clientCombat.maxActions);
     }
 
     [ClientRpc] public void NotifyTurnEnd() {
@@ -57,6 +58,7 @@ public class PlayerCombatInterface : NetworkBehaviour
         if (type == ResourceType.ACTIONS) {
             clientCombat.actionsLeft = clientCombat.actionsLeft - delta;
             clientCombat.DrawCombatMovement(true);
+            CombatUIController.Instance.SetActionUI(clientCombat.actionsLeft, clientCombat.maxActions);
         }
 
         foreach (var entity in FindObjectsOfType<CombatID>())
