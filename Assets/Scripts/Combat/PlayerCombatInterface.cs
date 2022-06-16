@@ -45,6 +45,7 @@ public class PlayerCombatInterface : NetworkBehaviour
         clientCombat.isTurn = false;
         clientCombat.ClearMove();
         clientCombat.ClearSelect();
+        clientCombat.ClearHighlight();
     }
 
     [ClientRpc] public void NotifyTurnOrder() {
@@ -67,14 +68,14 @@ public class PlayerCombatInterface : NetworkBehaviour
     }
 
     [Command] public void TryUseSkill(SkillID skill, Vector3 position) {
-        serverCombatManager.TryUseSkill(skill, position);
+        serverCombatManager.TryUseSkill(skill, position, GetComponent<CombatEntity>());
     }
 
     [Command] public void TryMove(Vector3 position) {
-        serverCombatManager.TryMovePlayer(position);
+        serverCombatManager.TryMovePlayer(position, GetComponent<CombatEntity>());
     }
 
     [Command] public void TryDefend() {
-        serverCombatManager.TryUseDefend();
+        serverCombatManager.TryUseDefend(GetComponent<CombatEntity>());
     }
 }

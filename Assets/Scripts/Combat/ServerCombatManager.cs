@@ -556,8 +556,10 @@ public class ServerCombatManager : CombatManager
         CombatUIController.Instance?.SetComboCounter(currentCombo);
     }
 
-    public void TryMovePlayer(Vector3 position)
+    public void TryMovePlayer(Vector3 position, CombatEntity entity)
     {
+        if (entity != currEntity)
+            return;
         Vector3Int source = combatOverlay.WorldToCell(currEntity.transform.position);
         Vector3Int dest = combatOverlay.WorldToCell(position);
 
@@ -589,8 +591,10 @@ public class ServerCombatManager : CombatManager
         }
     }
 
-    public void TryUseSkill(SkillID skill, Vector3 position)
+    public void TryUseSkill(SkillID skill, Vector3 position, CombatEntity entity)
     {
+        if (entity != currEntity)
+            return;
         if (!currEntity.KnownSkills.Contains(skill))
             return;
 
@@ -603,8 +607,10 @@ public class ServerCombatManager : CombatManager
         }
     }
 
-    public void TryUseDefend()
+    public void TryUseDefend(CombatEntity entity)
     {
+        if (entity != currEntity)
+            return;
         if(numActionsLeft >= skillList.Get(currEntity.DefendSkill).actionCost)
             currEntity.UseDefense();
     }
