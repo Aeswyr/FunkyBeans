@@ -83,6 +83,12 @@ public class ServerCombatManager : CombatManager
             }
         }
 
+        //Set up threat arrays for enemies
+        foreach (CombatEntity entity in enemyEntities)
+        {
+            entity.GenerateThreatArray(playerEntities);
+        }
+
         StartNextTurn();
     }
 
@@ -174,6 +180,22 @@ public class ServerCombatManager : CombatManager
         }
     }
 
+    List<Tuple<CombatEntity, float>> threatArr;
+
+    private float GetThreatValueOfEntity(CombatEntity entity)
+    {
+        for(int i = 0; i<threatArr.Count; i++)
+        {
+            if(threatArr[i].Item1.Equals(entity))
+            {
+                return threatArr[i].Item2;
+            }
+        }
+
+        Debug.LogError("Did not find entity " + entity.gameObject.name + " in threatArray");
+        return 0;
+    }
+
     private IEnumerator CalculateEnemyMove()
     {
         yield return new WaitForSeconds(0.25f);
@@ -181,6 +203,7 @@ public class ServerCombatManager : CombatManager
         Vector3Int posBeforeMove = GameHandler.Instance.currentLevel.WorldToCell(currEntity.transform.position);
 
         //Debug.Log("Pos at start of turn: " + posBeforeMove);
+        threatArr = currEntity.GetThreatArray();
 
         List<MoveHeuristic> movesToDo = GetBestMove(posBeforeMove, numActionsLeft, currEntity);
 
@@ -231,6 +254,8 @@ public class ServerCombatManager : CombatManager
         }
 
         yield return new WaitForSeconds(0.75f);
+
+        threatArr = null;
 
         Debug.Log("Turn over");
 
@@ -397,12 +422,14 @@ public class ServerCombatManager : CombatManager
     private float GetPositionHeuristic(Vector3Int position)
     {
         float dist = 0;
-        foreach (CombatEntity playerEntity in playerEntities)
+        for (int i = 0; i < threatArr.Count; i++)
         {
-            dist += Vector3.Distance(position, playerEntity.transform.position);
+            CombatEntity entity = threatArr[i].Item1;
+            float threat = threatArr[i].Item2;
+            dist += threat / Vector3.Distance(position, entity.transform.position);
         }
 
-        return 10f / dist;
+        return dist;
     }
 
     private float GetScoreFromMoveHeuristicList(List<MoveHeuristic> moves)
@@ -437,10 +464,12 @@ public class ServerCombatManager : CombatManager
                 {
                     case CombatEntity.EntityType.player:
                         {
-                            score += dmgToDeal * 10;
+                            float threat = GetThreatValueOfEntity(hitEntity);
+
+                            score += dmgToDeal * 10 * threat;
 
                             if (hitEntity.HP <= dmgToDeal)
-                                score += 5000;
+                                score += 5000 * threat;
                             break;
                         }
                     case CombatEntity.EntityType.enemy:

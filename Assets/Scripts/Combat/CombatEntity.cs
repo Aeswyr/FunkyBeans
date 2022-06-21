@@ -98,10 +98,8 @@ public class CombatEntity : NetworkBehaviour
 
     }
 
-    [Server] public void TakeDamage(int dmg)
+    [Server] public void TakeDamage(CombatEntity attacker, int dmg)
     {
-
-
         if (armor > 0) {
             armor -= dmg;
             if (armor < 0) {
@@ -116,11 +114,29 @@ public class CombatEntity : NetworkBehaviour
 
         GameObject parent = transform.gameObject;
         Debug.Log("Entity " + parent.name + " took " + dmg + " points of damage, new hp: " + hp + "/" + stats.maxHp);
-        if (hp <= 0 && entityType == EntityType.enemy) {
-            CombatUIController.Instance?.DisableIfDisplayed(this);
-            serverCombatManager.EntityExitTile(parent);
-            serverCombatManager.RemoveEntity(this);
-            Destroy(parent);
+        if (hp <= 0)
+        {
+            switch(entityType)
+            {
+                case EntityType.enemy:
+                    {
+                        CombatUIController.Instance?.DisableIfDisplayed(this);
+                        serverCombatManager.EntityExitTile(parent);
+                        serverCombatManager.RemoveEntity(this);
+                        Destroy(parent);
+                        break;
+                    }
+                case EntityType.player:
+                    {
+                        //TODO: remove player from all enemy's threatArray
+                        break;
+                    }
+            }
+        }
+        else
+        {
+            if(entityType == EntityType.enemy)
+                AddThreatToEntity(attacker, dmg);
         }
     }
 
@@ -159,6 +175,75 @@ public class CombatEntity : NetworkBehaviour
     public ServerCombatManager GetServerCombatManager()
     {
         return serverCombatManager;
+    }
+
+    private List<Tuple<CombatEntity, float>> modifiedThreatValues = new List<Tuple<CombatEntity, float>>();
+
+    [Server]
+    public void GenerateThreatArray(List<CombatEntity> entities)
+    {
+        foreach(CombatEntity entity in entities)
+        {
+            AddEntityToThreatArray(entity);
+        }
+    }
+    [Server]
+    public void AddEntityToThreatArray(CombatEntity entity)
+    {
+        for (int i = 0; i < modifiedThreatValues.Count; i++)
+        {
+            if (modifiedThreatValues[i].Item1.Equals(entity))
+            {
+                //Don't add duplicate
+                Debug.LogError("Tried to add duplicate entity " + entity.gameObject.name + " to threatArray of entity " + gameObject.name);
+                return;
+            }
+        }
+
+        modifiedThreatValues.Add(new Tuple<CombatEntity, float>(entity, 0));
+    }
+
+    [Server]
+    public void RemoveEntityFromThreatArray(CombatEntity entity)
+    {
+        for (int i = 0; i < modifiedThreatValues.Count; i++)
+        {
+            if (modifiedThreatValues[i].Item1.Equals(entity))
+            {
+                //Remove from array
+                modifiedThreatValues.RemoveAt(i);
+                return;
+            }
+        }
+    }
+
+    [Server]
+    public void AddThreatToEntity(CombatEntity entity, float threatToAdd)
+    {
+        for(int i = 0; i< modifiedThreatValues.Count; i++)
+        {
+            if (modifiedThreatValues[i].Item1.Equals(entity))
+            {
+                //Found the entity to add threat value to
+                modifiedThreatValues[i] = new Tuple<CombatEntity, float>(entity, threatToAdd);
+                return;
+            }
+        }
+
+        Debug.LogError("Did not find entity " + entity.gameObject.name + " in threatArray from entity " + gameObject.name);
+    }
+
+    public List<Tuple<CombatEntity, float>> GetThreatArray()
+    {
+        List<Tuple<CombatEntity, float>> arrToReturn = new List<Tuple<CombatEntity, float>>();
+        for (int i = 0; i < modifiedThreatValues.Count; i++)
+        {
+            CombatEntity currEntity = modifiedThreatValues[i].Item1;
+            float threat = modifiedThreatValues[i].Item2 + currEntity.stats.threat;
+            arrToReturn.Add(new Tuple<CombatEntity, float>(currEntity, threat));
+        }
+
+        return arrToReturn;
     }
 }
 

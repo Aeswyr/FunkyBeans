@@ -514,7 +514,7 @@ public class Utils
             {
                 if (entity.team == CombatEntity.EntityType.player)
                     entity.GetServerCombatManager().IncrementCombo();
-                target.TakeDamage((int)(entity.Stats.damage * multiplier));
+                target.TakeDamage(entity, (int)(entity.Stats.damage * multiplier));
             }
 
             //use actions
