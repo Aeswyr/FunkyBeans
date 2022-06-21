@@ -359,12 +359,15 @@ MonoBehaviour:
   entityName: Player
   description: It's you!
   stats:
-    maxHp: 10
-    maxMp: 6
-    damage: 3
-    speed: 23
-    actions: 5
-    defense: 5
+    raw:
+      maxHp: 10
+      maxMp: 6
+      threat: 5
+      damage: 3
+      speed: 23
+      actions: 5
+      defense: 5
+      dodge: 2
   reward:
     exp: 0
   knownSkills: 01000000020000000400000005000000

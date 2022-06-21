@@ -168,11 +168,8 @@ public class CombatUIController : Singleton<CombatUIController>
     public void SetDisplayedEntity(CombatEntity entity) {
         enemyInfo.SetActive(true);
         displayedEntity = entity;
-        resource.SetHP(entity.HP, entity.Stats.maxHp);
-        resource.SetMP(entity.MP, entity.Stats.maxMp);
-        resource.SetArmor(entity.Armor);
-        resource.SetNametag(entity.EntityName);
-        description.text = entity.Description;
+        
+        UpdateDisplayedEntity();
     }
 
     public void UpdateDisplayedEntity() {
@@ -182,6 +179,7 @@ public class CombatUIController : Singleton<CombatUIController>
         resource.SetHP(displayedEntity.HP, displayedEntity.Stats.maxHp);
         resource.SetMP(displayedEntity.MP, displayedEntity.Stats.maxMp);
         resource.SetArmor(displayedEntity.Armor);
+        resource.SetEvasion(displayedEntity.Evasion);
         resource.SetNametag(displayedEntity.EntityName);
         description.text = displayedEntity.Description;
     }
@@ -216,6 +214,7 @@ public class CombatUIController : Singleton<CombatUIController>
         resource.SetHP(entity.HP, entity.Stats.maxHp);
         resource.SetMP(entity.MP, entity.Stats.maxMp);
         resource.SetArmor(entity.Armor);
+        resource.SetEvasion(entity.Evasion);
     }
 
     public void ClearPlayerResources() {

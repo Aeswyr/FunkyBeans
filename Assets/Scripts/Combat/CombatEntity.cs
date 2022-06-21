@@ -24,8 +24,8 @@ public class CombatEntity : NetworkBehaviour
     public string EntityName => entityName;
     [SerializeField] private string description;
     public string Description => description;
-    [SerializeField] private Stats stats;
-    public Stats Stats => stats;
+    [SerializeField] private StatBlock stats;
+    public StatBlock Stats => stats;
     [SerializeField] private CombatReward reward;
     public CombatReward Reward => reward;
     [SerializeField] private List<SkillID> knownSkills;
@@ -58,10 +58,13 @@ public class CombatEntity : NetworkBehaviour
     public int MP => mp;
     [SyncVar] private int armor;
     public int Armor => armor;
+    [SyncVar] private int evasion;
+    public int Evasion => evasion;
     void Start()
     {
-        hp = stats.maxHp;
-        mp = stats.maxMp;
+        stats.Init();
+        hp = stats.raw.maxHp;
+        mp = stats.raw.maxMp;
     }
 
     [Client] public void UpdateResource(ResourceType type, int amt)
@@ -138,6 +141,11 @@ public class CombatEntity : NetworkBehaviour
         serverCombatManager.NotifyResourceChange(transform.GetComponent<CombatID>().CID, ResourceType.ARMOR, -amt);
     }
 
+    [Server] public void AddEvasion(int amt) {
+        evasion += amt;
+        serverCombatManager.NotifyResourceChange(transform.GetComponent<CombatID>().CID, ResourceType.EVASION, -amt);
+    }
+
     public int GetMagnitudeOfSkill(Skill skill)
     {
         return stats.damage;
@@ -155,13 +163,101 @@ public class CombatEntity : NetworkBehaviour
 }
 
 [Serializable]
+public struct StatBlock {
+    public Stats raw;
+    public int maxHp {
+        get {
+            int val = raw.maxHp;
+            foreach (var stat in modifiers.Values)
+                val += stat.maxHp;
+            return val;
+        }
+    }
+    public int maxMp {
+        get {
+            int val = raw.maxMp;
+            foreach (var stat in modifiers.Values)
+                val += stat.maxMp;
+            return val;
+        }
+    }
+    public int defense {
+        get {
+            int val = raw.defense;
+            foreach (var stat in modifiers.Values)
+                val += stat.defense;
+            return val;
+        }
+    }
+    public int threat {
+        get {
+            int val = raw.threat;
+            foreach (var stat in modifiers.Values)
+                val += stat.threat;
+            return val;
+        }
+    }
+        public int damage {
+        get {
+            int val = raw.damage;
+            foreach (var stat in modifiers.Values)
+                val += stat.damage;
+            return val;
+        }
+    }
+    public int speed {
+        get {
+            int val = raw.speed;
+            foreach (var stat in modifiers.Values)
+                val += stat.speed;
+            return val;
+        }
+    }
+    public int actions {
+        get {
+            int val = raw.actions;
+            foreach (var stat in modifiers.Values)
+                val += stat.actions;
+            return val;
+        }
+    }
+    public int dodge {
+        get {
+            int val = raw.dodge;
+            foreach (var stat in modifiers.Values)
+                val += stat.dodge;
+            return val;
+        }
+    }
+
+    public void AddModifier(long id, Stats mod) {
+        modifiers.Add(id, mod);
+    }
+    public void UpdateModifier(long id, Stats mod) {
+        modifiers[id] = mod;
+    }
+    public void RemoveModifier(long id) {
+        modifiers.Remove(id);
+    }
+    public Stats GetModifier(long id) {
+        return modifiers[id];
+    }
+    public void Init() {
+        modifiers = new Dictionary<long, Stats>();
+    }
+    private Dictionary<long, Stats> modifiers;
+}
+
+[Serializable]
 public struct Stats {
     public int maxHp;
     public int maxMp;
+    public int threat;
     public int damage;
     public int speed;
     public int actions;
     public int defense;
+    public int dodge;
 }
 
 [Serializable]
@@ -171,6 +267,6 @@ public struct CombatReward
 }
 
 public enum ResourceType {
-    DEFAULT, HEALTH, MANA, ACTIONS, ARMOR,
+    DEFAULT, HEALTH, MANA, ACTIONS, ARMOR, EVASION
 }
  

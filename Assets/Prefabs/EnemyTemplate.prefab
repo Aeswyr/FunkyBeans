@@ -176,12 +176,15 @@ MonoBehaviour:
   entityName: Default
   description: A lad befitting the name
   stats:
-    maxHp: 5
-    maxMp: 5
-    damage: 2
-    speed: 29
-    actions: 3
-    defense: 3
+    raw:
+      maxHp: 5
+      maxMp: 5
+      threat: 5
+      damage: 5
+      speed: 5
+      actions: 5
+      defense: 5
+      dodge: 5
   reward:
     exp: 0
   knownSkills: 01000000
