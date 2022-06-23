@@ -7,6 +7,8 @@ using TMPro;
 public class GameHandler : NetworkSingleton<GameHandler>
 {
     [SerializeField] private List<GameObject> thingsToEnableForCombat;
+    [SerializeField] private List<GameObject> playerMenuObjects;
+    private bool playerMenuState = false;
 
     [Header("Gameplay grids")]
     [SerializeField] private Grid m_currentLevel;
@@ -119,5 +121,25 @@ public class GameHandler : NetworkSingleton<GameHandler>
     {
         foreach (GameObject obj in thingsToEnableForCombat)
             obj.SetActive(false);
+    }
+
+    public void DisablePlayerMenu() {
+        foreach (var obj in playerMenuObjects)
+            obj.SetActive(false);
+    }
+
+    public void EnablePlayerMenu() {
+        foreach (var obj in playerMenuObjects)
+            obj.SetActive(true);
+    }
+
+    public void TogglePlayerMenu() {
+        if (playerMenuState) {
+            playerMenuState = false;
+            DisablePlayerMenu();
+        } else {
+            playerMenuState = true;
+            EnablePlayerMenu();
+        }
     }
 }

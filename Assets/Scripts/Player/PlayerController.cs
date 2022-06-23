@@ -30,6 +30,10 @@ public class PlayerController : NetworkBehaviour
         if (InputHandler.Instance.action.pressed)
             if (freeMove)
                 ServerAttack(Camera.main.ScreenToWorldPoint(InputHandler.Instance.mousePos));
+
+        if (InputHandler.Instance.back.pressed) {
+            GameHandler.Instance.TogglePlayerMenu();
+        }
     }
 
     [Command] public void ServerAttack(Vector3 mousePos) {
