@@ -6,6 +6,8 @@ using Mirror;
 
 public class CombatEntity : NetworkBehaviour
 {
+    [SyncVar] private List<EquipmentItem> equippedItems = new List<EquipmentItem>();
+
     private bool localIsMine;
     public bool LocalIsMine => localIsMine;
 
@@ -24,7 +26,7 @@ public class CombatEntity : NetworkBehaviour
     public string EntityName => entityName;
     [SerializeField] private string description;
     public string Description => description;
-    [SerializeField] private StatBlock stats;
+    [SyncVar, SerializeField] private StatBlock stats;
     public StatBlock Stats => stats;
     [SerializeField] private CombatReward reward;
     public CombatReward Reward => reward;
@@ -244,6 +246,20 @@ public class CombatEntity : NetworkBehaviour
         }
 
         return arrToReturn;
+    }
+
+    [Server]
+    public void EquipItem(EquipmentItem item)
+    {
+        equippedItems.Add(item);
+        stats.AddModifier(item.ID, item.Stats);
+    }
+
+    [Server]
+    public void UnequipItem(EquipmentItem item)
+    {
+        equippedItems.Remove(item);
+        stats.RemoveModifier(item.ID);
     }
 }
 
