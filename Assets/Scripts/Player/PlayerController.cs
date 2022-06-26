@@ -24,17 +24,18 @@ public class PlayerController : NetworkBehaviour
         if (!isLocalPlayer)
             return;
 
-        if (freeMove)
+        if (inputsFree)
             rbody.velocity = speed * InputHandler.Instance.dir;
 
-        if (InputHandler.Instance.action.pressed)
-            if (freeMove)
-                ServerAttack(Camera.main.ScreenToWorldPoint(InputHandler.Instance.mousePos));
+        if (InputHandler.Instance.action.pressed && inputsFree)
+            ServerAttack(Camera.main.ScreenToWorldPoint(InputHandler.Instance.mousePos));
 
-        if (InputHandler.Instance.back.pressed) {
+        if (InputHandler.Instance.back.pressed && freeMove) {
             GameHandler.Instance.TogglePlayerMenu();
         }
     }
+
+    private bool inputsFree => freeMove && !GameHandler.Instance.PlayerMenuState;
 
     [Command] public void ServerAttack(Vector3 mousePos) {
         GameObject attack = Instantiate(attackPrefab, transform);
@@ -52,7 +53,7 @@ public class PlayerController : NetworkBehaviour
     }
 
     [Server] public void StartBattle() {
-        if (freeMove)
+        if (freeMove) 
             GameHandler.Instance.EnterCombat(transform.position);
     }
 
@@ -71,6 +72,8 @@ public class PlayerController : NetworkBehaviour
     [ClientRpc] public void EnterCombat () {
         freeMove = false;
         
+        GameHandler.Instance.DisablePlayerMenu();
+
         rbody.velocity = Vector2.zero;
 
         if (!isLocalPlayer)

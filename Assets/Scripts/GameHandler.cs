@@ -126,12 +126,16 @@ public class GameHandler : NetworkSingleton<GameHandler>
     public void DisablePlayerMenu() {
         foreach (var obj in playerMenuObjects)
             obj.SetActive(false);
+        MenuUIController.Instance.DisableMenus();
     }
 
     public void EnablePlayerMenu() {
         foreach (var obj in playerMenuObjects)
             obj.SetActive(true);
+        MenuUIController.Instance.EnableMenus();
     }
+
+    public bool PlayerMenuState => playerMenuState;
 
     public void TogglePlayerMenu() {
         if (playerMenuState) {
