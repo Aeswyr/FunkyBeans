@@ -2,6 +2,7 @@ using TMPro;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using System;
 
 public class PlayerController : NetworkBehaviour
 {
@@ -11,11 +12,20 @@ public class PlayerController : NetworkBehaviour
     [SerializeField] private GameObject combatTextPrefab;
     [SerializeField] private PlayerCombatInterface combatInterface;
     [SerializeField] private GameObject combatPrefab;
+    [SerializeField] private CombatEntity playerEntity;
     private bool freeMove = true;
+
+    public List<Interactable> currInteractables = new List<Interactable>();
 
     void Awake() 
     {
         DontDestroyOnLoad(gameObject);
+        GameHandler.Instance.activePlayers.Add(this);
+    }
+
+    void OnDestroy()
+    {
+        GameHandler.Instance.activePlayers.Remove(this);
     }
 
     // Update is called once per frame
@@ -25,7 +35,22 @@ public class PlayerController : NetworkBehaviour
             return;
 
         if (inputsFree)
+        {
             rbody.velocity = speed * InputHandler.Instance.dir;
+
+            if((InputHandler.Instance.interact.pressed) && (!IsInCombat()) && (currInteractables.Count > 0))
+            {
+                //Check which interactable to interact with
+                PriorityQueue<Interactable> interactables = new PriorityQueue<Interactable>();
+                foreach(Interactable interactable in currInteractables)
+                {
+                    interactables.Put(interactable, interactable.Priority);
+                }
+
+                //Do the interaction event 
+                interactables.Peek().Interacted(this);
+            }
+        }
 
         if (InputHandler.Instance.action.pressed && inputsFree)
             ServerAttack(Camera.main.ScreenToWorldPoint(InputHandler.Instance.mousePos));
@@ -104,7 +129,33 @@ public class PlayerController : NetworkBehaviour
         Destroy(combatInterface.clientCombat.gameObject);
     }
 
-    public bool IsInCombat() {
+    public bool IsInCombat() 
+    {
         return !freeMove;
+    }
+
+    [ClientRpc]
+    public void SpawnCircle(Vector3 averageEntityPos, long id)
+    {
+        if (!isLocalPlayer)
+            return;
+
+        GameHandler.Instance.LocalPlayerSpawnCombatCircle(averageEntityPos, id);
+    }
+
+    public void AddInteractable(Interactable newInteractable)
+    {
+        if (currInteractables.Contains(newInteractable))
+            Debug.LogError("Cannot add duplicate interactable: " + newInteractable.gameObject.name);
+
+        currInteractables.Add(newInteractable);
+    }
+
+    public void RemoveInteractable(Interactable newInteractable)
+    {
+        if (!currInteractables.Contains(newInteractable))
+            Debug.LogError("Cannot remove nonexistant interactable: " + newInteractable.gameObject.name);
+
+        currInteractables.Remove(newInteractable);
     }
 }

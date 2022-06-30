@@ -24,11 +24,14 @@ public class GameHandler : NetworkSingleton<GameHandler>
         get {return m_currentLevel;}
     }
 
+    public List<PlayerController> activePlayers { get; set; } = new List<PlayerController>();
+
     public Dictionary<long, ServerCombatManager> activeCombats = new Dictionary<long, ServerCombatManager>();
 
     [Header("Prefabs")]
     [SerializeField] private GameObject combatManagerPrefab;
     [SerializeField] private GameObject textPrefab;
+    [SerializeField] private GameObject combatCirclePrefab;
     private ContactFilter2D filter = new ContactFilter2D();
 
     // Start is called before the first frame update
@@ -51,7 +54,9 @@ public class GameHandler : NetworkSingleton<GameHandler>
         textList.Clear();
     }
     
-    [Server] public void EnterCombat(Vector3 position) { 
+    [Server] 
+    public void EnterCombat(Vector3 position) 
+    { 
         Debug.Log("start battle!");
 
         var results = new List<RaycastHit2D>();
@@ -59,19 +64,21 @@ public class GameHandler : NetworkSingleton<GameHandler>
 
         List<CombatEntity> entities = new List<CombatEntity>();
 
+        List<PlayerController> playersEnteringCombat = new List<PlayerController>();
+
         long id = 0;
         foreach (var hit in results) {
             if (hit.collider.transform.parent.TryGetComponent(out PlayerController player)) {
                 if (player.IsInCombat())
                     continue;
                 player.EnterCombat();
+                playersEnteringCombat.Add(player);
             }
 
 
             id += hit.collider.transform.parent.GetComponent<CombatID>().CID; 
             entities.Add(hit.collider.transform.parent.GetComponent<CombatEntity>());
         }
-
         
         if (activeCombats.ContainsKey(id)) {
             Debug.Log($"Combat manager with ID {id} already exists");
@@ -89,14 +96,32 @@ public class GameHandler : NetworkSingleton<GameHandler>
                 player.serverCombatManager = currentCombat;
         }
 
+        Vector3 averageEntityPos = Vector3.zero;
+        foreach (CombatEntity entity in entities)
+        {
+            averageEntityPos += entity.transform.position;
+        }
+
+        averageEntityPos /= entities.Count;
+
+        //Spawn circles for players not in the new combat being created
+        foreach (PlayerController activePlayer in activePlayers)
+        {
+            if (playersEnteringCombat.Contains(activePlayer))
+                continue;
+
+            activePlayer.SpawnCircle(averageEntityPos, id);
+        }
+
         currentCombat.SetCombatEntities(entities);
         activeCombats[id] = currentCombat;
     }
 
-    [Command(requiresAuthority = false)] public void ExitCombat(long id, List<CombatEntity> entities) {
+    [Command(requiresAuthority = false)] public void ExitCombat(long id, List<CombatEntity> entities) 
+    {
         foreach (var entity in entities)
             if (entity.transform.TryGetComponent(out PlayerController player))
-                player.ExitCombat(new CombatReward {exp = 5});
+                player.ExitCombat(new CombatReward { exp = 5 });
 
         string output = "\nDictionary:";
         foreach (var val in activeCombats)
@@ -108,9 +133,6 @@ public class GameHandler : NetworkSingleton<GameHandler>
             activeCombats.Remove(id);
         }
     }
-
-
-
     public void EnableCombatObjects()
     {
         foreach (GameObject obj in thingsToEnableForCombat)
@@ -149,5 +171,21 @@ public class GameHandler : NetworkSingleton<GameHandler>
         } else {
             EnablePlayerMenu();
         }
+    }
+
+    [Client]
+    public void LocalPlayerSpawnCombatCircle(Vector3 pos, long newID)
+    { 
+        GameObject combatCircleObj = Instantiate(combatCirclePrefab);
+        combatCircleObj.transform.position = pos;
+
+        CombatCircle combatCircle = combatCircleObj.GetComponent<CombatCircle>();
+        combatCircle.SetCombatID(newID);
+    }
+
+    [Client]
+    public void AddPlayerToExistingCombat(long playerId, long combatId)
+    {
+
     }
 }

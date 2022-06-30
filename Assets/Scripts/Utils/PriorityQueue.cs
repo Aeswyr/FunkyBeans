@@ -48,6 +48,11 @@ public class PriorityQueue<T> {
         Debug.Log(output);
     }
 
+    public T Peek()
+    {
+        var value = elements[0].Value;
+        return value;
+    }
 
     //CombatEntity stuff for turn indicator
     public float GetLowestPriority()

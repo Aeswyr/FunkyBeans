@@ -139,6 +139,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2126037498}
     - target: {fileID: -2164704078874708322, guid: 4ab12a7ca0d80564ca996294ec053cdb, type: 3}
+      propertyPath: combatCirclePrefab
+      value: 
+      objectReference: {fileID: 2826412775404553664, guid: 93e0e0e99de2ea6488477078bc4053cd, type: 3}
+    - target: {fileID: -2164704078874708322, guid: 4ab12a7ca0d80564ca996294ec053cdb, type: 3}
       propertyPath: playerMenuObjects.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -1808,7 +1812,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 8.145833
+  orthographic size: 7.5
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
