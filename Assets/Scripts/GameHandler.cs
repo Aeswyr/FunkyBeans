@@ -108,9 +108,12 @@ public class GameHandler : NetworkSingleton<GameHandler>
         foreach (PlayerController activePlayer in activePlayers)
         {
             if (playersEnteringCombat.Contains(activePlayer))
+            {
+                activePlayer.SetCombatID(id);
                 continue;
+            }
 
-            activePlayer.SpawnCircle(averageEntityPos, id);
+            activePlayer.SpawnCircle(id, averageEntityPos, Utils.CombatUtil.GetMaxDisctanceOfEntities(entities, averageEntityPos));
         }
 
         currentCombat.SetCombatEntities(entities);
@@ -174,10 +177,11 @@ public class GameHandler : NetworkSingleton<GameHandler>
     }
 
     [Client]
-    public void LocalPlayerSpawnCombatCircle(Vector3 pos, long newID)
+    public void LocalPlayerSpawnCombatCircle(Vector3 pos, long newID, float maxDist)
     { 
         GameObject combatCircleObj = Instantiate(combatCirclePrefab);
         combatCircleObj.transform.position = pos;
+        combatCircleObj.transform.localScale = Vector3.one * (maxDist + 1);
 
         CombatCircle combatCircle = combatCircleObj.GetComponent<CombatCircle>();
         combatCircle.SetCombatID(newID);
@@ -186,6 +190,21 @@ public class GameHandler : NetworkSingleton<GameHandler>
     [Client]
     public void AddPlayerToExistingCombat(long playerId, long combatId)
     {
+        AddPlayerToExistingCombat_Server(playerId, combatId);
+    }
 
+    [Command]
+    public void AddPlayerToExistingCombat_Server(long playerId, long combatId)
+    {
+        ServerCombatManager combatManager = activeCombats[combatId];
+
+        foreach (PlayerController activePlayer in activePlayers)
+        {
+            if(activePlayer.transform.GetComponent<CombatID>().CID == combatId)
+            {
+                combatManager.AddEntityToCombat(activePlayer.CombatEntity);
+                return;
+            }
+        }
     }
 }

@@ -13,7 +13,10 @@ public class PlayerController : NetworkBehaviour
     [SerializeField] private PlayerCombatInterface combatInterface;
     [SerializeField] private GameObject combatPrefab;
     [SerializeField] private CombatEntity playerEntity;
+    public CombatEntity CombatEntity => playerEntity;
     private bool freeMove = true;
+
+    private long? currCombatID;
 
     public List<Interactable> currInteractables = new List<Interactable>();
 
@@ -111,6 +114,11 @@ public class PlayerController : NetworkBehaviour
         CombatUIController.Instance.SetKnownSkills(transform.GetComponent<CombatEntity>().KnownSkills);
     }
 
+    public void SetCombatID(long id)
+    {
+        currCombatID = id;
+    }
+
     /**
     * removes this player from the combat state while disabling associated UI
     */
@@ -127,6 +135,8 @@ public class PlayerController : NetworkBehaviour
         GameHandler.Instance.DisableCombatObjects();
 
         Destroy(combatInterface.clientCombat.gameObject);
+
+        currCombatID = null;
     }
 
     public bool IsInCombat() 
@@ -135,12 +145,15 @@ public class PlayerController : NetworkBehaviour
     }
 
     [ClientRpc]
-    public void SpawnCircle(Vector3 averageEntityPos, long id)
+    public void SpawnCircle(long id, Vector3 averageEntityPos, float maxDist)
     {
         if (!isLocalPlayer)
             return;
 
-        GameHandler.Instance.LocalPlayerSpawnCombatCircle(averageEntityPos, id);
+        if ((currCombatID == null) || (currCombatID != id))
+        {
+            GameHandler.Instance.LocalPlayerSpawnCombatCircle(averageEntityPos, id, maxDist);
+        }
     }
 
     public void AddInteractable(Interactable newInteractable)

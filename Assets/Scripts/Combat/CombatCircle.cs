@@ -18,7 +18,7 @@ public class CombatCircle : MonoBehaviour
 
         player.RemoveInteractable(interactable);
 
-        //GameHandler.Instance.AddPlayerToExistingCombat()
+        GameHandler.Instance.AddPlayerToExistingCombat(player.transform.GetComponent<CombatID>().CID, combatID);
 
         Destroy(gameObject);
     }

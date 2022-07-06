@@ -93,6 +93,47 @@ public class ServerCombatManager : CombatManager
     }
 
     [Server]
+    public void AddEntityToCombat(CombatEntity entity)
+    {
+        if (entity.team == CombatEntity.EntityType.player)
+            CombatUIController.Instance?.RegisterNewResource(entity);
+
+        Utils.GridUtil.SnapToLevelGrid(entity.gameObject, this);
+        if (entity.transform.TryGetComponent(out PlayerCombatInterface combatInterface))
+            combatInterface.NotifyMovePlayer(entity.transform.position);
+        EntityEnterTile(entity.gameObject);
+
+
+        entity.SetServerCombatManager(this);
+
+        switch (entity.team)
+        {
+            case CombatEntity.EntityType.player:
+                {
+                    playerEntities.Add(entity);
+                    break;
+                }
+            case CombatEntity.EntityType.enemy:
+                {
+                    enemyEntities.Add(entity);
+                    entity.GenerateThreatArray(playerEntities);
+                    break;
+                }
+        }
+
+        float posOnBar = speedMultiplier / entity.Stats.speed;
+
+        turnOrder.Put(entity, posOnBar);
+        posOnBar += speedMultiplier / entity.Stats.speed;
+
+        while (posOnBar <= timeToShowOnBar)
+        {
+            turnOrder.Put(entity, posOnBar);
+            posOnBar += speedMultiplier / entity.Stats.speed;
+        }
+    }
+
+    [Server]
     private void StartNextTurn()
     {
         if (currEntity != null)

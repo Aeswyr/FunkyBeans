@@ -249,6 +249,18 @@ public class Utils
 
     public class CombatUtil
     {
+        public static float GetMaxDisctanceOfEntities(List<CombatEntity> entities, Vector3 averagePos)
+        {
+            float maxDist = 0;
+
+            foreach (CombatEntity entity in entities)
+            {
+                maxDist = Mathf.Max(maxDist, Vector3.Distance(averagePos, entity.transform.position));
+            }
+
+            return maxDist;
+        }
+
         /// <summary>
         /// 
         /// </summary>
