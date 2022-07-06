@@ -14,6 +14,7 @@ public class PlayerController : NetworkBehaviour
     [SerializeField] private GameObject combatPrefab;
     [SerializeField] private CombatEntity playerEntity;
     public CombatEntity CombatEntity => playerEntity;
+    [SerializeField] private Inventory inventory;
     private bool freeMove = true;
 
     private long? currCombatID;
