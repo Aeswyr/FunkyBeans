@@ -181,7 +181,7 @@ public class GameHandler : NetworkSingleton<GameHandler>
     { 
         GameObject combatCircleObj = Instantiate(combatCirclePrefab);
         combatCircleObj.transform.position = pos;
-        combatCircleObj.transform.localScale = Vector3.one * (maxDist + 1);
+        combatCircleObj.transform.localScale = Vector3.one * (maxDist + 2);
 
         CombatCircle combatCircle = combatCircleObj.GetComponent<CombatCircle>();
         combatCircle.SetCombatID(newID);
