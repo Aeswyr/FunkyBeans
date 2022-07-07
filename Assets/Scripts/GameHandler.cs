@@ -39,6 +39,7 @@ public class GameHandler : NetworkSingleton<GameHandler>
         floorGrid = m_currentLevel.transform.Find("Collision").GetComponent<Tilemap>();
         wallGrid = m_currentLevel.transform.Find("Walls").GetComponent<Tilemap>();
         filter.SetLayerMask(LayerMask.GetMask(new []{"Hurtbox"}));
+        filter.useTriggers = true;
     }
 
     List<GameObject> textList = new List<GameObject>();
@@ -60,6 +61,8 @@ public class GameHandler : NetworkSingleton<GameHandler>
         Debug.Log("start battle!");
 
         var results = new List<RaycastHit2D>();
+
+
         Physics2D.CircleCast(position, 5, Vector2.right, filter, results, 0);
 
         List<CombatEntity> entities = new List<CombatEntity>();
@@ -181,7 +184,7 @@ public class GameHandler : NetworkSingleton<GameHandler>
     { 
         GameObject combatCircleObj = Instantiate(combatCirclePrefab);
         combatCircleObj.transform.position = pos;
-        combatCircleObj.transform.localScale = Vector3.one * (maxDist + 2);
+        combatCircleObj.transform.localScale = Vector3.one * (maxDist + 4);
 
         CombatCircle combatCircle = combatCircleObj.GetComponent<CombatCircle>();
         combatCircle.SetCombatID(newID);
@@ -193,7 +196,7 @@ public class GameHandler : NetworkSingleton<GameHandler>
         AddPlayerToExistingCombat_Server(playerId, combatId);
     }
 
-    [Command]
+    [Command(requiresAuthority = false)]
     public void AddPlayerToExistingCombat_Server(long playerId, long combatId)
     {
         ServerCombatManager combatManager = activeCombats[combatId];

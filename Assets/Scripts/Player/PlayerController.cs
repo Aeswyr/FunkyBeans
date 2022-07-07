@@ -52,6 +52,7 @@ public class PlayerController : NetworkBehaviour
                 }
 
                 //Do the interaction event 
+                Debug.Log("Interact!");
                 interactables.Peek().Interacted(this);
             }
         }
@@ -157,6 +158,7 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
+    [Client]
     public void AddInteractable(Interactable newInteractable)
     {
         if (currInteractables.Contains(newInteractable))
@@ -165,10 +167,14 @@ public class PlayerController : NetworkBehaviour
         currInteractables.Add(newInteractable);
     }
 
+    [Client]
     public void RemoveInteractable(Interactable newInteractable)
     {
         if (!currInteractables.Contains(newInteractable))
-            Debug.LogError("Cannot remove nonexistant interactable: " + newInteractable.gameObject.name);
+        {
+            Debug.Log("Cannot remove nonexistant interactable: " + newInteractable.gameObject.name);
+            return;
+        }
 
         currInteractables.Remove(newInteractable);
     }
