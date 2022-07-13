@@ -14,9 +14,19 @@ public class MenuHandler : Singleton<MenuHandler>
         network.StartHost();
     }
 
-    public void OnJoinPressed() {
-        network.networkAddress = inputIP.text;
+    public void OnJoinPressed() 
+    {
+        if(inputIP.text.Length == 0)
+        {
+            network.networkAddress = "localhost";
+        }
+        else
+        {
+            network.networkAddress = inputIP.text;
+        }
+
         //SceneManager.LoadScene("GameScene");
+
         network.StartClient();
     }
 }

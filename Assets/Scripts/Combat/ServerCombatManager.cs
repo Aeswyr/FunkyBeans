@@ -95,6 +95,8 @@ public class ServerCombatManager : CombatManager
     [Server]
     public void AddEntityToCombat(CombatEntity entity)
     {
+        combatEntities.Add(entity);
+
         if (entity.team == CombatEntity.EntityType.player)
             CombatUIController.Instance?.RegisterNewResource(entity);
 

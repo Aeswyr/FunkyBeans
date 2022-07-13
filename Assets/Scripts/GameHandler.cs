@@ -203,8 +203,10 @@ public class GameHandler : NetworkSingleton<GameHandler>
 
         foreach (PlayerController activePlayer in activePlayers)
         {
-            if(activePlayer.transform.GetComponent<CombatID>().CID == combatId)
+            if(activePlayer.transform.GetComponent<CombatID>().CID == playerId)
             {
+                Debug.Log("enter combat!");
+                activePlayer.EnterCombat();
                 combatManager.AddEntityToCombat(activePlayer.CombatEntity);
                 return;
             }
