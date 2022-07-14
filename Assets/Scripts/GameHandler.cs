@@ -179,6 +179,8 @@ public class GameHandler : NetworkSingleton<GameHandler>
         }
     }
 
+    private Dictionary<long, GameObject> combatCircles = new Dictionary<long, GameObject>();
+
     [Client]
     public void LocalPlayerSpawnCombatCircle(Vector3 pos, long newID, float maxDist)
     { 
@@ -188,6 +190,18 @@ public class GameHandler : NetworkSingleton<GameHandler>
 
         CombatCircle combatCircle = combatCircleObj.GetComponent<CombatCircle>();
         combatCircle.SetCombatID(newID);
+
+        combatCircles.Add(newID, combatCircleObj);
+    }
+
+    [ClientRpc]
+    public void DestroyCombatCircleWithID(long newId)
+    {
+        if (combatCircles.TryGetValue(newId, out GameObject circleObj))
+        {
+            Destroy(circleObj);
+            combatCircles.Remove(newId);
+        }
     }
 
     [Client]
@@ -206,6 +220,8 @@ public class GameHandler : NetworkSingleton<GameHandler>
             if(activePlayer.transform.GetComponent<CombatID>().CID == playerId)
             {
                 Debug.Log("enter combat!");
+                activePlayer.GetComponent<PlayerCombatInterface>().serverCombatManager = combatManager;
+
                 activePlayer.EnterCombat();
                 combatManager.AddEntityToCombat(activePlayer.CombatEntity);
                 return;

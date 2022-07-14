@@ -16,6 +16,11 @@ public class CombatEntity : NetworkBehaviour
         player, 
         enemy
     }
+    [SerializeField] private GameObject hitbox;
+    [ClientRpc] public void SetHitboxActive(bool newActive)
+    {
+        hitbox.SetActive(newActive);
+    }
     [Header("Universal data")]
     [SerializeField] private SkillList skillsMaster;
     [SerializeField] private SkillActions skillActions;
@@ -189,6 +194,7 @@ public class CombatEntity : NetworkBehaviour
             AddEntityToThreatArray(entity);
         }
     }
+
     [Server]
     public void AddEntityToThreatArray(CombatEntity entity)
     {

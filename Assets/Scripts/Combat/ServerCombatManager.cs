@@ -33,7 +33,10 @@ public class ServerCombatManager : CombatManager
     public void SetCombatEntities(List<CombatEntity> newEntities)
     {
         combatEntities = newEntities;
-        foreach (var entity in combatEntities) {
+        foreach (var entity in combatEntities) 
+        {
+            entity.SetHitboxActive(false);
+
             if (entity.team == CombatEntity.EntityType.player)
                 CombatUIController.Instance?.RegisterNewResource(entity);
 
@@ -97,6 +100,8 @@ public class ServerCombatManager : CombatManager
     {
         combatEntities.Add(entity);
 
+        entity.SetHitboxActive(false);
+
         if (entity.team == CombatEntity.EntityType.player)
             CombatUIController.Instance?.RegisterNewResource(entity);
 
@@ -121,6 +126,11 @@ public class ServerCombatManager : CombatManager
                     entity.GenerateThreatArray(playerEntities);
                     break;
                 }
+        }
+
+        foreach(CombatEntity enemyEntity in enemyEntities)
+        {
+            enemyEntity.AddEntityToThreatArray(entity);
         }
 
         float posOnBar = speedMultiplier / entity.Stats.speed;
@@ -718,7 +728,14 @@ public class ServerCombatManager : CombatManager
 
     public void EndCombat()
     {
+        foreach(CombatEntity entity in combatEntities)
+        {
+            entity.SetHitboxActive(true);
+        }
+
         GameHandler.Instance.ExitCombat(id, combatEntities);
+
+        GameHandler.Instance.DestroyCombatCircleWithID(id);
     }
 
     public void NotifyTurnOrder(PriorityQueue<CombatEntity> turnOrder)

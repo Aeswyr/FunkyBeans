@@ -99,7 +99,8 @@ public class PlayerController : NetworkBehaviour
     /**
     * places this player into the combat state and enables associated UI
     */
-    [ClientRpc] public void EnterCombat () {
+    [ClientRpc] public void EnterCombat() 
+    {
         freeMove = false;
         
         GameHandler.Instance.DisablePlayerMenu();
@@ -124,7 +125,8 @@ public class PlayerController : NetworkBehaviour
     /**
     * removes this player from the combat state while disabling associated UI
     */
-    [ClientRpc] public void ExitCombat(CombatReward reward) {
+    [ClientRpc] public void ExitCombat(CombatReward reward) 
+    {
         var tm = Instantiate(combatTextPrefab, transform.position, Quaternion.identity).GetComponent<TextMeshPro>();
         tm.text = $"+{reward.exp} EXP";
         tm.color = Color.yellow;
