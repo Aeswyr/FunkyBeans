@@ -5,15 +5,27 @@ using Mirror;
 
 public class Inventory : NetworkBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+    
+    private List<EquipmentItem> items = new List<EquipmentItem>();
+
+    public void Insert(EquipmentItem item) {
+        items.Add(item);
+        RedrawInventory(); 
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public void Remove(EquipmentItem item) {
+        for (int i = 0; i < items.Count; i++) {
+            if (items[i].ID == item.ID) {
+                items.RemoveAt(i);
+                i--;
+            }
+        }
+        RedrawInventory();
     }
+
+
+    [Client] public void RedrawInventory() {
+        MenuUIController.Instance?.DrawInventory(items);
+    }
+    
 }

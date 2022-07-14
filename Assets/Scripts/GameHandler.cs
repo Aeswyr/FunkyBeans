@@ -6,6 +6,7 @@ using TMPro;
 
 public class GameHandler : NetworkSingleton<GameHandler>
 {
+    public ItemHelper ItemHelper;
     [SerializeField] private List<GameObject> thingsToEnableForCombat;
     [SerializeField] private List<GameObject> playerMenuObjects;
     private bool playerMenuState = false;
@@ -125,9 +126,14 @@ public class GameHandler : NetworkSingleton<GameHandler>
 
     [Command(requiresAuthority = false)] public void ExitCombat(long id, List<CombatEntity> entities) 
     {
+
+        CombatReward reward = new CombatReward();
+        reward.items = new []{ItemHelper.GenerateItem(), ItemHelper.GenerateItem(), ItemHelper.GenerateItem()};
+        reward.exp = 5;
+
         foreach (var entity in entities)
             if (entity.transform.TryGetComponent(out PlayerController player))
-                player.ExitCombat(new CombatReward { exp = 5 });
+                player.ExitCombat(reward);
 
         string output = "\nDictionary:";
         foreach (var val in activeCombats)

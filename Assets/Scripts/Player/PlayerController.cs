@@ -62,6 +62,8 @@ public class PlayerController : NetworkBehaviour
 
         if (InputHandler.Instance.back.pressed && freeMove) {
             GameHandler.Instance.TogglePlayerMenu();
+            if (GameHandler.Instance.PlayerMenuState)
+                inventory.RedrawInventory();
         }
     }
 
@@ -125,11 +127,22 @@ public class PlayerController : NetworkBehaviour
     /**
     * removes this player from the combat state while disabling associated UI
     */
-    [ClientRpc] public void ExitCombat(CombatReward reward) 
-    {
-        var tm = Instantiate(combatTextPrefab, transform.position, Quaternion.identity).GetComponent<TextMeshPro>();
-        tm.text = $"+{reward.exp} EXP";
-        tm.color = Color.yellow;
+    [ClientRpc] public void ExitCombat(CombatReward reward) {
+        int output = 0;
+        foreach (var item in reward.items) {
+            Debug.Log($"You just picked up a(n) {item.Name}");
+            inventory.Insert(item);
+            var tm = Instantiate(combatTextPrefab, transform.position + (Vector3)(output * Vector2.up), Quaternion.identity).GetComponent<TextMeshPro>();
+            tm.text = item.Name;
+            tm.color = Color.gray;
+            output++;
+        }
+
+        {
+            var tm = Instantiate(combatTextPrefab, transform.position + (Vector3)(output * Vector2.up), Quaternion.identity).GetComponent<TextMeshPro>();
+            tm.text = $"+{reward.exp} EXP";
+            tm.color = Color.yellow;
+        }
 
         freeMove = true;
 

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public enum ItemType
 {
@@ -9,22 +10,31 @@ public enum ItemType
     body,
     ring,
     summon,
-    max
+    other
 }
-
-public struct EquipmentItem
+public struct TempItem {
+    public string Name;
+    public ItemType type;
+    public int SpriteID;
+    public long id;
+    public List<SkillID> skills;
+    public Stats stats;
+}
+[Serializable] public struct EquipmentItem
 {
-    [SerializeField] private ItemType type;
-    [SerializeField] private string name;
-    [SerializeField] private Sprite sprite;
-    [SerializeField] private Stats stats;
-    [SerializeField] private List<SkillID> skills;
-    [SerializeField] private long id;
+    public ItemType Type;
+    public string Name;
+    public int SpriteID;
+    public Stats Stats;
+    public List<SkillID> Skills;
+    public long ID;
 
-    public ItemType Type => type;
-    public string Name => name;
-    public Sprite Sprite => sprite;
-    public Stats Stats => stats;
-    public List<SkillID> Skills => skills;
-    public long ID => id;
+    public EquipmentItem(ItemType type, string name, int spriteID, Stats stats, List<SkillID> skills, long id) {
+        this.Type = type;
+        this.Name = name;
+        this.SpriteID = spriteID;
+        this.Stats = stats;
+        this.Skills = skills;
+        this.ID = id;
+    }
 }

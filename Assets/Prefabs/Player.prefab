@@ -106,6 +106,7 @@ GameObject:
   - component: {fileID: 4031835404114361965}
   - component: {fileID: 4405495902040467458}
   - component: {fileID: 4912105708230145843}
+  - component: {fileID: 7482969791649020708}
   m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
@@ -261,7 +262,7 @@ MonoBehaviour:
   combatInterface: {fileID: 3137590738874056035}
   combatPrefab: {fileID: 1823533853649431128, guid: fa5fa0a3058dd6b4db3767a68823916c, type: 3}
   playerEntity: {fileID: 4405495902040467458}
-  inventory: {fileID: 0}
+  inventory: {fileID: 7482969791649020708}
   currInteractables: []
 --- !u!114 &3137590738874056035
 MonoBehaviour:
@@ -392,6 +393,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillList: {fileID: 11400000, guid: 767c3e5c23ffcbd4dad117bb01187a80, type: 2}
   entity: {fileID: 4405495902040467458}
+--- !u!114 &7482969791649020708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5688980906302191263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37bb0dd66615b0647b23461d207a1b61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
 --- !u!1 &7406989071940038645
 GameObject:
   m_ObjectHideFlags: 0

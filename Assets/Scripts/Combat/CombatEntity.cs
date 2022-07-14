@@ -370,6 +370,7 @@ public struct Stats {
 [Serializable]
 public struct CombatReward
 {
+    public EquipmentItem[] items; //TODO reset
     public int exp;
 }
 
