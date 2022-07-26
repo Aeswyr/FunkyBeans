@@ -15,6 +15,7 @@ public class PlayerController : NetworkBehaviour
     [SerializeField] private CombatEntity playerEntity;
     public CombatEntity CombatEntity => playerEntity;
     [SerializeField] private Inventory inventory;
+    [SerializeField] private GameObject enterCombatPopup;
     private bool freeMove = true;
 
     private long? currCombatID;
@@ -112,6 +113,8 @@ public class PlayerController : NetworkBehaviour
         if (!isLocalPlayer)
             return;
 
+        SetCombatPopupActive(false);
+
         GameHandler.Instance.EnableCombatObjects();
 
         combatInterface.clientCombat = Instantiate(combatPrefab, Vector3.zero, Quaternion.identity).GetComponent<ClientCombatManager>();
@@ -192,5 +195,14 @@ public class PlayerController : NetworkBehaviour
         }
 
         currInteractables.Remove(newInteractable);
+    }
+
+    [Client]
+    public void SetCombatPopupActive(bool newActive)
+    {
+        if (!isLocalPlayer)
+            return;
+
+        enterCombatPopup.SetActive(newActive);
     }
 }

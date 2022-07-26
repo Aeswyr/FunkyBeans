@@ -27,8 +27,19 @@ public class CombatCircle : MonoBehaviour
         if(player != null)
         {
             player.RemoveInteractable(interactable);
+            player.SetCombatPopupActive(false);
         }
 
         GameHandler.Instance.DestroyCombatCircleWithID(combatID);
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        other.transform.parent.GetComponent<PlayerController>().SetCombatPopupActive(true);
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        other.transform.parent.GetComponent<PlayerController>().SetCombatPopupActive(false);
     }
 }
