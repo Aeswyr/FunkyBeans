@@ -45,7 +45,12 @@ public class MenuUIController : Singleton<MenuUIController>
     [SerializeField] private GameObject itemBoxPrefab;
     [SerializeField] private GameObject itemHolder;
     [SerializeField] private int MAX_INVENTORY = 20;
+    [SerializeField] private GameObject itemOptions;
+    [SerializeField] private Transform itemOptionsPosition;
+    [SerializeField] private GameObject equipmentHolder;
+    [SerializeField] private GameObject descriptionHolder;
     private List<MenuItemBox> itemBoxes = new List<MenuItemBox>();
+    private EquipmentItem? selectedItem = null;
 
     public void CreateInventory() {
         foreach (var item in itemBoxes)
@@ -64,4 +69,47 @@ public class MenuUIController : Singleton<MenuUIController>
                 itemBoxes[i].RemoveItem();
         }
     }
+
+    public void OpenItemOptions(EquipmentItem item, Vector3 pos) {
+        itemOptions.SetActive(true);
+        itemOptionsPosition.SetPositionAndRotation(pos + 2 * Vector3.left, Quaternion.identity);
+        selectedItem = item;
+    }
+
+    public void CloseItemOptions() {
+        itemOptions.SetActive(false);
+        selectedItem = null;
+    }
+
+    public void EnableEquipment() {
+        DisableDescription();
+        itemOptions.SetActive(false);
+        equipmentHolder.SetActive(true);
+
+        if (selectedItem != null) {
+            HighlightEquip(selectedItem.Value.Type);
+        }
+        
+    }
+
+    public void DisableDescription() {
+        descriptionHolder.SetActive(false);
+    }
+
+    public void DisableEquipment() {
+        equipmentHolder.SetActive(false);
+    }
+
+    public void HighlightEquip(ItemType type) {
+
+    }
+
+    public void EnableDescription() {
+        DisableEquipment();
+        descriptionHolder.SetActive(true);
+        
+        CloseItemOptions();
+    }
+
+
 }

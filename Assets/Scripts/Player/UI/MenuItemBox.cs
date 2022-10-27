@@ -25,4 +25,10 @@ public class MenuItemBox : MonoBehaviour
         image.color = EMPTY;
         item = null;
     }
+
+    public void TrySelectItem() {
+        if (item == null)
+            return;
+        MenuUIController.Instance.OpenItemOptions(item.Value, transform.position);
+    }
 }
