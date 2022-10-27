@@ -607,6 +607,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01614664b831546d2ae94a42149d80ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_SendPointerHoverToParent: 1
   m_MoveRepeatDelay: 0.5
   m_MoveRepeatRate: 0.1
   m_XRTrackingOrigin: {fileID: 0}
@@ -623,6 +624,7 @@ MonoBehaviour:
   m_TrackedDeviceOrientationAction: {fileID: 7970375526676320489, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
   m_DeselectOnBackgroundClick: 1
   m_PointerBehavior: 0
+  m_CursorLockBehavior: 0
 --- !u!114 &588450634
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -820,6 +822,10 @@ PrefabInstance:
       propertyPath: input
       value: 
       objectReference: {fileID: 1881036822}
+    - target: {fileID: -212305626576744386, guid: e91e99c54436eee46a6fd0f82d7b0e66, type: 3}
+      propertyPath: lobby
+      value: 
+      objectReference: {fileID: 2048786617}
     - target: {fileID: -212305626576744386, guid: e91e99c54436eee46a6fd0f82d7b0e66, type: 3}
       propertyPath: inputIP
       value: 
@@ -2159,6 +2165,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1038fc85af15dff4f98818390d108a15, type: 3}
+--- !u!114 &2048786617 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: -682597558208517491, guid: 1038fc85af15dff4f98818390d108a15, type: 3}
+  m_PrefabInstance: {fileID: 1887084275}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f466906794a740e4ea4b7b01b7400057, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2068650909
 GameObject:
   m_ObjectHideFlags: 0
