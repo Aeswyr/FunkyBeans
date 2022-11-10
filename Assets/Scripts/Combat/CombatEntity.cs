@@ -11,13 +11,15 @@ public class CombatEntity : NetworkBehaviour
     private bool localIsMine;
     public bool LocalIsMine => localIsMine;
 
-    [System.Serializable] public enum EntityType
+    [System.Serializable]
+    public enum EntityType
     {
-        player, 
-        enemy
+        player,
+        enemy,
     }
     [SerializeField] private GameObject hitbox;
-    [ClientRpc] public void SetHitboxActive(bool newActive)
+    [ClientRpc]
+    public void SetHitboxActive(bool newActive)
     {
         hitbox.SetActive(newActive);
     }
@@ -44,7 +46,8 @@ public class CombatEntity : NetworkBehaviour
     [SerializeField] private EntityType entityType;
     public EntityType team => entityType;
 
-    public void UseSkill(SkillID id) {
+    public void UseSkill(SkillID id)
+    {
         skillsMaster.Get(id, skillActions).behavior.Invoke();
     }
 
@@ -55,7 +58,8 @@ public class CombatEntity : NetworkBehaviour
         skillsMaster.Get(id, skillActions).behavior.Invoke();
     }
 
-    public void UseDefense() {
+    public void UseDefense()
+    {
         skillsMaster.Get(defendSkill, skillActions).behavior.Invoke();
     }
 
@@ -74,7 +78,8 @@ public class CombatEntity : NetworkBehaviour
         mp = stats.raw.maxMp;
     }
 
-    [Client] public void UpdateResource(ResourceType type, int amt)
+    [Client]
+    public void UpdateResource(ResourceType type, int amt)
     {
         TextMeshPro tm;
         switch (type)
@@ -105,16 +110,21 @@ public class CombatEntity : NetworkBehaviour
 
     }
 
-    [Server] public void TakeDamage(CombatEntity attacker, int dmg)
+    [Server]
+    public void TakeDamage(CombatEntity attacker, int dmg)
     {
-        if (armor > 0) {
+        if (armor > 0)
+        {
             armor -= dmg;
-            if (armor < 0) {
+            if (armor < 0)
+            {
                 hp += armor;
                 armor = 0;
             }
             serverCombatManager.NotifyResourceChange(transform.GetComponent<CombatID>().CID, ResourceType.ARMOR, dmg);
-        } else {
+        }
+        else
+        {
             hp -= dmg;
             serverCombatManager.NotifyResourceChange(transform.GetComponent<CombatID>().CID, ResourceType.HEALTH, dmg);
         }
@@ -123,7 +133,7 @@ public class CombatEntity : NetworkBehaviour
         Debug.Log("Entity " + parent.name + " took " + dmg + " points of damage, new hp: " + hp + "/" + stats.maxHp);
         if (hp <= 0)
         {
-            switch(entityType)
+            switch (entityType)
             {
                 case EntityType.enemy:
                     {
@@ -142,12 +152,14 @@ public class CombatEntity : NetworkBehaviour
         }
         else
         {
-            if(entityType == EntityType.enemy)
+            if (entityType == EntityType.enemy)
                 AddThreatToEntity(attacker, dmg);
         }
     }
 
-    [Server] public bool TrySpendMP(int val) {
+    [Server]
+    public bool TrySpendMP(int val)
+    {
         if (val == 0)
             return true;
         if (mp < val)
@@ -155,16 +167,20 @@ public class CombatEntity : NetworkBehaviour
         mp -= val;
 
         serverCombatManager.NotifyResourceChange(transform.GetComponent<CombatID>().CID, ResourceType.MANA, val);
-            
+
         return true;
     }
 
-    [Server] public void AddArmor(int amt) {
+    [Server]
+    public void AddArmor(int amt)
+    {
         armor += amt;
         serverCombatManager.NotifyResourceChange(transform.GetComponent<CombatID>().CID, ResourceType.ARMOR, -amt);
     }
 
-    [Server] public void AddEvasion(int amt) {
+    [Server]
+    public void AddEvasion(int amt)
+    {
         evasion += amt;
         serverCombatManager.NotifyResourceChange(transform.GetComponent<CombatID>().CID, ResourceType.EVASION, -amt);
     }
@@ -189,7 +205,7 @@ public class CombatEntity : NetworkBehaviour
     [Server]
     public void GenerateThreatArray(List<CombatEntity> entities)
     {
-        foreach(CombatEntity entity in entities)
+        foreach (CombatEntity entity in entities)
         {
             AddEntityToThreatArray(entity);
         }
@@ -228,7 +244,7 @@ public class CombatEntity : NetworkBehaviour
     [Server]
     public void AddThreatToEntity(CombatEntity entity, float threatToAdd)
     {
-        for(int i = 0; i< modifiedThreatValues.Count; i++)
+        for (int i = 0; i < modifiedThreatValues.Count; i++)
         {
             if (modifiedThreatValues[i].Item1.Equals(entity))
             {
@@ -270,66 +286,83 @@ public class CombatEntity : NetworkBehaviour
 }
 
 [Serializable]
-public struct StatBlock {
+public struct StatBlock
+{
     public Stats raw;
-    public int maxHp {
-        get {
+    public int maxHp
+    {
+        get
+        {
             int val = raw.maxHp;
             foreach (var stat in modifiers.Values)
                 val += stat.maxHp;
             return val;
         }
     }
-    public int maxMp {
-        get {
+    public int maxMp
+    {
+        get
+        {
             int val = raw.maxMp;
             foreach (var stat in modifiers.Values)
                 val += stat.maxMp;
             return val;
         }
     }
-    public int defense {
-        get {
+    public int defense
+    {
+        get
+        {
             int val = raw.defense;
             foreach (var stat in modifiers.Values)
                 val += stat.defense;
             return val;
         }
     }
-    public int threat {
-        get {
+    public int threat
+    {
+        get
+        {
             int val = raw.threat;
             foreach (var stat in modifiers.Values)
                 val += stat.threat;
             return val;
         }
     }
-        public int damage {
-        get {
+    public int damage
+    {
+        get
+        {
             int val = raw.damage;
             foreach (var stat in modifiers.Values)
                 val += stat.damage;
             return val;
         }
     }
-    public int speed {
-        get {
+    public int speed
+    {
+        get
+        {
             int val = raw.speed;
             foreach (var stat in modifiers.Values)
                 val += stat.speed;
             return val;
         }
     }
-    public int actions {
-        get {
+    public int actions
+    {
+        get
+        {
             int val = raw.actions;
             foreach (var stat in modifiers.Values)
                 val += stat.actions;
             return val;
         }
     }
-    public int dodge {
-        get {
+    public int dodge
+    {
+        get
+        {
             int val = raw.dodge;
             foreach (var stat in modifiers.Values)
                 val += stat.dodge;
@@ -337,26 +370,32 @@ public struct StatBlock {
         }
     }
 
-    public void AddModifier(long id, Stats mod) {
+    public void AddModifier(long id, Stats mod)
+    {
         modifiers.Add(id, mod);
     }
-    public void UpdateModifier(long id, Stats mod) {
+    public void UpdateModifier(long id, Stats mod)
+    {
         modifiers[id] = mod;
     }
-    public void RemoveModifier(long id) {
+    public void RemoveModifier(long id)
+    {
         modifiers.Remove(id);
     }
-    public Stats GetModifier(long id) {
+    public Stats GetModifier(long id)
+    {
         return modifiers[id];
     }
-    public void Init() {
+    public void Init()
+    {
         modifiers = new Dictionary<long, Stats>();
     }
     private Dictionary<long, Stats> modifiers;
 }
 
 [Serializable]
-public struct Stats {
+public struct Stats
+{
     public int maxHp;
     public int maxMp;
     public int threat;
@@ -374,7 +413,8 @@ public struct CombatReward
     public int exp;
 }
 
-public enum ResourceType {
+public enum ResourceType
+{
     DEFAULT, HEALTH, MANA, ACTIONS, ARMOR, EVASION
 }
- 
+

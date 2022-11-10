@@ -33,7 +33,7 @@ public class ServerCombatManager : CombatManager
     public void SetCombatEntities(List<CombatEntity> newEntities)
     {
         combatEntities = newEntities;
-        foreach (var entity in combatEntities) 
+        foreach (var entity in combatEntities)
         {
             entity.SetHitboxActive(false);
 
@@ -128,7 +128,7 @@ public class ServerCombatManager : CombatManager
                 }
         }
 
-        foreach(CombatEntity enemyEntity in enemyEntities)
+        foreach (CombatEntity enemyEntity in enemyEntities)
         {
             enemyEntity.AddEntityToThreatArray(entity);
         }
@@ -157,7 +157,7 @@ public class ServerCombatManager : CombatManager
             {
                 case CombatEntity.EntityType.player:
                     {
-                        if(TryGetPlayerCombatInterface(out var player))
+                        if (TryGetPlayerCombatInterface(out var player))
                         {
                             player.NotifyTurnEnd();
                         }
@@ -237,9 +237,9 @@ public class ServerCombatManager : CombatManager
 
     private float GetThreatValueOfEntity(CombatEntity entity)
     {
-        for(int i = 0; i<threatArr.Count; i++)
+        for (int i = 0; i < threatArr.Count; i++)
         {
-            if(threatArr[i].Item1.Equals(entity))
+            if (threatArr[i].Item1.Equals(entity))
             {
                 return threatArr[i].Item2;
             }
@@ -592,16 +592,18 @@ public class ServerCombatManager : CombatManager
             StartNextTurn();
         }
 
-        var team = combatEntities[0].team;
+        //check if there are any enemies left
         foreach (var centity in combatEntities)
         {
-            if (team != centity.team)
+            //If any entities in combat aren't players or allies, keep the combat going
+            if (centity.team != CombatEntity.EntityType.player)
                 return;
         }
-        if (team == CombatEntity.EntityType.player)
-        {
-            EndCombat();
-        }
+
+        // if (team == CombatEntity.EntityType.player)
+        // {
+        EndCombat();
+        // }
     }
 
 
@@ -656,7 +658,8 @@ public class ServerCombatManager : CombatManager
             EntityExitTile(currEntity.gameObject);
 
             //Move that lad to the destination (might need to wait here, idk if next line will work)
-            if (TryGetPlayerCombatInterface(out var combatInterface)) {
+            if (TryGetPlayerCombatInterface(out var combatInterface))
+            {
                 currEntity.transform.position = combatOverlay.CellToWorld(pathToDest[0]);
                 Utils.GridUtil.SnapToLevelGrid(currEntity.gameObject, this);
                 combatInterface.NotifyMovePlayer(currEntity.transform.position);
@@ -695,7 +698,7 @@ public class ServerCombatManager : CombatManager
     {
         if (entity != currEntity)
             return;
-        if(numActionsLeft >= skillList.Get(currEntity.DefendSkill).actionCost)
+        if (numActionsLeft >= skillList.Get(currEntity.DefendSkill).actionCost)
             currEntity.UseDefense();
     }
 
@@ -728,7 +731,7 @@ public class ServerCombatManager : CombatManager
 
     public void EndCombat()
     {
-        foreach(CombatEntity entity in combatEntities)
+        foreach (CombatEntity entity in combatEntities)
         {
             entity.SetHitboxActive(true);
         }
@@ -744,10 +747,10 @@ public class ServerCombatManager : CombatManager
         List<float> positions = new List<float>();
 
         List<KeyValuePair<float, CombatEntity>> turnElements = turnOrder.GetElements();
-        for(int i = 0; i< turnElements.Count; i++)
+        for (int i = 0; i < turnElements.Count; i++)
         {
             entityIDs.Add(turnElements[i].Value.GetComponent<CombatID>().CID);
-            positions.Add(turnElements[i].Key/timeToShowOnBar);
+            positions.Add(turnElements[i].Key / timeToShowOnBar);
         }
 
         foreach (CombatEntity entity in combatEntities)
@@ -755,13 +758,15 @@ public class ServerCombatManager : CombatManager
                 player.NotifyTurnOrder(entityIDs, positions);
     }
 
-    public void NotifyResourceChange(long id, ResourceType type, int delta) {
+    public void NotifyResourceChange(long id, ResourceType type, int delta)
+    {
         foreach (CombatEntity entity in combatEntities)
             if (entity.transform.TryGetComponent(out PlayerCombatInterface player))
                 player.NotifyResourceChange(id, type, delta);
     }
 
-    public void NotifyMovement(Vector3Int pos, bool entering) {
+    public void NotifyMovement(Vector3Int pos, bool entering)
+    {
         foreach (CombatEntity entity in combatEntities)
             if (entity.transform.TryGetComponent(out PlayerCombatInterface player))
                 player.NotifyMovement(pos, entering);

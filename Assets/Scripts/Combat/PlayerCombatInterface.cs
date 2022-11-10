@@ -6,11 +6,33 @@ using UnityEngine.Tilemaps;
 
 public class PlayerCombatInterface : NetworkBehaviour
 {
-    public ClientCombatManager clientCombat {get; set;}
+    private PlayerCombatInterface owner;
+    public void SetOwner(PlayerCombatInterface _owner)
+    {
+        owner = _owner;
+    }
+
+    public ClientCombatManager clientCombat { get; set; }
 
     public ServerCombatManager serverCombatManager { get; set; }
 
-    [ClientRpc] public void NotifyMovement(Vector3Int pos, bool entering) {
+    public bool IsOwnedByMe()
+    {
+        if (isLocalPlayer)
+            return true;
+
+        if (owner == null)
+            return false;
+
+        if (owner.isLocalPlayer)
+            return true;
+
+        return false;
+    }
+
+    [ClientRpc]
+    public void NotifyMovement(Vector3Int pos, bool entering)
+    {
         if (!isLocalPlayer)
             return;
         if (clientCombat == null)
@@ -19,19 +41,24 @@ public class PlayerCombatInterface : NetworkBehaviour
             clientCombat.SetEntityTile(pos, entering);
     }
 
-    [ClientRpc] public void NotifyMovePlayer(Vector3 pos) {
-        if (!isLocalPlayer)
+    [ClientRpc]
+    public void NotifyMovePlayer(Vector3 pos)
+    {
+        if (!IsOwnedByMe())
             return;
         transform.position = pos;
     }
 
-    private IEnumerator MoveAfterClientInit(Vector3Int pos, bool entering) {
+    private IEnumerator MoveAfterClientInit(Vector3Int pos, bool entering)
+    {
         yield return new WaitUntil(() => clientCombat != null);
         clientCombat.SetEntityTile(pos, entering);
     }
 
-    [ClientRpc] public void NotifyTurnStart(int actions) {
-        if (!isLocalPlayer)
+    [ClientRpc]
+    public void NotifyTurnStart(int actions)
+    {
+        if (!IsOwnedByMe())
             return;
         clientCombat.isTurn = true;
         clientCombat.actionsLeft = actions;
@@ -39,8 +66,10 @@ public class PlayerCombatInterface : NetworkBehaviour
         CombatUIController.Instance.SetActionUI(clientCombat.actionsLeft, clientCombat.maxActions);
     }
 
-    [ClientRpc] public void NotifyTurnEnd() {
-        if (!isLocalPlayer)
+    [ClientRpc]
+    public void NotifyTurnEnd()
+    {
+        if (!IsOwnedByMe())
             return;
         clientCombat.isTurn = false;
         clientCombat.ClearMove();
@@ -51,7 +80,7 @@ public class PlayerCombatInterface : NetworkBehaviour
     [ClientRpc]
     public void NotifyTurnOrder(List<long> entityIDs, List<float> positions)
     {
-        if (!isLocalPlayer)
+        if (!IsOwnedByMe())
             return;
 
         List<CombatEntity> combatEntities = new List<CombatEntity>();
@@ -71,10 +100,13 @@ public class PlayerCombatInterface : NetworkBehaviour
         CombatUIController.Instance.UpdateTurnIndicatorUI(combatEntities, positions);
     }
 
-    [ClientRpc] public void NotifyResourceChange(long id, ResourceType type, int delta) {
-        if (!isLocalPlayer)
+    [ClientRpc]
+    public void NotifyResourceChange(long id, ResourceType type, int delta)
+    {
+        if (!IsOwnedByMe())
             return;
-        if (type == ResourceType.ACTIONS) {
+        if (type == ResourceType.ACTIONS)
+        {
             clientCombat.actionsLeft = clientCombat.actionsLeft - delta;
             clientCombat.DrawCombatMovement(true);
             CombatUIController.Instance.SetActionUI(clientCombat.actionsLeft, clientCombat.maxActions);
@@ -85,19 +117,27 @@ public class PlayerCombatInterface : NetworkBehaviour
                 entity.transform.GetComponent<CombatEntity>().UpdateResource(type, delta);
     }
 
-    [Command] public void TryUseSkill(SkillID skill, Vector3 position) {
+    [Command]
+    public void TryUseSkill(SkillID skill, Vector3 position)
+    {
         serverCombatManager.TryUseSkill(skill, position, GetComponent<CombatEntity>());
     }
 
-    [Command] public void TryMove(Vector3 position) {
+    [Command]
+    public void TryMove(Vector3 position)
+    {
         serverCombatManager.TryMovePlayer(position, GetComponent<CombatEntity>());
     }
 
-    [Command] public void TryDefend() {
+    [Command]
+    public void TryDefend()
+    {
         serverCombatManager.TryUseDefend(GetComponent<CombatEntity>());
     }
 
-    [Command] public void TryFlee() {
+    [Command]
+    public void TryFlee()
+    {
         serverCombatManager.EndCombat();
     }
 }

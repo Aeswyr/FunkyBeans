@@ -11,6 +11,7 @@ public class PlayerController : NetworkBehaviour
     [SerializeField] private GameObject attackPrefab;
     [SerializeField] private GameObject combatTextPrefab;
     [SerializeField] private PlayerCombatInterface combatInterface;
+    public PlayerCombatInterface CombatInterface => combatInterface;
     [SerializeField] private GameObject combatPrefab;
     [SerializeField] private CombatEntity playerEntity;
     public CombatEntity CombatEntity => playerEntity;
@@ -18,11 +19,19 @@ public class PlayerController : NetworkBehaviour
     [SerializeField] private GameObject enterCombatPopup;
     private bool freeMove = true;
 
+    private Vector3 lastStoredPosition;
+    private List<Vector3> lastPositions = new List<Vector3>();
+    public List<Vector3> LastPositions => lastPositions;
+
     private long? currCombatID;
 
     public List<Interactable> currInteractables = new List<Interactable>();
 
-    void Awake() 
+    [Header("TEMP")]
+    [SerializeField] private GameObject allyFollowPrefab;
+    private int alliesSpawned = 0;
+
+    void Awake()
     {
         DontDestroyOnLoad(gameObject);
         GameHandler.Instance.activePlayers.Add(this);
@@ -31,6 +40,17 @@ public class PlayerController : NetworkBehaviour
     void OnDestroy()
     {
         GameHandler.Instance.activePlayers.Remove(this);
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            AllyController newAlly = Instantiate(allyFollowPrefab).GetComponent<AllyController>();
+            newAlly.OnSummon(alliesSpawned, this);
+
+            alliesSpawned++;
+        }
     }
 
     // Update is called once per frame
@@ -43,11 +63,11 @@ public class PlayerController : NetworkBehaviour
         {
             rbody.velocity = speed * InputHandler.Instance.dir;
 
-            if((InputHandler.Instance.interact.pressed) && (!IsInCombat()) && (currInteractables.Count > 0))
+            if ((InputHandler.Instance.interact.pressed) && (!IsInCombat()) && (currInteractables.Count > 0))
             {
                 //Check which interactable to interact with
                 PriorityQueue<Interactable> interactables = new PriorityQueue<Interactable>();
-                foreach(Interactable interactable in currInteractables)
+                foreach (Interactable interactable in currInteractables)
                 {
                     interactables.Put(interactable, interactable.Priority);
                 }
@@ -56,12 +76,23 @@ public class PlayerController : NetworkBehaviour
                 Debug.Log("Interact!");
                 interactables.Peek().Interacted(this);
             }
+
+            //Set array of previous positions
+            if (Vector3.Distance(transform.position, lastStoredPosition) > 0.05f)
+            {
+                lastPositions.Insert(0, transform.position);
+                if (lastPositions.Count > 250)
+                    lastPositions.RemoveAt(lastPositions.Count - 1);
+
+                lastStoredPosition = transform.position;
+            }
         }
 
         if (InputHandler.Instance.action.pressed && inputsFree)
             ServerAttack(Camera.main.ScreenToWorldPoint(InputHandler.Instance.mousePos));
 
-        if (InputHandler.Instance.back.pressed && freeMove) {
+        if (InputHandler.Instance.back.pressed && freeMove)
+        {
             GameHandler.Instance.TogglePlayerMenu();
             if (GameHandler.Instance.PlayerMenuState)
                 inventory.RedrawInventory();
@@ -70,7 +101,9 @@ public class PlayerController : NetworkBehaviour
 
     private bool inputsFree => freeMove && !GameHandler.Instance.PlayerMenuState;
 
-    [Command] public void ServerAttack(Vector3 mousePos) {
+    [Command]
+    public void ServerAttack(Vector3 mousePos)
+    {
         GameObject attack = Instantiate(attackPrefab, transform);
         attack.transform.rotation = Utils.Rotate(mousePos - transform.position);
         attack.GetComponent<AttackController>().SetSource(this);
@@ -78,19 +111,25 @@ public class PlayerController : NetworkBehaviour
         ClientAttack(mousePos);
     }
 
-    [ClientRpc] public void ClientAttack(Vector3 mousePos) {
+    [ClientRpc]
+    public void ClientAttack(Vector3 mousePos)
+    {
         GameObject attack = Instantiate(attackPrefab, transform);
         attack.transform.rotation = Utils.Rotate(mousePos - transform.position);
         attack.GetComponent<AttackController>().enabled = false;
         attack.GetComponent<Collider2D>().enabled = false;
     }
 
-    [Server] public void StartBattle() {
-        if (freeMove) 
+    [Server]
+    public void StartBattle()
+    {
+        if (freeMove)
             GameHandler.Instance.EnterCombat(transform.position);
     }
 
-    [Server] public void EndBattle(CombatReward reward, long id) {
+    [Server]
+    public void EndBattle(CombatReward reward, long id)
+    {
 
         var tm = Instantiate(combatTextPrefab, transform.position, Quaternion.identity).GetComponent<TextMeshPro>();
         tm.text = $"+{reward.exp} EXP";
@@ -102,10 +141,11 @@ public class PlayerController : NetworkBehaviour
     /**
     * places this player into the combat state and enables associated UI
     */
-    [ClientRpc] public void EnterCombat() 
+    [ClientRpc]
+    public void EnterCombat()
     {
         freeMove = false;
-        
+
         GameHandler.Instance.DisablePlayerMenu();
 
         rbody.velocity = Vector2.zero;
@@ -130,9 +170,12 @@ public class PlayerController : NetworkBehaviour
     /**
     * removes this player from the combat state while disabling associated UI
     */
-    [ClientRpc] public void ExitCombat(CombatReward reward) {
+    [ClientRpc]
+    public void ExitCombat(CombatReward reward)
+    {
         int output = 0;
-        foreach (var item in reward.items) {
+        foreach (var item in reward.items)
+        {
             Debug.Log($"You just picked up a(n) {item.Name}");
             inventory.Insert(item);
             var tm = Instantiate(combatTextPrefab, transform.position + (Vector3)(output * Vector2.up), Quaternion.identity).GetComponent<TextMeshPro>();
@@ -159,7 +202,7 @@ public class PlayerController : NetworkBehaviour
         currCombatID = null;
     }
 
-    public bool IsInCombat() 
+    public bool IsInCombat()
     {
         return !freeMove;
     }
