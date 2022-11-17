@@ -13,16 +13,19 @@ public class GameHandler : NetworkSingleton<GameHandler>
 
     [Header("Gameplay grids")]
     [SerializeField] private Grid m_currentLevel;
-    public Tilemap floorGrid {
+    public Tilemap floorGrid
+    {
         get;
         private set;
     }
-    public Tilemap wallGrid {
+    public Tilemap wallGrid
+    {
         get;
         private set;
     }
-    public Grid currentLevel {
-        get {return m_currentLevel;}
+    public Grid currentLevel
+    {
+        get { return m_currentLevel; }
     }
 
     public List<PlayerController> activePlayers { get; set; } = new List<PlayerController>();
@@ -36,29 +39,32 @@ public class GameHandler : NetworkSingleton<GameHandler>
     private ContactFilter2D filter = new ContactFilter2D();
 
     // Start is called before the first frame update
-    void Start() {
+    void Start()
+    {
         floorGrid = m_currentLevel.transform.Find("Collision").GetComponent<Tilemap>();
         wallGrid = m_currentLevel.transform.Find("Walls").GetComponent<Tilemap>();
-        filter.SetLayerMask(LayerMask.GetMask(new []{"Hurtbox"}));
+        filter.SetLayerMask(LayerMask.GetMask(new[] { "Hurtbox" }));
         filter.useTriggers = true;
     }
 
     List<GameObject> textList = new List<GameObject>();
-    public void DrawText(Vector3 pos, string text) {
+    public void DrawText(Vector3 pos, string text)
+    {
         GameObject txt = Instantiate(textPrefab, pos, Quaternion.identity);
         txt.GetComponent<TextMeshPro>().text = text;
         textList.Add(txt);
     }
 
-    public void ClearText() {
+    public void ClearText()
+    {
         foreach (var txt in textList)
             Destroy(txt);
         textList.Clear();
     }
-    
-    [Server] 
-    public void EnterCombat(Vector3 position) 
-    { 
+
+    [Server]
+    public void EnterCombat(Vector3 position)
+    {
         Debug.Log("start battle!");
 
         var results = new List<RaycastHit2D>();
@@ -71,8 +77,10 @@ public class GameHandler : NetworkSingleton<GameHandler>
         List<PlayerController> playersEnteringCombat = new List<PlayerController>();
 
         long id = 0;
-        foreach (var hit in results) {
-            if (hit.collider.transform.parent.TryGetComponent(out PlayerController player)) {
+        foreach (var hit in results)
+        {
+            if (hit.collider.transform.parent.TryGetComponent(out PlayerController player))
+            {
                 if (player.IsInCombat())
                     continue;
                 player.EnterCombat();
@@ -80,21 +88,23 @@ public class GameHandler : NetworkSingleton<GameHandler>
             }
 
 
-            id += hit.collider.transform.parent.GetComponent<CombatID>().CID; 
+            id += hit.collider.transform.parent.GetComponent<CombatID>().CID;
             entities.Add(hit.collider.transform.parent.GetComponent<CombatEntity>());
         }
-        
-        if (activeCombats.ContainsKey(id)) {
+
+        if (activeCombats.ContainsKey(id))
+        {
             Debug.Log($"Combat manager with ID {id} already exists");
             return;
         }
-        
+
         Debug.Log($"Creating combat manager with ID {id}");
         GameObject combatManager = Instantiate(combatManagerPrefab, Vector3.zero, Quaternion.identity);
         ServerCombatManager currentCombat = combatManager.GetComponent<ServerCombatManager>();
         currentCombat.ID = id;
 
-        foreach (var hit in results) {
+        foreach (var hit in results)
+        {
             GameObject hitEntity = hit.collider.transform.parent.gameObject;
             if (hitEntity.TryGetComponent(out PlayerCombatInterface player))
                 player.serverCombatManager = currentCombat;
@@ -124,11 +134,12 @@ public class GameHandler : NetworkSingleton<GameHandler>
         activeCombats[id] = currentCombat;
     }
 
-    [Command(requiresAuthority = false)] public void ExitCombat(long id, List<CombatEntity> entities) 
+    [Command(requiresAuthority = false)]
+    public void ExitCombat(long id, List<CombatEntity> entities)
     {
 
         CombatReward reward = new CombatReward();
-        reward.items = new []{ItemHelper.GenerateItem(), ItemHelper.GenerateItem(), ItemHelper.GenerateItem()};
+        reward.items = new[] { ItemHelper.GenerateItem(), ItemHelper.GenerateItem(), ItemHelper.GenerateItem() };
         reward.exp = 5;
 
         foreach (var entity in entities)
@@ -139,7 +150,8 @@ public class GameHandler : NetworkSingleton<GameHandler>
         foreach (var val in activeCombats)
             output += $"\n{val.Key.ToString()}, {val.Value.ToString()}";
         Debug.Log($"Searching for combat manager with ID {id} {output}");
-        if (activeCombats.ContainsKey(id)) {
+        if (activeCombats.ContainsKey(id))
+        {
             Debug.Log($"Trying to destroy combat manager with ID {id}");
             Destroy(activeCombats[id].gameObject);
             activeCombats.Remove(id);
@@ -157,7 +169,8 @@ public class GameHandler : NetworkSingleton<GameHandler>
             obj.SetActive(false);
     }
 
-    public void DisablePlayerMenu() {
+    public void DisablePlayerMenu()
+    {
         if (!playerMenuState)
             return;
         foreach (var obj in playerMenuObjects)
@@ -166,7 +179,8 @@ public class GameHandler : NetworkSingleton<GameHandler>
         playerMenuState = false;
     }
 
-    public void EnablePlayerMenu() {
+    public void EnablePlayerMenu()
+    {
         if (playerMenuState)
             return;
         foreach (var obj in playerMenuObjects)
@@ -177,10 +191,14 @@ public class GameHandler : NetworkSingleton<GameHandler>
 
     public bool PlayerMenuState => playerMenuState;
 
-    public void TogglePlayerMenu() {
-        if (playerMenuState) {
+    public void TogglePlayerMenu()
+    {
+        if (playerMenuState)
+        {
             DisablePlayerMenu();
-        } else {
+        }
+        else
+        {
             EnablePlayerMenu();
         }
     }
@@ -189,7 +207,7 @@ public class GameHandler : NetworkSingleton<GameHandler>
 
     [Client]
     public void LocalPlayerSpawnCombatCircle(Vector3 pos, long newID, float maxDist)
-    { 
+    {
         GameObject combatCircleObj = Instantiate(combatCirclePrefab);
         combatCircleObj.transform.position = pos;
         combatCircleObj.transform.localScale = Vector3.one * (maxDist + 4);
@@ -223,15 +241,42 @@ public class GameHandler : NetworkSingleton<GameHandler>
 
         foreach (PlayerController activePlayer in activePlayers)
         {
-            if(activePlayer.transform.GetComponent<CombatID>().CID == playerId)
+            if (activePlayer.transform.GetComponent<CombatID>().CID == playerId)
             {
                 Debug.Log("enter combat!");
                 activePlayer.GetComponent<PlayerCombatInterface>().serverCombatManager = combatManager;
 
                 activePlayer.EnterCombat();
                 combatManager.AddEntityToCombat(activePlayer.CombatEntity);
+
+                DebugLog(activePlayer.name + " entered Combat");
+                DebugLog(activePlayer.SpawnedAllies.ToString());
+
+                //Add allies to combat
+                foreach (AllyController ally in activePlayer.SpawnedAllies)
+                {
+                    Debug.Log("Added ally to combat");
+                    combatManager.AddEntityToCombat(ally.CombatEntity);
+                }
+
                 return;
             }
         }
+    }
+
+    [Server]
+    public void AddAlliesToCombat(List<AllyController> allies, ServerCombatManager _combatManager)
+    {
+        foreach (AllyController ally in allies)
+        {
+            Debug.Log("Added ally to combat");
+            _combatManager.AddEntityToCombat(ally.CombatEntity);
+        }
+    }
+
+    [ClientRpc]
+    public void DebugLog(string _message)
+    {
+        Debug.Log(_message);
     }
 }

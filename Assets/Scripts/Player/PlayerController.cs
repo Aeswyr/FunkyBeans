@@ -27,6 +27,8 @@ public class PlayerController : NetworkBehaviour
 
     public List<Interactable> currInteractables = new List<Interactable>();
 
+    public List<AllyController> SpawnedAllies = new List<AllyController>();
+
     [Header("TEMP")]
     [SerializeField] private GameObject allyFollowPrefab;
     private int alliesSpawned = 0;
@@ -44,14 +46,31 @@ public class PlayerController : NetworkBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.I))
+        if (Input.GetKeyDown(KeyCode.I) && isLocalPlayer)
         {
-            AllyController newAlly = Instantiate(allyFollowPrefab).GetComponent<AllyController>();
-            newAlly.OnSummon(alliesSpawned, this);
-
-            alliesSpawned++;
+            SummonAlly();
         }
     }
+
+    [Command(requiresAuthority = false)]
+    private void SummonAlly()
+    {
+        GameObject newAllyGO = Instantiate(allyFollowPrefab);
+        NetworkServer.Spawn(newAllyGO);
+        AllyController newAlly = newAllyGO.GetComponent<AllyController>();
+        newAlly.OnSummon(alliesSpawned, this);
+
+        alliesSpawned++;
+
+        SpawnedAllies.Add(newAlly);
+    }
+
+    [ClientRpc]
+    private void SummonAllyClient()
+    {
+
+    }
+
 
     // Update is called once per frame
     void FixedUpdate()
@@ -124,7 +143,11 @@ public class PlayerController : NetworkBehaviour
     public void StartBattle()
     {
         if (freeMove)
+        {
             GameHandler.Instance.EnterCombat(transform.position);
+
+            GameHandler.Instance.AddAlliesToCombat(SpawnedAllies, combatInterface.serverCombatManager);
+        }
     }
 
     [Server]

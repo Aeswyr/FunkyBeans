@@ -33,7 +33,7 @@ public class PlayerCombatInterface : NetworkBehaviour
     [ClientRpc]
     public void NotifyMovement(Vector3Int pos, bool entering)
     {
-        if (!isLocalPlayer)
+        if (!IsOwnedByMe())
             return;
         if (clientCombat == null)
             StartCoroutine(MoveAfterClientInit(pos, entering));
@@ -58,8 +58,14 @@ public class PlayerCombatInterface : NetworkBehaviour
     [ClientRpc]
     public void NotifyTurnStart(int actions)
     {
+        Debug.Log("a");
         if (!IsOwnedByMe())
             return;
+        Debug.Log("mogus");
+
+        if ((clientCombat == null) && (owner != null))
+            clientCombat = owner.clientCombat;
+
         clientCombat.isTurn = true;
         clientCombat.actionsLeft = actions;
         clientCombat.maxActions = actions;

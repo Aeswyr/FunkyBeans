@@ -95,6 +95,10 @@ public class ServerCombatManager : CombatManager
         StartNextTurn();
     }
 
+    /// <summary>
+    /// Called when a player or ally enters into combat
+    /// </summary>
+    /// <param name="entity">  </param>
     [Server]
     public void AddEntityToCombat(CombatEntity entity)
     {
@@ -219,6 +223,8 @@ public class ServerCombatManager : CombatManager
                     //TODO LocalPlayerOnTurnStarted();
                     if (TryGetPlayerCombatInterface(out var player))
                     {
+                        Debug.Log("notified player " + currEntity.name);
+                        Debug.Log(player);
                         player.NotifyTurnStart(numMaxActions);
                     }
 

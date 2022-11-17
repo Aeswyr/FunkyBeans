@@ -498,6 +498,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  allyCombatInterface: {fileID: 2294656908674514436}
+  <CombatEntity>k__BackingField: {fileID: 680539716597820261}
   entriesNeededForEachAlly: 7
 --- !u!114 &1704578434472408336
 MonoBehaviour:
@@ -594,7 +596,7 @@ MonoBehaviour:
       threat: 5
       damage: 3
       speed: 23
-      actions: 5
+      actions: 4
       defense: 5
       dodge: 2
   reward:
