@@ -107,7 +107,7 @@ public class GameHandler : NetworkSingleton<GameHandler>
         {
             GameObject hitEntity = hit.collider.transform.parent.gameObject;
             if (hitEntity.TryGetComponent(out PlayerCombatInterface player))
-                player.serverCombatManager = currentCombat;
+                player.SetServerCombatManager(currentCombat);
         }
 
         Vector3 averageEntityPos = Vector3.zero;
@@ -244,7 +244,7 @@ public class GameHandler : NetworkSingleton<GameHandler>
             if (activePlayer.transform.GetComponent<CombatID>().CID == playerId)
             {
                 Debug.Log("enter combat!");
-                activePlayer.GetComponent<PlayerCombatInterface>().serverCombatManager = combatManager;
+                activePlayer.GetComponent<PlayerCombatInterface>().SetServerCombatManager(combatManager);
 
                 activePlayer.EnterCombat();
                 combatManager.AddEntityToCombat(activePlayer.CombatEntity);

@@ -181,7 +181,7 @@ public class PlayerController : NetworkBehaviour
         GameHandler.Instance.EnableCombatObjects();
 
         combatInterface.clientCombat = Instantiate(combatPrefab, Vector3.zero, Quaternion.identity).GetComponent<ClientCombatManager>();
-        combatInterface.clientCombat.combatInterface = combatInterface;
+        combatInterface.clientCombat.SetPlayerCombatInterface(combatInterface);
         CombatUIController.Instance.SetKnownSkills(transform.GetComponent<CombatEntity>().KnownSkills);
     }
 

@@ -33,6 +33,7 @@ public class AllyController : NetworkBehaviour
         startingIndex = entriesNeededForEachAlly * (_alliesAhead + 1) - 1;
 
         allyCombatInterface.SetOwner(combatInterface);
+        combatInterface.AddAlly(allyCombatInterface);
     }
 
     [ClientRpc]

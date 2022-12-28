@@ -27,9 +27,14 @@ public class ClientCombatManager : CombatManager
     [SerializeField] private GameObject moveCost;
     private TextMeshPro moveText;
 
-    public PlayerCombatInterface combatInterface { get; set; }
-    public int actionsLeft {get {return numActionsLeft;} set {numActionsLeft = value;}}
-    public int maxActions {get {return numMaxActions;} set {numMaxActions = value;}}
+    //public PlayerCombatInterface combatInterface { get; set; }
+    private PlayerCombatInterface combatInterface;
+    public void SetPlayerCombatInterface(PlayerCombatInterface _combatInterface)
+    {
+        combatInterface = _combatInterface;
+    }
+    public int actionsLeft { get { return numActionsLeft; } set { numActionsLeft = value; } }
+    public int maxActions { get { return numMaxActions; } set { numMaxActions = value; } }
     public bool isTurn { get; set; }
     private SkillID activeSkill;
     private CombatMode mode = CombatMode.MOVE;
@@ -54,18 +59,21 @@ public class ClientCombatManager : CombatManager
         mouseCell = GameHandler.Instance.currentLevel.WorldToCell(mousePos);
 
         if (mouseCell != lastMouseCell)
-            if (CellHasEntity(mouseCell)) {
+            if (CellHasEntity(mouseCell))
+            {
                 EntityReference obj = GetEntityInCell(mouseCell);
                 if (obj != null)
                     CombatUIController.Instance.SetDisplayedEntity(obj.entity);
-            } else
+            }
+            else
                 CombatUIController.Instance.DisableDisplay();
 
-        
+
         if (mode == CombatMode.MOVE)
         {
             ClearSelect();
-            if (actionsLeft > 0) {
+            if (actionsLeft > 0)
+            {
                 DrawSelect(combatInterface.gameObject, actionsLeft);
                 DrawCombatMovement();
 
@@ -75,24 +83,30 @@ public class ClientCombatManager : CombatManager
                 }
             }
         }
-        else if (mode == CombatMode.SELECT)
+        else
         {
-            DrawCombatHighlight();
-
-            if (InputHandler.Instance.action.pressed)
+            if (mode == CombatMode.SELECT)
             {
-                combatInterface.TryUseSkill(activeSkill, mousePos);
+                DrawCombatHighlight();
+
+                if (InputHandler.Instance.action.pressed)
+                {
+                    combatInterface.TryUseSkill(activeSkill, mousePos);
+                }
             }
-        }
-        else if (mode == CombatMode.GUARD)
-        {
-            combatInterface.TryDefend();
-            SetMoveMode();
+            else
+            {
+                if (mode == CombatMode.GUARD)
+                {
+                    combatInterface.TryDefend();
+                    SetMoveMode();
+                }
+            }
         }
         lastMouseCell = mouseCell;
     }
 
-    public void DrawCombatMovement( bool force = false)
+    public void DrawCombatMovement(bool force = false)
     {
         if (mouseCell != lastMouseCell || force)
         {
@@ -260,7 +274,8 @@ public class ClientCombatManager : CombatManager
             entityGrid.SetTile(pos, null);
     }
 
-    public void TryFlee() {
+    public void TryFlee()
+    {
         combatInterface.TryFlee();
     }
 

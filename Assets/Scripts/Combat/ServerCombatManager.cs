@@ -648,6 +648,7 @@ public class ServerCombatManager : CombatManager
         CombatUIController.Instance?.SetComboCounter(currentCombo);
     }
 
+    [Server]
     public void TryMovePlayer(Vector3 position, CombatEntity entity)
     {
         if (entity != currEntity)

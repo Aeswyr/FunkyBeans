@@ -11,10 +11,26 @@ public class PlayerCombatInterface : NetworkBehaviour
     {
         owner = _owner;
     }
+    private List<PlayerCombatInterface> ownedAllyCombatInterfaces = new List<PlayerCombatInterface>();
+    public void AddAlly(PlayerCombatInterface _ally)
+    {
+        ownedAllyCombatInterfaces.Add(_ally);
+    }
 
     public ClientCombatManager clientCombat { get; set; }
 
-    public ServerCombatManager serverCombatManager { get; set; }
+    public ServerCombatManager serverCombatManager { get; private set; }
+    public void SetServerCombatManager(ServerCombatManager _serverCombatManager)
+    {
+        if (_serverCombatManager == null)
+            Debug.LogError("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        serverCombatManager = _serverCombatManager;
+
+        foreach (PlayerCombatInterface cbInterface in ownedAllyCombatInterfaces)
+        {
+            cbInterface.SetServerCombatManager(_serverCombatManager);
+        }
+    }
 
     public bool IsOwnedByMe()
     {
@@ -65,6 +81,8 @@ public class PlayerCombatInterface : NetworkBehaviour
 
         if ((clientCombat == null) && (owner != null))
             clientCombat = owner.clientCombat;
+
+        clientCombat.SetPlayerCombatInterface(this);
 
         clientCombat.isTurn = true;
         clientCombat.actionsLeft = actions;
@@ -123,25 +141,25 @@ public class PlayerCombatInterface : NetworkBehaviour
                 entity.transform.GetComponent<CombatEntity>().UpdateResource(type, delta);
     }
 
-    [Command]
+    [Command(requiresAuthority = false)]
     public void TryUseSkill(SkillID skill, Vector3 position)
     {
         serverCombatManager.TryUseSkill(skill, position, GetComponent<CombatEntity>());
     }
 
-    [Command]
+    [Command(requiresAuthority = false)]
     public void TryMove(Vector3 position)
     {
         serverCombatManager.TryMovePlayer(position, GetComponent<CombatEntity>());
     }
 
-    [Command]
+    [Command(requiresAuthority = false)]
     public void TryDefend()
     {
         serverCombatManager.TryUseDefend(GetComponent<CombatEntity>());
     }
 
-    [Command]
+    [Command(requiresAuthority = false)]
     public void TryFlee()
     {
         serverCombatManager.EndCombat();
